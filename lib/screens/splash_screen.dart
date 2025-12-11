@@ -11,7 +11,8 @@ class SplashScreen extends StatelessWidget {
 
           Text("Welcome to GB Ride", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
           SizedBox(height: 10,),
-          Text("Make your Journey with comfort", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color(0xFF7F7F7F),),)
+          Text("Make your Journey with comfort", style:  TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color(0xFF7F7F7F),),)
+
         ],
       ),
 
