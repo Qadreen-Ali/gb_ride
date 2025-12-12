@@ -1,4 +1,4 @@
 class GBImagePath {
   // Logo
-  static final String logo = "assets/icon/logo.png";
+   static final String logo = "assets/icons/gblogo.png";
 }

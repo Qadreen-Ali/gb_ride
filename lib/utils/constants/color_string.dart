@@ -7,6 +7,7 @@ class GBColor{
   static const Color lineColor = Color(0xFF999999);
   static const Color error = Color(0xFFF13F3F);
   static const Color lightred = Color(0xFFFF383C);
+  static const Color gray = Color(0xFF7F7F7F);
 
 
   static const Color lightBlue = Color(0xFFB9D6F0);
@@ -16,6 +17,7 @@ class GBColor{
   static const Color containerGrayColor = Color(0xFFD9D9D9);
   static const Color yellow = Color(0xFFFFCC00);
   static const Color green = Color(0xFF319F43);
+  static const Color textFieldText = Color(0xFF868080);
 
 
 
