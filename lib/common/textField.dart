@@ -34,7 +34,8 @@ class TTextField extends StatefulWidget {
     this.readOnly = false,
     this.onTap,
     this.inputFormatters,
-    this.textColor, this.titleTextColor, // ✅ Added
+    this.textColor,
+    this.titleTextColor, // ✅ Added
   });
 
   @override
@@ -60,6 +61,8 @@ class _TTextFieldState extends State<TTextField> {
         SizedBox(
           width: 385,
           height: 54,
+          
+
           child: TextFormField(
             controller: widget.controller,
             obscureText: widget.obscureText,
@@ -70,7 +73,8 @@ class _TTextFieldState extends State<TTextField> {
             validator: widget.validator,
             inputFormatters: widget.inputFormatters,
             style: TextStyle(
-              color: widget.textColor ??
+              color:
+                  widget.textColor ??
                   GBColor.textFieldText, // ✅ Use custom color if provided
               fontSize: 14,
               fontWeight: FontWeight.w500,
@@ -90,13 +94,15 @@ class _TTextFieldState extends State<TTextField> {
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide:
-                BorderSide(color: GBColor.textFieldText.withOpacity(0.4)),
+                borderSide: BorderSide(
+                  color: GBColor.textFieldText.withOpacity(0.4),
+                ),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide:
-                BorderSide(color: GBColor.textFieldText.withOpacity(0.4)),
+                borderSide: BorderSide(
+                  color: GBColor.textFieldText.withOpacity(0.4),
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
