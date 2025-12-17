@@ -33,14 +33,12 @@ class SecondaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? GBColor.primary,
+          backgroundColor: backgroundColor ?? GBColor.secondary,
           foregroundColor: Colors.black,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(12),
-            side: BorderSide(
-              color: borderColor ?? Colors.transparent,
-            ),
+            side: BorderSide(color: borderColor ?? Colors.transparent),
           ),
         ),
         child: Row(
@@ -48,14 +46,14 @@ class SecondaryButton extends StatelessWidget {
           children: [
             if (leadingIcon != null) ...[
               leadingIcon!,
-              const SizedBox(width: 8),
+              const SizedBox(width: 12),
             ],
             Text(
               title,
               style: TextStyle(
                 fontSize: 14.2,
-                fontWeight: FontWeight.w400,
-                color: textColor ?? GBColor.primary,
+                fontWeight: FontWeight.w500,
+                color: textColor ?? GBColor.black,
               ),
             ),
           ],

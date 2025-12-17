@@ -30,7 +30,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width ?? 400,
+      width: width ?? 358,
       height: height ?? 54,
       child: ElevatedButton(
         onPressed: onPressed,
@@ -40,14 +40,14 @@ class PrimaryButton extends StatelessWidget {
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(12),
-            side: BorderSide(color: borderColor ?? Colors.transparent),
+            side: BorderSide(color: borderColor ?? GBColor.primary),
           ),
         ),
         child: Text(
           title,
           style: TextStyle(
             fontSize: fontsize ?? 16,
-            fontWeight: weight ?? FontWeight.w400,
+            fontWeight: weight ?? FontWeight.w600,
             color: textColor ?? Colors.white,
           ),
         ),

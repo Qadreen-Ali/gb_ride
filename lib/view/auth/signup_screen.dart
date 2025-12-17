@@ -1,20 +1,22 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
+import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
+// import 'package:gb_ride/utils/constants/socialsignin_button.dart';
 import 'package:gb_ride/utils/constants/social_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
 import 'package:gb_ride/utils/logger.dart';
 import '../../common/textfield.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   bool _isPasswordVisible = false;
 
   @override
@@ -28,21 +30,21 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               children: [
-                const SizedBox(height: 90),
+                const SizedBox(height: 70),
 
-                // const SizedBox(height: 10),
                 Text(
-                  GBText.welcomeBack,
+                  GBText.createYourAccount,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 24,
+                    fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
-                    color: GBColor.gray,
                   ),
                 ),
-                SizedBox(height: 10),
+
+                const SizedBox(height: 10),
                 Text(
-                  GBText.loginToYourAccount,
+                  GBText.connectingGilgitBaltistan,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 12,
@@ -54,17 +56,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 10),
                 //Input Fields
                 TTextField(
-                  // controller: _emailController,
-                  titleText: GBText.emailOrPhone,
-                  hintText: GBText.emailOrPhone,
-                  prefixIcon: Icon(Icons.person_outline),
+                  //controller: _emailController,
+                  titleText: GBText.emailAddress,
+                  hintText: GBText.emailAddress,
+                  prefixIcon: Icon(Icons.email_outlined),
                 ),
-                // TTextField(
-                //   //controller: _phoneController,
-                //   titleText: GBText.phone,
-                //   hintText: GBText.phone,
-                //   prefixIcon: Icon(Icons.phone_android_outlined),
-                // ),
+                TTextField(
+                  //controller: _phoneController,
+                  titleText: GBText.phone,
+                  hintText: GBText.phone,
+                  prefixIcon: Icon(Icons.phone_android_outlined),
+                ),
                 TTextField(
                   //controller: _passwordController,
                   titleText: GBText.password,
@@ -85,33 +87,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   obscureText: !_isPasswordVisible, //Hide Password characters
                 ),
-                Row(
-                  children: [
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        // Navigate to Forgot Password Screen
-                        Navigator.pushNamed(context, '/ForgotPassword');
-                        logger.i('Navigate to Forgot Password Screen');
-                      },
-                      child: Text(
-                        GBText.forgotPassword,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: GBColor.textOrange,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
                 //Primary Button
                 PrimaryButton(
-                  title: GBText.signIn,
+                  title: GBText.signUp,
                   onPressed: () {
-                    // Sign In logic here
-                    logger.i('Sign In button pressed');
+                    // Sign up logic here
+                    logger.i('Sign Up button pressed');
                   },
                 ),
                 const SizedBox(height: 30),
@@ -133,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Expanded(child: Container(height: 1.5, color: Colors.grey)),
                   ],
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 40),
                 //Social Media Buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -141,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     SocialSignInButton(
                       title: '',
                       leadingIcon: Image.asset(
-                        'assets/icons/google.png',
+                        GBImagePath.google,
                         width: 32,
                         height: 32,
                       ),
@@ -151,10 +133,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
                     const SizedBox(width: 25),
+                    //apple button
                     SocialSignInButton(
                       title: '',
                       leadingIcon: Image.asset(
-                        'assets/icons/apple.png',
+                        GBImagePath.apple,
                         width: 32,
                         height: 32,
                       ),
@@ -164,11 +147,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         logger.i('Apple Sign-In Pressed');
                       },
                     ),
+                    //facebook button
                     const SizedBox(width: 25),
                     SocialSignInButton(
                       title: '',
                       leadingIcon: Image.asset(
-                        'assets/icons/facebook.png',
+                        GBImagePath.facebook,
                         width: 32,
                         height: 32,
                       ),
@@ -180,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 //Terms of Service Text
                 RichText(
                   textAlign: TextAlign.center,
@@ -235,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     children: [
                       TextSpan(
-                        text: GBText.signUp,
+                        text: GBText.signIn,
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -243,14 +227,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            Navigator.pushNamed(context, '/SignUp');
-                            logger.i('Navigate to sign-Up Screen');
+                            Navigator.pushNamed(context, '/login');
+                            logger.i('Navigate to sign-In Screen');
                           },
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
+                // const SizedBox(height: 10),
               ],
             ),
           ),

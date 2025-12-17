@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../utils/constants/color_string.dart';
 import '../../utils/constants/image_string.dart';
 import '../../utils/constants/text_string.dart';
-import '../auth/login_screen.dart';
+import '../auth/signup_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
+        MaterialPageRoute(builder: (context) => SignUpScreen()),
       );
     });
   }
@@ -28,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Colors.white,
       body: Column(
         children: [
           const SizedBox(height: 120),
@@ -40,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
           const SizedBox(height: 10),
 
           Text(
-            GBText.JourneyWithComfort,
+            GBText.journeyWithComfort,
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w400,
