@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
 import 'package:gb_ride/view/splash/splash_screen.dart';
-import 'package:gb_ride/view/auth/signup_screen.dart';
 import 'package:gb_ride/view/home/home.dart';
 // import 'package:logger/logger.dart';
 
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(), //initial Screen
         '/login': (context) => LoginScreen(),
-        '/SignUp': (context) => SignUpScreen(),
+        // '/SignUp': (context) => SignUpScreen(),
         '/home': (context) => const HomeScreen(),
       },
     );

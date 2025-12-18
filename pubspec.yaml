@@ -36,6 +36,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   logger: ^2.6.2
   google_fonts: ^6.3.3
+  solar_icon_pack: ^0.2.1
+  country_code_picker: ^3.0.1
 
 dev_dependencies:
   flutter_test:

@@ -31,16 +31,16 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width ?? 358,
-      height: height ?? 54,
+      height: height ?? 48,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? GBColor.primary,
-          foregroundColor: textColor ?? Colors.white,
+          backgroundColor: backgroundColor ?? GBColor.secondary,
+          foregroundColor: textColor ?? Colors.black,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(12),
-            side: BorderSide(color: borderColor ?? GBColor.primary),
+            side: BorderSide(color: borderColor ?? GBColor.secondary),
           ),
         ),
         child: Text(
@@ -48,7 +48,7 @@ class PrimaryButton extends StatelessWidget {
           style: TextStyle(
             fontSize: fontsize ?? 16,
             fontWeight: weight ?? FontWeight.w600,
-            color: textColor ?? Colors.white,
+            color: textColor ?? GBColor.black,
           ),
         ),
       ),

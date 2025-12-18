@@ -17,7 +17,9 @@ class TTextField extends StatefulWidget {
   final VoidCallback? onTap;
   final List<TextInputFormatter>? inputFormatters;
   final Color? textColor; // ✅ Custom text color
-  final Color? titleTextColor; // ✅ Custom text color
+  final Color? titleTextColor;
+
+  final dynamic prefix; // ✅ Custom text color
 
   const TTextField({
     super.key,
@@ -28,6 +30,7 @@ class TTextField extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     this.prefixIcon,
     this.suffixIcon,
+    this.prefix,
     this.enabled = true,
     this.validator,
     this.maxLines = 1,
@@ -35,7 +38,8 @@ class TTextField extends StatefulWidget {
     this.onTap,
     this.inputFormatters,
     this.textColor,
-    this.titleTextColor, // ✅ Added
+    this.titleTextColor,
+    ValueChanged<String>? onChanged, // ✅ Added
   });
 
   @override
@@ -58,6 +62,7 @@ class _TTextFieldState extends State<TTextField> {
             keyboardType: widget.keyboardType,
             maxLines: widget.maxLines,
             readOnly: widget.readOnly,
+            textAlign: TextAlign.start,
             onTap: widget.onTap,
             validator: widget.validator,
             inputFormatters: widget.inputFormatters,
@@ -70,7 +75,7 @@ class _TTextFieldState extends State<TTextField> {
             ),
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.transparent,
+              fillColor: GBColor.secondary,
               hintText: widget.hintText,
               hintStyle: TextStyle(
                 color: GBColor.textFieldText,

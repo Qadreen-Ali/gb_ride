@@ -55,12 +55,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 10),
                 //Input Fields
-                TTextField(
-                  //controller: _emailController,
-                  titleText: GBText.emailAddress,
-                  hintText: GBText.emailAddress,
-                  prefixIcon: Icon(Icons.email_outlined),
-                ),
+                // TTextField(
+                //   //controller: _emailController,
+                //   titleText: GBText.emailAddress,
+                //   hintText: GBText.emailAddress,
+                //   prefixIcon: Icon(Icons.email_outlined),
+                // ),
                 TTextField(
                   //controller: _phoneController,
                   titleText: GBText.phone,
@@ -207,33 +207,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const SizedBox(height: 120),
 
                 //Already have an account? Sign In
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: GBText.alreadyhaveAnAccount,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w500,
-                      color: GBColor.gray,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: GBText.signIn,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: GBColor.textOrange,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.pushNamed(context, '/login');
-                            logger.i('Navigate to sign-In Screen');
-                          },
-                      ),
-                    ],
-                  ),
-                ),
+                // RichText(
+                //   textAlign: TextAlign.center,
+                //   text: TextSpan(
+                //     text: GBText.alreadyhaveAnAccount,
+                //     style: const TextStyle(
+                //       fontSize: 14,
+                //       fontFamily: 'Poppins',
+                //       fontWeight: FontWeight.w500,
+                //       color: GBColor.gray,
+                //     ),
+                //     children: [
+                //       TextSpan(
+                //         text: GBText.signIn,
+                //         style: const TextStyle(
+                //           fontSize: 14,
+                //           fontWeight: FontWeight.w500,
+                //           color: GBColor.textOrange,
+                //         ),
+                //         recognizer: TapGestureRecognizer()
+                //           ..onTap = () {
+                //             Navigator.pushNamed(context, '/login');
+                //             logger.i('Navigate to sign-In Screen');
+                //           },
+                //       ),
+                //     ],
+                //   ),
+                // ),
                 // const SizedBox(height: 10),
               ],
             ),

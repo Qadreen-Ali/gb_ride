@@ -6,6 +6,8 @@ import 'package:gb_ride/utils/constants/social_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
 import 'package:gb_ride/utils/logger.dart';
 import '../../common/textfield.dart';
+import 'package:solar_icon_pack/solar_icon_pack.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,12 +17,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool _isPasswordVisible = false;
+  // final bool _isPasswordVisible = false;
+
+  final TextEditingController _phoneController = TextEditingController(
+    text: '+92 ',
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: GBColor.primary,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -28,82 +34,37 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               children: [
-                const SizedBox(height: 90),
+                const SizedBox(height: 200),
 
                 // const SizedBox(height: 10),
                 Text(
-                  GBText.welcomeBack,
+                  GBText.gbRide,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontSize: 24,
+                    fontSize: 50,
                     fontWeight: FontWeight.w600,
-                    color: GBColor.gray,
+                    color: GBColor.black,
                   ),
                 ),
-                SizedBox(height: 10),
-                Text(
-                  GBText.loginToYourAccount,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    color: GBColor.gray,
-                  ),
-                ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 180),
                 //Input Fields
                 TTextField(
-                  // controller: _emailController,
-                  titleText: GBText.emailOrPhone,
-                  hintText: GBText.emailOrPhone,
-                  prefixIcon: Icon(Icons.person_outline),
-                ),
-                // TTextField(
-                //   //controller: _phoneController,
-                //   titleText: GBText.phone,
-                //   hintText: GBText.phone,
-                //   prefixIcon: Icon(Icons.phone_android_outlined),
-                // ),
-                TTextField(
-                  //controller: _passwordController,
-                  titleText: GBText.password,
-                  hintText: GBText.password,
-                  prefixIcon: Icon(Icons.lock_outline),
-                  suffixIcon: GestureDetector(
-                    //Toggle eye icon
-                    onTap: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
+                  controller: _phoneController,
+                  titleText: GBText.phoneNumber,
+                  hintText: GBText.phoneNumber,
+                  keyboardType: TextInputType.phone,
+                  prefixIcon: Icon(SolarLinearIcons.phone),
+                  prefix: CountryCodePicker(
+                    onChanged: (country) {
+                      // You can store selected country code if needed
+                      logger.i("Selected country code: ${country.dialCode}");
                     },
-                    child: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                    ),
+                    initialSelection: 'PK', // Pakistan
+                    favorite: ['+92', 'PK'],
+                    showCountryOnly: false,
+                    showOnlyCountryWhenClosed: false,
+                    alignLeft: false,
                   ),
-                  obscureText: !_isPasswordVisible, //Hide Password characters
-                ),
-                Row(
-                  children: [
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {
-                        // Navigate to Forgot Password Screen
-                        Navigator.pushNamed(context, '/ForgotPassword');
-                        logger.i('Navigate to Forgot Password Screen');
-                      },
-                      child: Text(
-                        GBText.forgotPassword,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: GBColor.textOrange,
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
                 const SizedBox(height: 20),
                 //Primary Button
@@ -196,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextSpan(
                         text: GBText.termsofServices,
                         style: const TextStyle(
-                          color: GBColor.textOrange,
+                          color: GBColor.secondary,
                           // decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
@@ -208,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       TextSpan(
                         text: GBText.privacyPolicy,
                         style: const TextStyle(
-                          color: GBColor.textOrange,
+                          color: GBColor.secondary,
                           // decoration: TextDecoration.underline,
                         ),
                         recognizer: TapGestureRecognizer()
@@ -220,37 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 120),
-
-                //Already have an account? Sign In
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    text: GBText.alreadyhaveAnAccount,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w500,
-                      color: GBColor.gray,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: GBText.signUp,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: GBColor.textOrange,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.pushNamed(context, '/SignUp');
-                            logger.i('Navigate to sign-Up Screen');
-                          },
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
+                // const SizedBox(height: 80),
               ],
             ),
           ),
