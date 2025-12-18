@@ -3,6 +3,11 @@ class GBText{
   static const String JourneyWithComfort = "Make your Journey with comfort";
 
   // Login text
+  static const String welcomeBack = "Welcome Back";
+  static const String forgotPassword = "Forgot Password";
+  static const String logIn = "Log In";
+  static const String signUp = "Sign Up";
+
 
   static const String createYourAccount = "Create your account";
   static const String connectingGilgitBaltistan = "Connecting Gilgit Baltistan, One Ride at a Time";
