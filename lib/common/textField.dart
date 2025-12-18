@@ -58,7 +58,7 @@ class _TTextFieldState extends State<TTextField> {
         // ),
         const SizedBox(height: 8),
         SizedBox(
-          width: 385,
+          width: 378,
           height: 54,
           child: TextFormField(
             controller: widget.controller,
