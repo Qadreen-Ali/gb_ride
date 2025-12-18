@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
 
 import '../../common/textfield.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
@@ -16,8 +17,6 @@ class LoginScreen extends StatelessWidget {
             hintText: GBText.emailAddress,
             prefixIcon: Icon(Icons.email_outlined),
           ),
-
-
         ],
       ),
     );

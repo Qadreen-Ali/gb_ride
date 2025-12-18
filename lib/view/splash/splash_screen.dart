@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/setting/setting_screen.dart';
 import '../../utils/constants/color_string.dart';
 import '../../utils/constants/image_string.dart';
 import '../../utils/constants/text_string.dart';
-import '../auth/login_screen.dart';
+// import '../auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         // ignore: use_build_context_synchronously
         context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
+        MaterialPageRoute(builder: (context) => SettingsScreen()),
       );
     });
   }
