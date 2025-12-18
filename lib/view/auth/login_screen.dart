@@ -8,6 +8,7 @@ import 'package:gb_ride/utils/logger.dart';
 import '../../common/textfield.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:gb_ride/view/home/home.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
