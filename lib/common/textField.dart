@@ -17,7 +17,9 @@ class TTextField extends StatefulWidget {
   final VoidCallback? onTap;
   final List<TextInputFormatter>? inputFormatters;
   final Color? textColor; // ✅ Custom text color
-  final Color? titleTextColor; // ✅ Custom text color
+  final Color? titleTextColor;
+
+  final dynamic prefix; // ✅ Custom text color
 
   const TTextField({
     super.key,
@@ -28,6 +30,7 @@ class TTextField extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     this.prefixIcon,
     this.suffixIcon,
+    this.prefix,
     this.enabled = true,
     this.validator,
     this.maxLines = 1,
@@ -35,7 +38,12 @@ class TTextField extends StatefulWidget {
     this.onTap,
     this.inputFormatters,
     this.textColor,
+<<<<<<< HEAD
     this.titleTextColor, // ✅ Added
+=======
+    this.titleTextColor,
+    ValueChanged<String>? onChanged, // ✅ Added
+>>>>>>> 84a7239abc15b0004789d92da1b0a59038b24c79
   });
 
   @override
@@ -48,27 +56,23 @@ class _TTextFieldState extends State<TTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(
-        //   widget.,
-        //   style: TextStyle(
-        //     color: widget.titleTextColor ??
-        //         GBColor.gray,
-        //     fontSize: 14,
-        //     fontWeight: FontWeight.w500,
-        //   ),
-        // ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 15),
         SizedBox(
           width: 385,
+<<<<<<< HEAD
           height: 54,
           
 
+=======
+          height: 48,
+>>>>>>> 84a7239abc15b0004789d92da1b0a59038b24c79
           child: TextFormField(
             controller: widget.controller,
             obscureText: widget.obscureText,
             keyboardType: widget.keyboardType,
             maxLines: widget.maxLines,
             readOnly: widget.readOnly,
+            textAlign: TextAlign.start,
             onTap: widget.onTap,
             validator: widget.validator,
             inputFormatters: widget.inputFormatters,
@@ -81,7 +85,7 @@ class _TTextFieldState extends State<TTextField> {
             ),
             decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.transparent,
+              fillColor: GBColor.secondary,
               hintText: widget.hintText,
               hintStyle: TextStyle(
                 color: GBColor.textFieldText,

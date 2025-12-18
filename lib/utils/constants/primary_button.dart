@@ -30,25 +30,25 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: width ?? 400,
-      height: height ?? 54,
+      width: width ?? 358,
+      height: height ?? 48,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? GBColor.primary,
-          foregroundColor: textColor ?? Colors.white,
+          backgroundColor: backgroundColor ?? GBColor.secondary,
+          foregroundColor: textColor ?? Colors.black,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(12),
-            side: BorderSide(color: borderColor ?? Colors.transparent),
+            side: BorderSide(color: borderColor ?? GBColor.secondary),
           ),
         ),
         child: Text(
           title,
           style: TextStyle(
             fontSize: fontsize ?? 16,
-            fontWeight: weight ?? FontWeight.w400,
-            color: textColor ?? Colors.white,
+            fontWeight: weight ?? FontWeight.w600,
+            color: textColor ?? GBColor.black,
           ),
         ),
       ),
