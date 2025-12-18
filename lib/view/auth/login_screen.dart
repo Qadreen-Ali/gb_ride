@@ -8,7 +8,7 @@ import 'package:gb_ride/utils/logger.dart';
 import '../../common/textfield.dart';
 import 'package:flutter/services.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
-import 'package:country_code_picker/country_code_picker.dart';
+// import 'package:country_code_picker/country_code_picker.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,14 +20,14 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   // final bool _isPasswordVisible = false;
   // State fields
-  final TextEditingController _phoneController = TextEditingController();
-  String _selectedCountryCode = '+92';
+  // final TextEditingController _phoneController = TextEditingController();
+  // String _selectedCountryCode = '+92';
 
-  @override
-  void dispose() {
-    _phoneController.dispose(); // important to avoid memory leaks
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _phoneController.dispose(); // important to avoid memory leaks
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -54,40 +54,27 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 160),
                 //Input Fields
-                Row(
-                  children: [
-                    // Country code picker
-                    CountryCodePicker(
-                      onChanged: (country) {
-                        setState(() {
-                          _selectedCountryCode = country.dialCode ?? '+92';
-                        });
-                        logger.i(
-                          "Selected country code: $_selectedCountryCode",
-                        );
-                      },
-                      initialSelection: 'PK',
-                      favorite: ['+92', 'PK'],
-                      showCountryOnly: false,
-                      showFlag: false,
-                      showOnlyCountryWhenClosed: false,
-                      alignLeft: false,
-                    ),
-
-                    // Expanded TextField for phone number
-                    Expanded(
-                      child: TTextField(
-                        controller: _phoneController,
-                        titleText: GBText.phoneNumber,
-                        hintText: GBText.phoneNumber,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        prefixIcon: Icon(SolarLinearIcons.phone),
+                TTextField(
+                  // controller: _phoneController,
+                  titleText: GBText.phoneNumber,
+                  hintText: '0000000000', // show 10-digit placeholder
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [
+                    // allow only digits, max 10 digits
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
+                  ],
+                  prefixIcon: Icon(SolarLinearIcons.phone),
+                  prefix: Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Text(
+                      '+92',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 20),
                 //Primary Button
