@@ -16,6 +16,8 @@ class GBText {
   static const String loginToYourAccount = "Log In to manage your finances.";
   // static const String emailAddress = "Email Address";
   static const String phoneNumber = "00 00000000";
+  static const String verificationCode = "Verification Code";
+  static const String codeSent = "We have sent the code verification to";
   // static const String emailOrPhone =
   //     "Email or Phone Number"; //added new string for dynamic login approach
   static const String phone = "Phone";
