@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:gb_ride/setting/setting_screen.dart';
 
 import '../../utils/constants/color_string.dart';
 import '../../utils/constants/image_string.dart';
@@ -21,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         // ignore: use_build_context_synchronously
         context,
-        MaterialPageRoute(builder: (context) => SettingsScreen()),
+        MaterialPageRoute(builder: (context) => LoginScreen()),
       );
     });
   }

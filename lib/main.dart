@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/common/bottom_navbar.dart';
+// import 'package:gb_ride/common/bottom_navbar.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
 import 'package:gb_ride/view/auth/otp_verification_screen.dart';
-import 'package:gb_ride/view/module/student/home/home_screen.dart';
+// import 'package:gb_ride/view/module/student/home/home_screen.dart';
 import 'package:gb_ride/view/splash/splash_screen.dart';
 //import 'package:gb_ride/view/home/home_screen.dart';
 // import 'package:logger/logger.dart';
@@ -21,11 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-<<<<<<< HEAD
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-=======
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
->>>>>>> 6f1797ee52998405c2e60936453add949478a648
       ),
       //   home: const BottomNavBar(),
       routes: {
@@ -33,7 +29,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/otp': (context) => const OTPVerificationScreen(),
         '/home': (context) => const SplashScreen(),
-        '/bottomnavbar': (context) => const BottomNavBar(),
+        '/bottomnavbar': (context) => const BottomAppBar(),
         //   '/home': (context) => const HomeScreen(),
       },
     );

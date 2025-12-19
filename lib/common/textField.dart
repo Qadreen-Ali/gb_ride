@@ -92,11 +92,13 @@ class _TTextFieldState extends State<TTextField> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide:
+                // ignore: deprecated_member_use
                 BorderSide(color: GBColor.textFieldText.withOpacity(0.4)),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide:
+                // ignore: deprecated_member_use
                 BorderSide(color: GBColor.textFieldText.withOpacity(0.4)),
               ),
               focusedBorder: OutlineInputBorder(

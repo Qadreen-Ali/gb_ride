@@ -1,12 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/utils/constants/social_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
 
 import '../../common/textField.dart';
-class LoginScreen extends StatelessWidget {
+
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
@@ -57,8 +59,6 @@ class _LoginScreenState extends State<LoginScreen> {
             hintText: GBText.emailAddress,
             prefixIcon: Icon(Icons.email_outlined),
           ),
-
-
         ],
       ),
     );

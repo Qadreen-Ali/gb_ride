@@ -24,14 +24,6 @@ class GlobalBottomBar extends StatelessWidget {
             color: const Color(0xFFEB8E00),
             borderRadius: const BorderRadius.all(Radius.circular(44)),
             border: const Border(top: BorderSide(width: 1)),
-
-            // boxShadow: const [
-            //   // BoxShadow(
-            //   //   color: Colors.black26,
-            //   //   blurRadius: 10,
-            //   //   offset: Offset(0, -4),
-            //   // ),
-            // ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -96,7 +88,7 @@ class _BottomItem extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              fontSize: 15, 
+              fontSize: 15,
               fontWeight: FontWeight.w600,
               color: isSelected ? Colors.white : Colors.black,
             ),

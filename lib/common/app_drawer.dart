@@ -152,7 +152,6 @@ class _DrawerMenuItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const _DrawerMenuItem({
-    super.key,
     required this.icon,
     required this.label,
     this.isSelected = false,
