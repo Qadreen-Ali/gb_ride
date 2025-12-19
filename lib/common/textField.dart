@@ -19,7 +19,9 @@ class TTextField extends StatefulWidget {
   final VoidCallback? onTap;
   final List<TextInputFormatter>? inputFormatters;
   final Color? textColor; // ✅ Custom text color
-  final Color? titleTextColor; // ✅ Custom text color
+  final Color? titleTextColor;
+
+  final dynamic prefix; // ✅ Custom text color
 
   const TTextField({
     super.key,
@@ -30,14 +32,14 @@ class TTextField extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     this.prefixIcon,
     this.suffixIcon,
+    this.prefix,
     this.enabled = true,
     this.validator,
     this.maxLines = 1,
     this.readOnly = false,
     this.onTap,
     this.inputFormatters,
-    this.textColor,
-    this.titleTextColor, // ✅ Added
+    this.textColor, this.titleTextColor, // ✅ Added
   });
 
   @override
@@ -50,38 +52,33 @@ class _TTextFieldState extends State<TTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(
-        //   widget.,
-        //   style: TextStyle(
-        //     color: widget.titleTextColor ??
-        //         GBColor.gray,
-        //     fontSize: 14,
-        //     fontWeight: FontWeight.w500,
-        //   ),
-        // ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 15),
         SizedBox(
-          width: 385,
-          height: 54,
+          width: 378,
+          height: 48,
           child: TextFormField(
             controller: widget.controller,
             obscureText: widget.obscureText,
             keyboardType: widget.keyboardType,
             maxLines: widget.maxLines,
             readOnly: widget.readOnly,
+            textAlign: TextAlign.start,
             onTap: widget.onTap,
             validator: widget.validator,
             inputFormatters: widget.inputFormatters,
             style: TextStyle(
-              color:
-                  widget.textColor ??
+              color: widget.textColor ??
                   GBColor.textFieldText, // ✅ Use custom color if provided
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
             decoration: InputDecoration(
+              prefixIconConstraints: const BoxConstraints(
+                minWidth: 0,
+                minHeight: 0,
+              ),
               filled: true,
-              fillColor: Colors.transparent,
+              fillColor: GBColor.secondary,
               hintText: widget.hintText,
               hintStyle: TextStyle(
                 color: GBColor.textFieldText,
@@ -89,24 +86,22 @@ class _TTextFieldState extends State<TTextField> {
                 fontWeight: FontWeight.w400,
               ),
               contentPadding: const EdgeInsets.symmetric(
-                vertical: 16,
-                horizontal: 16,
+                vertical: 10,
+                horizontal: 18,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide:
-                    // ignore: deprecated_member_use
-                    BorderSide(color: GBColor.textFieldText.withOpacity(0.4)),
+                BorderSide(color: GBColor.textFieldText.withOpacity(0.4)),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide:
-                    // ignore: deprecated_member_use
-                    BorderSide(color: GBColor.textFieldText.withOpacity(0.4)),
+                BorderSide(color: GBColor.textFieldText.withOpacity(0.4)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: GBColor.textFieldText),
+                borderSide: BorderSide(color: GBColor.secondary),
               ),
               prefixIcon: widget.prefixIcon,
               suffixIcon: widget.suffixIcon,
