@@ -3,21 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
-// import 'package:gb_ride/utils/constants/socialsignin_button.dart';
-import 'package:gb_ride/utils/constants/social_button.dart';
+// import 'package:gb_ride/utils/constants/social_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
 import 'package:gb_ride/utils/logger.dart';
 import '../../common/textfield.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class OTPVerificationScreen extends StatefulWidget {
+  const OTPVerificationScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<OTPVerificationScreen> createState() => _OTPVerificationScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  bool _isPasswordVisible = false;
+class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
+  // bool _isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -61,32 +60,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 //   hintText: GBText.emailAddress,
                 //   prefixIcon: Icon(Icons.email_outlined),
                 // ),
-                TTextField(
-                  //controller: _phoneController,
-                  titleText: GBText.phone,
-                  hintText: GBText.phone,
-                  prefixIcon: Icon(Icons.phone_android_outlined),
-                ),
-                TTextField(
-                  //controller: _passwordController,
-                  titleText: GBText.password,
-                  hintText: GBText.password,
-                  prefixIcon: Icon(Icons.lock_outline),
-                  suffixIcon: GestureDetector(
-                    //Toggle eye icon
-                    onTap: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
-                    child: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                    ),
-                  ),
-                  obscureText: !_isPasswordVisible, //Hide Password characters
-                ),
+                // TTextField(
+                //   //controller: _phoneController,
+                //   titleText: GBText.phone,
+                //   hintText: GBText.phone,
+                //   prefixIcon: Icon(Icons.phone_android_outlined),
+                // ),
+                // TTextField(
+                //   //controller: _passwordController,
+                //   titleText: GBText.password,
+                //   hintText: GBText.password,
+                //   prefixIcon: Icon(Icons.lock_outline),
+                //   suffixIcon: GestureDetector(
+                //     //Toggle eye icon
+                //     onTap: () {
+                //       setState(() {
+                //         _isPasswordVisible = !_isPasswordVisible;
+                //       });
+                //     },
+                //     child: Icon(
+                //       _isPasswordVisible
+                //           ? Icons.visibility
+                //           : Icons.visibility_off,
+                //     ),
+                //   ),
+                //   obscureText: !_isPasswordVisible, //Hide Password characters
+                // ),
                 const SizedBox(height: 30),
                 //Primary Button
                 PrimaryButton(
@@ -117,53 +116,53 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 const SizedBox(height: 40),
                 //Social Media Buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SocialSignInButton(
-                      title: '',
-                      leadingIcon: Image.asset(
-                        GBImagePath.google,
-                        width: 32,
-                        height: 32,
-                      ),
-                      onPressed: () {
-                        // Handle Google sign-in
-                        logger.i('Google Sign-In Pressed');
-                      },
-                    ),
-                    const SizedBox(width: 25),
-                    //apple button
-                    SocialSignInButton(
-                      title: '',
-                      leadingIcon: Image.asset(
-                        GBImagePath.apple,
-                        width: 32,
-                        height: 32,
-                      ),
-                      // backgroundColor: GBColor.containerColor,
-                      onPressed: () {
-                        // Handle Apple sign-in
-                        logger.i('Apple Sign-In Pressed');
-                      },
-                    ),
-                    //facebook button
-                    const SizedBox(width: 25),
-                    SocialSignInButton(
-                      title: '',
-                      leadingIcon: Image.asset(
-                        GBImagePath.facebook,
-                        width: 32,
-                        height: 32,
-                      ),
-                      // backgroundColor: GBColor.containerColor,
-                      onPressed: () {
-                        // Handle Apple sign-in
-                        logger.i('Apple Sign-In Pressed');
-                      },
-                    ),
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     SocialSignInButton(
+                //       title: '',
+                //       leadingIcon: Image.asset(
+                //         GBImagePath.google,
+                //         width: 32,
+                //         height: 32,
+                //       ),
+                //       onPressed: () {
+                //         // Handle Google sign-in
+                //         logger.i('Google Sign-In Pressed');
+                //       },
+                //     ),
+                //     const SizedBox(width: 25),
+                //     //apple button
+                //     SocialSignInButton(
+                //       title: '',
+                //       leadingIcon: Image.asset(
+                //         GBImagePath.apple,
+                //         width: 32,
+                //         height: 32,
+                //       ),
+                //       // backgroundColor: GBColor.containerColor,
+                //       onPressed: () {
+                //         // Handle Apple sign-in
+                //         logger.i('Apple Sign-In Pressed');
+                //       },
+                //     ),
+                //     //facebook button
+                //     const SizedBox(width: 25),
+                //     SocialSignInButton(
+                //       title: '',
+                //       leadingIcon: Image.asset(
+                //         GBImagePath.facebook,
+                //         width: 32,
+                //         height: 32,
+                //       ),
+                //       // backgroundColor: GBColor.containerColor,
+                //       onPressed: () {
+                //         // Handle Apple sign-in
+                //         logger.i('Apple Sign-In Pressed');
+                //       },
+                //     ),
+                //   ],
+                // ),
                 const SizedBox(height: 20),
                 //Terms of Service Text
                 RichText(
