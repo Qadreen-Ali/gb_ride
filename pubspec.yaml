@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^6.3.3
   solar_icon_pack: ^0.2.1
   country_code_picker: ^3.0.1
+  mask_text_input_formatter: ^2.9.0
 
 dev_dependencies:
   flutter_test:

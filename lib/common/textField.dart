@@ -69,11 +69,15 @@ class _TTextFieldState extends State<TTextField> {
             style: TextStyle(
               color:
                   widget.textColor ??
-                  GBColor.textFieldText, // ✅ Use custom color if provided
+                  GBColor.black, // ✅ Use custom color if provided
               fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
             decoration: InputDecoration(
+              prefixIconConstraints: const BoxConstraints(
+                minWidth: 0,
+                minHeight: 0,
+              ),
               filled: true,
               fillColor: GBColor.secondary,
               hintText: widget.hintText,
@@ -83,13 +87,13 @@ class _TTextFieldState extends State<TTextField> {
                 fontWeight: FontWeight.w400,
               ),
               contentPadding: const EdgeInsets.symmetric(
-                vertical: 16,
-                horizontal: 16,
+                vertical: 10,
+                horizontal: 18,
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: GBColor.textFieldText.withOpacity(0.4),
+                  color: GBColor.secondary.withOpacity(0.4),
                 ),
               ),
               enabledBorder: OutlineInputBorder(
@@ -100,7 +104,7 @@ class _TTextFieldState extends State<TTextField> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: GBColor.textFieldText),
+                borderSide: BorderSide(color: GBColor.secondary),
               ),
               prefixIcon: widget.prefixIcon,
               suffixIcon: widget.suffixIcon,
