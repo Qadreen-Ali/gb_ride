@@ -5,9 +5,8 @@ import '../../utils/constants/color_string.dart';
 import '../../utils/constants/image_string.dart';
 import '../../utils/constants/text_string.dart';
 
-import '../auth/signup_screen.dart';
-import '../auth/login_screen.dart';
-
+// import '../auth/signup_screen.dart';
+// import '../auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

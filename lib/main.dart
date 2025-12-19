@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(), //initial Screen
         '/login': (context) => const LoginScreen(),
-        '/otp': (context) => const OTPVerificationScreen(),
+        '/otp': (context) =>
+            const OTPVerificationScreen(phoneNumber: '3001234567'),
         '/home': (context) => const HomeScreen(),
       },
     );
