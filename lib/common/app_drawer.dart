@@ -170,7 +170,7 @@ class _DrawerMenuItem extends StatelessWidget {
       child: ListTile(
         leading: Icon(
           icon,
-          color: isSelected ? Colors.blue.shade700 : Colors.black87,
+          color: isSelected ? Colors.orange:Colors.black87,
           size: 22,
         ),
         title: Text(
@@ -178,7 +178,7 @@ class _DrawerMenuItem extends StatelessWidget {
           style: TextStyle(
             fontSize: 15,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-            color: isSelected ? Colors.blue.shade700 : Colors.black87,
+            color: isSelected ? Colors.orange: Colors.black87,
           ),
         ),
        // trailing: badge != null
