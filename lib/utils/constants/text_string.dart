@@ -3,6 +3,11 @@ class GBText {
   static const String journeyWithComfort = "Make your Journey with comfort";
 
   // Login text
+  static const String welcomeBack = "Welcome Back";
+  static const String forgotPassword = "Forgot Password";
+  static const String logIn = "Log In";
+  static const String signUp = "Sign Up";
+
 
   static const String createYourAccount = "Create your account";
   static const String connectingGilgitBaltistan =
@@ -16,8 +21,8 @@ class GBText {
   //     "Email or Phone Number"; //added new string for dynamic login approach
   static const String phone = "Phone";
   static const String password = "Password";
-  static const String forgotPassword = "Forgot Password?";
-  static const String signUp = "Sign Up";
+  //static const String forgotPassword = "Forgot Password?";
+  //static const String signUp = "Sign Up";
   static const String orContinuewith = "Or Continue with";
   static const String continuewithGoogle = "Continue with Google";
   static const String continuewithApple = "Continue with Apple";

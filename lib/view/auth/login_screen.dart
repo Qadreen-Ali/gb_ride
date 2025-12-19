@@ -9,7 +9,7 @@ import '../../common/textfield.dart';
 import 'package:flutter/services.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:gb_ride/view/home/home.dart';
+//import 'package:gb_ride/view/home/home_screen.dart';
 // import 'package:country_code_picker/country_code_picker.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   PrimaryButton(
                     title: GBText.signIn,
                     onPressed: () {
-                      Navigator.pushNamed(context, '/otp');
+                      Navigator.pushNamed(context, '/bottomnavbar');
                       // Sign In logic here
                       logger.i('Sign In button pressed');
                     },

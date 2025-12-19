@@ -30,9 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_map: ^6.1.0
-  latlong2: ^0.9.0
-  geolocator: ^10.1.0
+
+
   permission_handler: ^11.0.1
   geocoding: ^3.0.0  # Add this line if missing
 
@@ -44,6 +43,15 @@ dependencies:
   solar_icon_pack: ^0.2.1
   country_code_picker: ^3.0.1
   mask_text_input_formatter: ^2.9.0
+  google_maps_flutter: ^2.14.0
+  cloud_firestore: ^6.1.1
+  firebase_auth: ^6.1.3
+  firebase_storage: ^13.0.5
+  firebase_core: ^4.3.0
+  geolocator: ^14.0.2
+  latlong2: ^0.9.1
+  flutter_map: ^8.2.2
+
 
 dev_dependencies:
   flutter_test:
@@ -65,11 +73,13 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
-  
+  #uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/
     - assets/icons/
+    - assets/images/
 
 
   fonts:
@@ -95,7 +105,7 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  
+
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
