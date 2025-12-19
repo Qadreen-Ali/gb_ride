@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   PrimaryButton(
                     title: GBText.signIn,
                     onPressed: () {
-                      Navigator.pushNamed(context, '/otp');
+                      Navigator.pushNamed(context, '/bottomnavbar');
                       // Sign In logic here
                       logger.i('Sign In button pressed');
                     },

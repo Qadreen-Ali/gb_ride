@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/common/bottom_navbar.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
 
 import '../../utils/constants/color_string.dart';

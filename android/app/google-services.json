@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "560604047926",
+    "project_id": "gb-ride-a591a",
+    "storage_bucket": "gb-ride-a591a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560604047926:android:0d59529e23ad976cab4697",
+        "android_client_info": {
+          "package_name": "com.example.gb_ride"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqhXVgwZvsUZtBaxDJWgPh0E5mEaaS2hw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560604047926:android:ef92388c58ef7c40ab4697",
+        "android_client_info": {
+          "package_name": "com.example.google_map"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqhXVgwZvsUZtBaxDJWgPh0E5mEaaS2hw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

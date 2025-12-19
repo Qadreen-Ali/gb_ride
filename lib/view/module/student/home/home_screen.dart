@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:gb_ride/common/app_drawer.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:gb_ride/services/location_search_service.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,7 +17,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _pickupController = TextEditingController();
   final TextEditingController _destinationController = TextEditingController();
-  MapController? _mapController;  // Make it nullable
+  MapController? _mapController;
+  
+  final DraggableScrollableController _sheetController = DraggableScrollableController();
 
   LatLng _currentLocation = const LatLng(35.911383, 74.341500);
   LatLng? _pickupLocation;
@@ -26,14 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isSelectingPickup = false;
   bool _isSelectingDestination = false;
   bool _isLoadingAddress = false;
+  bool _isSheetExpanded = true;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _mapController = MapController();  // Initialize here
-    // Delay location getting until after first frame
+    _mapController = MapController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getCurrentLocation();
     });
@@ -44,16 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Location services are disabled. Please enable them.'),
-              backgroundColor: Colors.orange,
-              duration: Duration(seconds: 3),
-            ),
-          );
           setState(() {
             _pickupLocation = _currentLocation;
-            _pickupController.text = 'Gilgit, Pakistan (Default)';
+            _pickupController.text = 'Gilgit, Pakistan';
             _isLoadingLocation = false;
           });
         }
@@ -61,65 +58,15 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       LocationPermission permission = await Geolocator.checkPermission();
-      debugPrint('Current permission status: $permission');
-
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
-        debugPrint('Requested permission status: $permission');
-        
-        if (permission == LocationPermission.denied) {
-          if (mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Location permissions are denied'),
-                backgroundColor: Colors.orange,
-              ),
-            );
-            setState(() {
-              _pickupLocation = _currentLocation;
-              _pickupController.text = 'Gilgit, Pakistan (Default)';
-              _isLoadingLocation = false;
-            });
-          }
-          return;
-        }
-      }
-
-      if (permission == LocationPermission.deniedForever) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('Location permissions are permanently denied. Enable them in settings.'),
-              backgroundColor: Colors.red,
-              action: SnackBarAction(
-                label: 'Settings',
-                textColor: Colors.white,
-                onPressed: () async {
-                  await Geolocator.openLocationSettings();
-                },
-              ),
-              duration: const Duration(seconds: 5),
-            ),
-          );
-          setState(() {
-            _pickupLocation = _currentLocation;
-            _pickupController.text = 'Gilgit, Pakistan (Default)';
-            _isLoadingLocation = false;
-          });
-        }
-        return;
       }
 
       if (permission == LocationPermission.whileInUse ||
           permission == LocationPermission.always) {
-        debugPrint('Getting current position...');
-        
         Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
-          timeLimit: const Duration(seconds: 10),
         );
-        
-        debugPrint('Got position: ${position.latitude}, ${position.longitude}');
 
         if (mounted) {
           setState(() {
@@ -128,19 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
             _pickupController.text = 'Getting address...';
             _isLoadingLocation = false;
           });
-          
-          // Move map to current location - only if map controller is ready
-          if (_mapController != null) {
-            try {
-              _mapController!.move(_currentLocation, 15.0);
-            } catch (e) {
-              debugPrint('Map controller not ready yet: $e');
-            }
-          }
-          
-          // Get address
+
+          _mapController?.move(_currentLocation, 15.0);
           await _getAddressFromLatLng(_currentLocation, isPickup: true);
-          
+
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -153,20 +91,13 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     } catch (e) {
-      debugPrint('Error getting location: $e');
+      debugPrint('Error: $e');
       if (mounted) {
         setState(() {
           _pickupLocation = _currentLocation;
-          _pickupController.text = 'Gilgit, Pakistan (Default)';
+          _pickupController.text = 'Gilgit, Pakistan';
           _isLoadingLocation = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Using default location'),
-            backgroundColor: Colors.orange,
-            duration: const Duration(seconds: 2),
-          ),
-        );
       }
     }
   }
@@ -206,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         if (address.isEmpty) {
-          address = 'Lat: ${position.latitude.toStringAsFixed(4)}, Lng: ${position.longitude.toStringAsFixed(4)}';
+          address = '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
         }
 
         if (mounted) {
@@ -225,89 +156,12 @@ class _HomeScreenState extends State<HomeScreen> {
       if (mounted) {
         setState(() {
           if (isPickup) {
-            _pickupController.text = 'Lat: ${position.latitude.toStringAsFixed(4)}, Lng: ${position.longitude.toStringAsFixed(4)}';
+            _pickupController.text = '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
           } else {
-            _destinationController.text = 'Lat: ${position.latitude.toStringAsFixed(4)}, Lng: ${position.longitude.toStringAsFixed(4)}';
+            _destinationController.text = '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
           }
           _isLoadingAddress = false;
         });
-      }
-    }
-  }
-
-  Future<void> _searchLocation(String query, {required bool isPickup}) async {
-    if (query.trim().isEmpty) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please enter a location'),
-            backgroundColor: Colors.orange,
-          ),
-        );
-      }
-      return;
-    }
-
-    try {
-      if (mounted) {
-        setState(() {
-          _isLoadingAddress = true;
-        });
-      }
-
-      List<Location> locations = await locationFromAddress(query);
-
-      if (locations.isNotEmpty && mounted) {
-        Location location = locations[0];
-        LatLng position = LatLng(location.latitude, location.longitude);
-
-        setState(() {
-          if (isPickup) {
-            _pickupLocation = position;
-            _pickupController.text = query;
-          } else {
-            _destinationLocation = position;
-            _destinationController.text = query;
-          }
-          _isLoadingAddress = false;
-        });
-
-        _mapController?.move(position, 15.0);
-
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(isPickup ? '✓ Pickup location set' : '✓ Destination set'),
-              backgroundColor: Colors.green,
-              duration: const Duration(seconds: 1),
-            ),
-          );
-        }
-      } else {
-        if (mounted) {
-          setState(() {
-            _isLoadingAddress = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Location not found. Please try again.'),
-              backgroundColor: Colors.orange,
-            ),
-          );
-        }
-      }
-    } catch (e) {
-      debugPrint('Error searching location: $e');
-      if (mounted) {
-        setState(() {
-          _isLoadingAddress = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Error finding location. Please try a different search.'),
-            backgroundColor: Colors.red,
-          ),
-        );
       }
     }
   }
@@ -317,6 +171,9 @@ class _HomeScreenState extends State<HomeScreen> {
       _isSelectingPickup = true;
       _isSelectingDestination = false;
     });
+    
+    _collapseSheet();
+    
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('👆 Tap anywhere on the map to select pickup location'),
@@ -342,6 +199,9 @@ class _HomeScreenState extends State<HomeScreen> {
       _isSelectingDestination = true;
       _isSelectingPickup = false;
     });
+    
+    _collapseSheet();
+    
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('👆 Tap anywhere on the map to select destination'),
@@ -360,20 +220,9 @@ class _HomeScreenState extends State<HomeScreen> {
       });
 
       _getAddressFromLatLng(position, isPickup: true);
+      _mapController?.move(position, 15.0);
       
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (mounted) {
-          _mapController?.move(position, 15.0);
-        }
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('✓ Pickup location selected'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 1),
-        ),
-      );
+      _expandSheet();
     } else if (_isSelectingDestination) {
       setState(() {
         _destinationLocation = position;
@@ -383,21 +232,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
       _getAddressFromLatLng(position, isPickup: false);
 
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (mounted && _pickupLocation != null) {
-          double centerLat = (_pickupLocation!.latitude + position.latitude) / 2;
-          double centerLng = (_pickupLocation!.longitude + position.longitude) / 2;
-          _mapController?.move(LatLng(centerLat, centerLng), 13.0);
-        }
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('✓ Destination selected'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 1),
-        ),
-      );
+      if (_pickupLocation != null) {
+        double centerLat = (_pickupLocation!.latitude + position.latitude) / 2;
+        double centerLng = (_pickupLocation!.longitude + position.longitude) / 2;
+        _mapController?.move(LatLng(centerLat, centerLng), 13.0);
+      }
+      
+      _expandSheet();
+    } else {
+      _collapseSheet();
     }
   }
 
@@ -406,71 +249,29 @@ class _HomeScreenState extends State<HomeScreen> {
       _isSelectingPickup = false;
       _isSelectingDestination = false;
     });
+    _expandSheet();
   }
 
-  void _showLocationInputDialog({required bool isPickup}) {
-    final TextEditingController dialogController = TextEditingController();
-    
-    showDialog(
-      context: context,
-      builder: (BuildContext dialogContext) => AlertDialog(
-        title: Text(
-          isPickup ? 'Enter Pickup Location' : 'Enter Destination',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: dialogController,
-              decoration: InputDecoration(
-                hintText: 'e.g., Gilgit, Pakistan',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                prefixIcon: const Icon(Icons.search, color: Colors.orange),
-                filled: true,
-                fillColor: Colors.grey[50],
-              ),
-              autofocus: true,
-              onSubmitted: (value) {
-                Navigator.pop(dialogContext);
-                _searchLocation(value, isPickup: isPickup);
-              },
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'Examples: "Karachi", "Lahore, Pakistan", "Islamabad"',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              _searchLocation(dialogController.text, isPickup: isPickup);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-            child: const Text('Search'),
-          ),
-        ],
-      ),
+  void _collapseSheet() {
+    _sheetController.animateTo(
+      0.15,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
     );
+    setState(() {
+      _isSheetExpanded = false;
+    });
+  }
+
+  void _expandSheet() {
+    _sheetController.animateTo(
+      0.7,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+    setState(() {
+      _isSheetExpanded = true;
+    });
   }
 
   void _refreshCurrentLocation() {
@@ -521,7 +322,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     MarkerLayer(
                       markers: [
-                        // Current location marker
                         Marker(
                           point: _currentLocation,
                           width: 40,
@@ -546,8 +346,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-
-                        // Pickup location marker
                         if (_pickupLocation != null)
                           Marker(
                             point: _pickupLocation!,
@@ -583,8 +381,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           ),
-
-                        // Destination location marker
                         if (_destinationLocation != null)
                           Marker(
                             point: _destinationLocation!,
@@ -851,49 +647,50 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-          // Bottom Card  
+          // Draggable Bottom Sheet
           if (!_isSelectingPickup && !_isSelectingDestination)
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 20,
-                      offset: const Offset(0, -5),
+            DraggableScrollableSheet(
+              controller: _sheetController,
+              initialChildSize: 0.7,
+              minChildSize: 0.15,
+              maxChildSize: 0.9,
+              snap: true,
+              snapSizes: const [0.15, 0.7, 0.9],
+              builder: (BuildContext context, ScrollController scrollController) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
                     ),
-                  ],
-                ),
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 20,
+                        offset: const Offset(0, -5),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    // Pickup Location
-                    GestureDetector(
-                      onTap: () => _showLocationInputDialog(isPickup: true),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
+                    ],
+                  ),
+                  child: ListView(
+                    controller: scrollController,
+                    padding: const EdgeInsets.all(20),
+                    children: [
+                      // Drag Handle
+                      Center(
+                        child: Container(
+                          width: 40,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(2),
+                          ),
                         ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Pickup Location with Autocomplete
+                      Container(
                         decoration: BoxDecoration(
                           color: Colors.green.shade50,
                           border: Border.all(
@@ -904,71 +701,140 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: Row(
                           children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: const BoxDecoration(
-                                color: Colors.green,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.person_pin_circle,
-                                color: Colors.white,
-                                size: 20,
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.person_pin_circle,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
                               ),
                             ),
-                            const SizedBox(width: 12),
                             Expanded(
-                              child: Text(
-                                _pickupController.text.isEmpty
-                                    ? 'Tap to enter pickup location'
-                                    : _pickupController.text,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: _pickupController.text.isEmpty
-                                      ? Colors.grey[600]
-                                      : Colors.black87,
+                              child: TypeAheadField<LocationSuggestion>(
+                                controller: _pickupController,
+                                builder: (context, controller, focusNode) {
+                                  return TextField(
+                                    controller: controller,
+                                    focusNode: focusNode,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Enter pickup location',
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                      isDense: true,
+                                    ),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    onTap: () {
+                                      _expandSheet();
+                                    },
+                                  );
+                                },
+                                suggestionsCallback: (search) async {
+                                  if (search.isEmpty || search.length < 2) return [];
+                                  return await LocationSearchService.searchLocations(search);
+                                },
+                                itemBuilder: (context, LocationSuggestion suggestion) {
+                                  return ListTile(
+                                    dense: true,
+                                    leading: const Icon(
+                                      Icons.location_on,
+                                      color: Colors.green,
+                                      size: 20,
+                                    ),
+                                    title: Text(
+                                      suggestion.displayName.split(',').first,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    subtitle: Text(
+                                      suggestion.displayName,
+                                      style: const TextStyle(fontSize: 11),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                },
+                                onSelected: (LocationSuggestion suggestion) {
+                                  final position = LatLng(
+                                    suggestion.latitude,
+                                    suggestion.longitude,
+                                  );
+
+                                  setState(() {
+                                    _pickupLocation = position;
+                                    _pickupController.text = suggestion.displayName.split(',').first;
+                                  });
+
+                                  _mapController?.move(position, 15.0);
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('✓ Pickup location set'),
+                                      backgroundColor: Colors.green,
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
+                                emptyBuilder: (context) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'No locations found',
+                                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                                  ),
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                                loadingBuilder: (context) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
+                                ),
+                                errorBuilder: (context, error) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Error loading suggestions',
+                                    style: TextStyle(color: Colors.red, fontSize: 12),
+                                  ),
+                                ),
+                                decorationBuilder: (context, child) {
+                                  return Material(
+                                    elevation: 4,
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: child,
+                                  );
+                                },
                               ),
                             ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    color: Colors.green,
-                                    size: 20,
-                                  ),
-                                  onPressed: () => _showLocationInputDialog(isPickup: true),
-                                  tooltip: 'Type location',
-                                ),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.map,
-                                    color: Colors.green,
-                                    size: 24,
-                                  ),
-                                  onPressed: _startPickupSelection,
-                                  tooltip: 'Select on map',
-                                ),
-                              ],
+                            IconButton(
+                              icon: const Icon(
+                                Icons.map,
+                                color: Colors.green,
+                                size: 24,
+                              ),
+                              onPressed: _startPickupSelection,
+                              tooltip: 'Select on map',
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 12),
+                      const SizedBox(height: 12),
 
-                    // Destination
-                    GestureDetector(
-                      onTap: () => _showLocationInputDialog(isPickup: false),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 12,
-                        ),
+                      // Destination with Autocomplete
+                      Container(
                         decoration: BoxDecoration(
                           color: Colors.red.shade50,
                           border: Border.all(
@@ -979,237 +845,313 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         child: Row(
                           children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.location_on,
-                                color: Colors.white,
-                                size: 20,
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.location_on,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
                               ),
                             ),
-                            const SizedBox(width: 12),
                             Expanded(
-                              child: Text(
-                                _destinationController.text.isEmpty
-                                    ? 'Tap to enter destination'
-                                    : _destinationController.text,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: _destinationController.text.isEmpty
-                                      ? Colors.grey[600]
-                                      : Colors.black87,
+                              child: TypeAheadField<LocationSuggestion>(
+                                controller: _destinationController,
+                                builder: (context, controller, focusNode) {
+                                  return TextField(
+                                    controller: controller,
+                                    focusNode: focusNode,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Where to?',
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                      isDense: true,
+                                    ),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    onTap: () {
+                                      _expandSheet();
+                                    },
+                                  );
+                                },
+                                suggestionsCallback: (search) async {
+                                  if (search.isEmpty || search.length < 2) return [];
+                                  return await LocationSearchService.searchLocations(search);
+                                },
+                                itemBuilder: (context, LocationSuggestion suggestion) {
+                                  return ListTile(
+                                    dense: true,
+                                    leading: const Icon(
+                                      Icons.location_on,
+                                      color: Colors.red,
+                                      size: 20,
+                                    ),
+                                    title: Text(
+                                      suggestion.displayName.split(',').first,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    subtitle: Text(
+                                      suggestion.displayName,
+                                      style: const TextStyle(fontSize: 11),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  );
+                                },
+                                onSelected: (LocationSuggestion suggestion) {
+                                  final position = LatLng(
+                                    suggestion.latitude,
+                                    suggestion.longitude,
+                                  );
+
+                                  setState(() {
+                                    _destinationLocation = position;
+                                    _destinationController.text = suggestion.displayName.split(',').first;
+                                  });
+
+                                  _mapController?.move(position, 15.0);
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('✓ Destination set'),
+                                      backgroundColor: Colors.green,
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
+                                emptyBuilder: (context) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'No locations found',
+                                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                                  ),
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                                loadingBuilder: (context) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
+                                ),
+                                errorBuilder: (context, error) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Error loading suggestions',
+                                    style: TextStyle(color: Colors.red, fontSize: 12),
+                                  ),
+                                ),
+                                decorationBuilder: (context, child) {
+                                  return Material(
+                                    elevation: 4,
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: child,
+                                  );
+                                },
                               ),
                             ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.edit,
-                                    color: Colors.red,
-                                    size: 20,
-                                  ),
-                                  onPressed: () => _showLocationInputDialog(isPickup: false),
-                                  tooltip: 'Type location',
-                                ),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.map,
-                                    color: Colors.red,
-                                    size: 24,
-                                  ),
-                                  onPressed: _startDestinationSelection,
-                                  tooltip: 'Select on map',
-                                ),
-                              ],
+                            IconButton(
+                              icon: const Icon(
+                                Icons.map,
+                                color: Colors.red,
+                                size: 24,
+                              ),
+                              onPressed: _startDestinationSelection,
+                              tooltip: 'Select on map',
                             ),
                           ],
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
+                      const SizedBox(height: 16),
 
-                    // Vehicle Selection
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildVehicleOption('car', '🚗', 'Car'),
-                        _buildVehicleOption('city', '🏙️', 'City to city'),
-                        _buildVehicleOption('bike', '🏍️', 'Bike'),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
+                      // Vehicle Selection
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          _buildVehicleOption('car', '🚗', 'Car'),
+                          _buildVehicleOption('city', '🏙️', 'City to city'),
+                          _buildVehicleOption('bike', '🏍️', 'Bike'),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
 
-                    // Fare Input
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
+                      // Fare Input
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[50],
+                          border: Border.all(color: Colors.grey[300]!),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.orange.shade100,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: const Text(
+                                'PKR',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            const Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'Offer your fare',
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                ),
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[50],
-                        border: Border.all(color: Colors.grey[300]!),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
+                      const SizedBox(height: 16),
+
+                      // Action Buttons
+                      Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
                             decoration: BoxDecoration(
-                              color: Colors.orange.shade100,
-                              borderRadius: BorderRadius.circular(6),
+                              color: Colors.orange,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.orange.withOpacity(0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
                             ),
-                            child: const Text(
-                              'PKR',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.chat_bubble_outline,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (_pickupLocation == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Please select a pickup location'),
+                                      backgroundColor: Colors.orange,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if (_destinationLocation == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Please select a destination'),
+                                      backgroundColor: Colors.orange,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Searching for $_selectedVehicle drivers...',
+                                    ),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 4,
+                              ),
+                              child: const Text(
+                                'Find a Driver',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
                           const SizedBox(width: 12),
-                          const Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Offer your fare',
-                                hintStyle: TextStyle(color: Colors.grey),
-                                border: InputBorder.none,
-                                isDense: true,
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.orange,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.orange.withOpacity(0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.navigation,
+                                color: Colors.white,
                               ),
-                              keyboardType: TextInputType.number,
-                              style: TextStyle(fontSize: 16),
+                              onPressed: () {
+                                if (_destinationLocation != null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Starting navigation...'),
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Please select a destination first'),
+                                      backgroundColor: Colors.orange,
+                                    ),
+                                  );
+                                }
+                              },
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Action Buttons
-                    Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.orange,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.orange.withOpacity(0.3),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.chat_bubble_outline,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {},
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (_pickupLocation == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Please select a pickup location'),
-                                    backgroundColor: Colors.orange,
-                                  ),
-                                );
-                                return;
-                              }
-                              if (_destinationLocation == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Please select a destination'),
-                                    backgroundColor: Colors.orange,
-                                  ),
-                                );
-                                return;
-                              }
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Searching for $_selectedVehicle drivers...',
-                                  ),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 4,
-                            ),
-                            child: const Text(
-                              'Find a Driver',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.orange,
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.orange.withOpacity(0.3),
-                                blurRadius: 8,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.navigation,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              if (_destinationLocation != null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Starting navigation...'),
-                                    backgroundColor: Colors.blue,
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Please select a destination first'),
-                                    backgroundColor: Colors.orange,
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                ),
-              ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                );
+              },
             ),
         ],
       ),
@@ -1269,6 +1211,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _pickupController.dispose();
     _destinationController.dispose();
     _mapController?.dispose();
+    _sheetController.dispose();
     super.dispose();
   }
 }
