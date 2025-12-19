@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfileDrawer extends StatelessWidget {
-  const ProfileDrawer({Key? key}) : super(key: key);
+  const ProfileDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -152,12 +152,12 @@ class _DrawerMenuItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const _DrawerMenuItem({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
     this.isSelected = false,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

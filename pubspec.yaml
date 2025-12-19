@@ -51,6 +51,13 @@ dependencies:
   geolocator: ^14.0.2
   latlong2: ^0.9.1
   flutter_map: ^8.2.2
+  dtd: ^4.0.0
+  flutter_lints: ^6.0.0
+  json_rpc_2: ^4.0.0
+  path: ^1.9.1
+  stack_trace: ^1.12.1
+  url_launcher: ^6.3.2
+  web: ^1.1.1
 
 
 dev_dependencies:
@@ -62,7 +69,6 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
