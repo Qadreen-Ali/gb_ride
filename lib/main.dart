@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/otp': (context) =>
             const OTPVerificationScreen(phoneNumber: '3001234567'),
+        '/bottomnavbar': (context) => const BottomNavBar(),
         '/home': (context) => const HomeScreen(),
       },
     );

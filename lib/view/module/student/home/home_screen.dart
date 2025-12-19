@@ -18,8 +18,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _pickupController = TextEditingController();
   final TextEditingController _destinationController = TextEditingController();
   MapController? _mapController;
-  
-  final DraggableScrollableController _sheetController = DraggableScrollableController();
+
+  final DraggableScrollableController _sheetController =
+      DraggableScrollableController();
 
   LatLng _currentLocation = const LatLng(35.911383, 74.341500);
   LatLng? _pickupLocation;
@@ -102,7 +103,10 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _getAddressFromLatLng(LatLng position, {required bool isPickup}) async {
+  Future<void> _getAddressFromLatLng(
+    LatLng position, {
+    required bool isPickup,
+  }) async {
     try {
       if (mounted) {
         setState(() {
@@ -119,15 +123,19 @@ class _HomeScreenState extends State<HomeScreen> {
         Placemark place = placemarks[0];
         String address = '';
 
-        if (place.name != null && place.name!.isNotEmpty && place.name != position.latitude.toStringAsFixed(4)) {
+        if (place.name != null &&
+            place.name!.isNotEmpty &&
+            place.name != position.latitude.toStringAsFixed(4)) {
           address += place.name!;
         }
         if (place.locality != null && place.locality!.isNotEmpty) {
           if (address.isNotEmpty) address += ', ';
           address += place.locality!;
         }
-        if (place.subAdministrativeArea != null && place.subAdministrativeArea!.isNotEmpty) {
-          if (address.isNotEmpty && !address.contains(place.subAdministrativeArea!)) {
+        if (place.subAdministrativeArea != null &&
+            place.subAdministrativeArea!.isNotEmpty) {
+          if (address.isNotEmpty &&
+              !address.contains(place.subAdministrativeArea!)) {
             address += ', ${place.subAdministrativeArea!}';
           }
         }
@@ -137,7 +145,8 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         if (address.isEmpty) {
-          address = '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
+          address =
+              '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
         }
 
         if (mounted) {
@@ -156,9 +165,11 @@ class _HomeScreenState extends State<HomeScreen> {
       if (mounted) {
         setState(() {
           if (isPickup) {
-            _pickupController.text = '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
+            _pickupController.text =
+                '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
           } else {
-            _destinationController.text = '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
+            _destinationController.text =
+                '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
           }
           _isLoadingAddress = false;
         });
@@ -171,9 +182,9 @@ class _HomeScreenState extends State<HomeScreen> {
       _isSelectingPickup = true;
       _isSelectingDestination = false;
     });
-    
+
     _collapseSheet();
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('👆 Tap anywhere on the map to select pickup location'),
@@ -199,9 +210,9 @@ class _HomeScreenState extends State<HomeScreen> {
       _isSelectingDestination = true;
       _isSelectingPickup = false;
     });
-    
+
     _collapseSheet();
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('👆 Tap anywhere on the map to select destination'),
@@ -221,7 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       _getAddressFromLatLng(position, isPickup: true);
       _mapController?.move(position, 15.0);
-      
+
       _expandSheet();
     } else if (_isSelectingDestination) {
       setState(() {
@@ -234,10 +245,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (_pickupLocation != null) {
         double centerLat = (_pickupLocation!.latitude + position.latitude) / 2;
-        double centerLng = (_pickupLocation!.longitude + position.longitude) / 2;
+        double centerLng =
+            (_pickupLocation!.longitude + position.longitude) / 2;
         _mapController?.move(LatLng(centerLat, centerLng), 13.0);
       }
-      
+
       _expandSheet();
     } else {
       _collapseSheet();
@@ -317,7 +329,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   children: [
                     TileLayer(
-                      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                       userAgentPackageName: 'com.example.gb_ride',
                     ),
                     MarkerLayer(
@@ -358,7 +371,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                     color: Colors.green,
                                     shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.white, width: 3),
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 3,
+                                    ),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.green.withOpacity(0.5),
@@ -393,7 +409,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                     color: Colors.red,
                                     shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.white, width: 3),
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 3,
+                                    ),
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.red.withOpacity(0.5),
@@ -632,7 +651,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
           // Refresh Location Button
-          if (!_isSelectingPickup && !_isSelectingDestination && !_isLoadingLocation)
+          if (!_isSelectingPickup &&
+              !_isSelectingDestination &&
+              !_isLoadingLocation)
             Positioned(
               right: 16,
               top: 120,
@@ -640,10 +661,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mini: true,
                 backgroundColor: Colors.white,
                 onPressed: _refreshCurrentLocation,
-                child: const Icon(
-                  Icons.my_location,
-                  color: Colors.orange,
-                ),
+                child: const Icon(Icons.my_location, color: Colors.orange),
               ),
             ),
 
@@ -739,34 +757,40 @@ class _HomeScreenState extends State<HomeScreen> {
                                   );
                                 },
                                 suggestionsCallback: (search) async {
-                                  if (search.isEmpty || search.length < 2) return [];
-                                  return await LocationSearchService.searchLocations(search);
-                                },
-                                itemBuilder: (context, LocationSuggestion suggestion) {
-                                  return ListTile(
-                                    dense: true,
-                                    leading: const Icon(
-                                      Icons.location_on,
-                                      color: Colors.green,
-                                      size: 20,
-                                    ),
-                                    title: Text(
-                                      suggestion.displayName.split(',').first,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    subtitle: Text(
-                                      suggestion.displayName,
-                                      style: const TextStyle(fontSize: 11),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                  if (search.isEmpty || search.length < 2)
+                                    return [];
+                                  return await LocationSearchService.searchLocations(
+                                    search,
                                   );
                                 },
+                                itemBuilder:
+                                    (context, LocationSuggestion suggestion) {
+                                      return ListTile(
+                                        dense: true,
+                                        leading: const Icon(
+                                          Icons.location_on,
+                                          color: Colors.green,
+                                          size: 20,
+                                        ),
+                                        title: Text(
+                                          suggestion.displayName
+                                              .split(',')
+                                              .first,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        subtitle: Text(
+                                          suggestion.displayName,
+                                          style: const TextStyle(fontSize: 11),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      );
+                                    },
                                 onSelected: (LocationSuggestion suggestion) {
                                   final position = LatLng(
                                     suggestion.latitude,
@@ -775,7 +799,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                   setState(() {
                                     _pickupLocation = position;
-                                    _pickupController.text = suggestion.displayName.split(',').first;
+                                    _pickupController.text = suggestion
+                                        .displayName
+                                        .split(',')
+                                        .first;
                                   });
 
                                   _mapController?.move(position, 15.0);
@@ -792,7 +819,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'No locations found',
-                                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
                                 loadingBuilder: (context) => const Padding(
@@ -800,14 +830,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: SizedBox(
                                     height: 20,
                                     width: 20,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
                                   ),
                                 ),
                                 errorBuilder: (context, error) => const Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'Error loading suggestions',
-                                    style: TextStyle(color: Colors.red, fontSize: 12),
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
                                 decorationBuilder: (context, child) {
@@ -883,34 +918,40 @@ class _HomeScreenState extends State<HomeScreen> {
                                   );
                                 },
                                 suggestionsCallback: (search) async {
-                                  if (search.isEmpty || search.length < 2) return [];
-                                  return await LocationSearchService.searchLocations(search);
-                                },
-                                itemBuilder: (context, LocationSuggestion suggestion) {
-                                  return ListTile(
-                                    dense: true,
-                                    leading: const Icon(
-                                      Icons.location_on,
-                                      color: Colors.red,
-                                      size: 20,
-                                    ),
-                                    title: Text(
-                                      suggestion.displayName.split(',').first,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    subtitle: Text(
-                                      suggestion.displayName,
-                                      style: const TextStyle(fontSize: 11),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                  if (search.isEmpty || search.length < 2)
+                                    return [];
+                                  return await LocationSearchService.searchLocations(
+                                    search,
                                   );
                                 },
+                                itemBuilder:
+                                    (context, LocationSuggestion suggestion) {
+                                      return ListTile(
+                                        dense: true,
+                                        leading: const Icon(
+                                          Icons.location_on,
+                                          color: Colors.red,
+                                          size: 20,
+                                        ),
+                                        title: Text(
+                                          suggestion.displayName
+                                              .split(',')
+                                              .first,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        subtitle: Text(
+                                          suggestion.displayName,
+                                          style: const TextStyle(fontSize: 11),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      );
+                                    },
                                 onSelected: (LocationSuggestion suggestion) {
                                   final position = LatLng(
                                     suggestion.latitude,
@@ -919,7 +960,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                   setState(() {
                                     _destinationLocation = position;
-                                    _destinationController.text = suggestion.displayName.split(',').first;
+                                    _destinationController.text = suggestion
+                                        .displayName
+                                        .split(',')
+                                        .first;
                                   });
 
                                   _mapController?.move(position, 15.0);
@@ -936,7 +980,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'No locations found',
-                                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
                                 loadingBuilder: (context) => const Padding(
@@ -944,14 +991,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: SizedBox(
                                     height: 20,
                                     width: 20,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
                                   ),
                                 ),
                                 errorBuilder: (context, error) => const Padding(
                                   padding: EdgeInsets.all(8.0),
                                   child: Text(
                                     'Error loading suggestions',
-                                    style: TextStyle(color: Colors.red, fontSize: 12),
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
                                 decorationBuilder: (context, child) {
@@ -1066,7 +1118,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 if (_pickupLocation == null) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text('Please select a pickup location'),
+                                      content: Text(
+                                        'Please select a pickup location',
+                                      ),
                                       backgroundColor: Colors.orange,
                                     ),
                                   );
@@ -1075,7 +1129,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 if (_destinationLocation == null) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text('Please select a destination'),
+                                      content: Text(
+                                        'Please select a destination',
+                                      ),
                                       backgroundColor: Colors.orange,
                                     ),
                                   );
@@ -1093,7 +1149,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.orange,
                                 foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -1137,7 +1195,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text('Please select a destination first'),
+                                      content: Text(
+                                        'Please select a destination first',
+                                      ),
                                       backgroundColor: Colors.orange,
                                     ),
                                   );

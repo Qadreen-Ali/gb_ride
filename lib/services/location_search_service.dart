@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:latlong2/latlong.dart';
+// import 'package:latlong2/latlong.dart';
+import 'package:gb_ride/utils/logger.dart';
 
 class LocationSuggestion {
   final String displayName;
@@ -41,38 +42,33 @@ class LocationSearchService {
 
       final response = await http.get(
         url,
-        headers: {
-          'User-Agent': 'GBRideApp/1.0',
-          'Accept': 'application/json',
-        },
+        headers: {'User-Agent': 'GBRideApp/1.0', 'Accept': 'application/json'},
       );
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         return data.map((json) => LocationSuggestion.fromJson(json)).toList();
       } else {
-        print('Search failed with status: ${response.statusCode}');
+        logger.i('Search failed with status: ${response.statusCode}');
         return [];
       }
     } catch (e) {
-      print('Error searching locations: $e');
+      logger.i('Error searching locations: $e');
       return [];
     }
   }
 
   // Get location from coordinates (reverse geocoding)
-  static Future<String?> getAddressFromCoordinates(double lat, double lon) async {
+  static Future<String?> getAddressFromCoordinates(
+    double lat,
+    double lon,
+  ) async {
     try {
-      final url = Uri.parse(
-        '$_baseUrl/reverse?lat=$lat&lon=$lon&format=json',
-      );
+      final url = Uri.parse('$_baseUrl/reverse?lat=$lat&lon=$lon&format=json');
 
       final response = await http.get(
         url,
-        headers: {
-          'User-Agent': 'GBRideApp/1.0',
-          'Accept': 'application/json',
-        },
+        headers: {'User-Agent': 'GBRideApp/1.0', 'Accept': 'application/json'},
       );
 
       if (response.statusCode == 200) {
@@ -81,7 +77,7 @@ class LocationSearchService {
       }
       return null;
     } catch (e) {
-      print('Error getting address: $e');
+      logger.i('Error getting address: $e');
       return null;
     }
   }
