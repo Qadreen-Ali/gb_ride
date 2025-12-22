@@ -40,7 +40,7 @@ class _BottomNavBarScreenState extends State<BottomNavBar> {
 
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
-          splashColor: Colors.transparent,
+          splashColor: GBColor.secondary,
           highlightColor: Colors.transparent,
           hoverColor: Colors.transparent,
         ),

@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         debugPrint('Requested permission status: $permission');
-        
+
         if (permission == LocationPermission.denied) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -114,12 +114,12 @@ class _HomeScreenState extends State<HomeScreen> {
       if (permission == LocationPermission.whileInUse ||
           permission == LocationPermission.always) {
         debugPrint('Getting current position...');
-        
+
         Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high,
           timeLimit: const Duration(seconds: 10),
         );
-        
+
         debugPrint('Got position: ${position.latitude}, ${position.longitude}');
 
         if (mounted) {
@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _pickupController.text = 'Getting address...';
             _isLoadingLocation = false;
           });
-          
+
           // Move map to current location - only if map controller is ready
           if (_mapController != null) {
             try {
@@ -138,10 +138,10 @@ class _HomeScreenState extends State<HomeScreen> {
               debugPrint('Map controller not ready yet: $e');
             }
           }
-          
+
           // Get address
           await _getAddressFromLatLng(_currentLocation, isPickup: true);
-          
+
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -361,7 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
 
       _getAddressFromLatLng(position, isPickup: true);
-      
+
       Future.delayed(const Duration(milliseconds: 100), () {
         if (mounted) {
           _mapController?.move(position, 15.0);
@@ -411,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _showLocationInputDialog({required bool isPickup}) {
     final TextEditingController dialogController = TextEditingController();
-    
+
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) => AlertDialog(
@@ -534,7 +534,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               border: Border.all(color: Colors.white, width: 3),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.blue.withOpacity(0.5),
+                                   color: Colors.blue.withOpacity(0.5),
                                   blurRadius: 10,
                                   spreadRadius: 2,
                                 ),
@@ -587,7 +587,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         // Destination location marker
                         if (_destinationLocation != null)
-                          Marker(
+
+                            Marker(
                             point: _destinationLocation!,
                             width: 50,
                             height: 60,
@@ -852,7 +853,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-          // Bottom Card  
+          // Bottom Card
           if (!_isSelectingPickup && !_isSelectingDestination)
             Positioned(
               bottom: 0,

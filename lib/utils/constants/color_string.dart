@@ -3,7 +3,7 @@ import 'dart:ui';
 class GBColor {
   static const Color primary = Color(0xFFEB8E00); // Updated Primary - Shade 500
   static const Color secondary = Color(
-    0xFFECEFF4,
+    0xFFFFFFFF,
   ); // Updated Secondary - Shade 500
   static const Color lineColor = Color(0xFF999999);
   static const Color error = Color(0xFFF13F3F);
