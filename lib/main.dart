@@ -6,6 +6,7 @@ import 'package:gb_ride/view/module/student/home/home_screen.dart';
 import 'package:gb_ride/view/splash/splash_screen.dart';
 //import 'package:gb_ride/view/home/home_screen.dart';
 // import 'package:logger/logger.dart';
+import 'package:gb_ride/view/auth/form_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,9 +29,10 @@ class MyApp extends StatelessWidget {
         '/': (context) => SplashScreen(), //initial Screen
         '/login': (context) => const LoginScreen(),
         '/otp': (context) =>
-            const OTPVerificationScreen(phoneNumber: '3001234567'),
-        '/bottomnavbar': (context) => const BottomNavBar(),
-        '/home': (context) => const HomeScreen(),
+            const OTPVerificationScreen(phoneNumber: '3465407068'),
+        '/form': (context) => const FormScreen(),
+        // '/bottomnavbar': (context) => const BottomNavBar(),
+        // '/home': (context) => const HomeScreen(),
       },
     );
   }

@@ -102,6 +102,11 @@ class _OTPFieldState extends State<OTPField> {
           ),
           width: widget.fieldWidth,
           height: widget.fieldHeight,
+          decoration: BoxDecoration(
+            color: Colors.white, // ✅ WHITE BOX HERE
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: Colors.grey.shade300, width: 1),
+          ),
           child: RawKeyboardListener(
             focusNode: FocusNode(),
             onKey: (event) => _onKeyEvent(event, index),
@@ -119,13 +124,17 @@ class _OTPFieldState extends State<OTPField> {
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
                 counterText: '',
+                // filled: true,
+                border: InputBorder.none, // ❌ no underline / border
+                filled: false,
+                fillColor: GBColor.secondary,
                 contentPadding: EdgeInsets.zero,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: GBColor.secondary, width: 2),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: GBColor.secondary, width: 2.5),
-                ),
+                // enabledBorder: UnderlineInputBorder(
+                //   // borderSide: BorderSide(color: GBColor.secondary, width: 2),
+                // ),
+                // focusedBorder: UnderlineInputBorder(
+                //   borderSide: BorderSide(color: GBColor.secondary, width: 2.5),
+                // ),
               ),
               onChanged: (value) => _onChanged(value, index),
             ),

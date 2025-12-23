@@ -93,7 +93,7 @@ class _TTextFieldState extends State<TTextField> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
-                  color: GBColor.secondary.withOpacity(0.4),
+                  color: GBColor.lineColor.withOpacity(0.4),
                 ),
               ),
               enabledBorder: OutlineInputBorder(
@@ -104,7 +104,7 @@ class _TTextFieldState extends State<TTextField> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: GBColor.secondary),
+                borderSide: BorderSide(color: GBColor.primary),
               ),
               prefixIcon: widget.prefixIcon,
               suffixIcon: widget.suffixIcon,
