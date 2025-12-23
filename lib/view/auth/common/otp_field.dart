@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-// import 'package:gb_ride/view/auth/otp_verification_screen.dart';
 
 class OTPField extends StatefulWidget {
   final int length;
@@ -26,8 +25,8 @@ class OTPField extends StatefulWidget {
 }
 
 class _OTPFieldState extends State<OTPField> {
-  late List<TextEditingController> _controllers;
-  late List<FocusNode> _focusNodes;
+  late final List<TextEditingController> _controllers;
+  late final List<FocusNode> _focusNodes;
 
   @override
   void initState() {
@@ -62,13 +61,11 @@ class _OTPFieldState extends State<OTPField> {
       }
     }
 
-    if (widget.onChanged != null) {
-      widget.onChanged!(_getOTP());
-    }
+    widget.onChanged?.call(_getOTP());
   }
 
-  void _onKeyEvent(RawKeyEvent event, int index) {
-    if (event is RawKeyDownEvent) {
+  void _onKeyEvent(KeyEvent event, int index) {
+    if (event is KeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.backspace) {
         if (_controllers[index].text.isEmpty && index > 0) {
           // Move to previous field when backspace on empty field
@@ -80,7 +77,7 @@ class _OTPFieldState extends State<OTPField> {
   }
 
   void _checkCompletion() {
-    String otp = _getOTP();
+    final otp = _getOTP();
     if (otp.length == widget.length) {
       widget.onCompleted(otp);
     }
@@ -102,9 +99,10 @@ class _OTPFieldState extends State<OTPField> {
           ),
           width: widget.fieldWidth,
           height: widget.fieldHeight,
+          // ignore: deprecated_member_use
           child: RawKeyboardListener(
             focusNode: FocusNode(),
-            onKey: (event) => _onKeyEvent(event, index),
+            onKey: (event) => _onKeyEvent(event as KeyEvent, index),
             child: TextField(
               controller: _controllers[index],
               focusNode: _focusNodes[index],

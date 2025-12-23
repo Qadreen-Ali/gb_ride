@@ -14,12 +14,20 @@
 //   State<HomeScreen> createState() => _HomeScreenState();
 // }
 
-// class _HomeScreenState extends State<HomeScreen> {
-//   final TextEditingController _pickupController = TextEditingController();
-//   final TextEditingController _destinationController = TextEditingController();
-//   MapController? _mapController;
-  
-//   final DraggableScrollableController _sheetController = DraggableScrollableController();
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:gb_ride/view/module/student/home/home_screen.dart';
+import 'package:json_rpc_2/error_code.dart' as place;
+import 'package:latlong2/latlong.dart';
+import 'package:path/path.dart';
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _pickupController = TextEditingController();
+  final TextEditingController _destinationController = TextEditingController();
+  MapController? _mapController;
+
+  final DraggableScrollableController _sheetController =
+      DraggableScrollableController();
 
 //   LatLng _currentLocation = const LatLng(35.911383, 74.341500);
 //   LatLng? _pickupLocation;
@@ -102,147 +110,132 @@
 //     }
 //   }
 
-//   Future<void> _getAddressFromLatLng(LatLng position, {required bool isPickup}) async {
-//     try {
-//       if (mounted) {
-//         setState(() {
-//           _isLoadingAddress = true;
-//         });
-//       }
+  Future<void> _getAddressFromLatLng(
+    LatLng position, {
+    required bool isPickup,
+  }) async {
+    try {
+      if (mounted) {
+        setState(() {
+          _isLoadingAddress = true;
+        });
+      }
 
-//       List<Placemark> placemarks = await placemarkFromCoordinates(
-//         position.latitude,
-//         position.longitude,
-//       );
+        if (place.name != null &&
+            place.name.isNotEmpty &&
+            place.name != position.latitude.toStringAsFixed(4)) {
+          address += place.name!;
+        }
+        if (place.locality != null && place.locality!.isNotEmpty) {
+          if (address.isNotEmpty) address += ', ';
+          address += place.locality!;
+        }
+        if (place.subAdministrativeArea != null &&
+            place.subAdministrativeArea!.isNotEmpty) {
+          if (address.isNotEmpty &&
+              !address.contains(place.subAdministrativeArea!)) {
+            address += ', ${place.subAdministrativeArea!}';
+          }
+        }
+        if (place.country != null && place.country!.isNotEmpty) {
+          if (address.isNotEmpty) address += ', ';
+          address += place.country!;
+        }
 
-//       if (placemarks.isNotEmpty && mounted) {
-//         Placemark place = placemarks[0];
-//         String address = '';
+        if (address.isEmpty) {
+          address =
+              '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
+        }
 
-//         if (place.name != null && place.name!.isNotEmpty && place.name != position.latitude.toStringAsFixed(4)) {
-//           address += place.name!;
-//         }
-//         if (place.locality != null && place.locality!.isNotEmpty) {
-//           if (address.isNotEmpty) address += ', ';
-//           address += place.locality!;
-//         }
-//         if (place.subAdministrativeArea != null && place.subAdministrativeArea!.isNotEmpty) {
-//           if (address.isNotEmpty && !address.contains(place.subAdministrativeArea!)) {
-//             address += ', ${place.subAdministrativeArea!}';
-//           }
-//         }
-//         if (place.country != null && place.country!.isNotEmpty) {
-//           if (address.isNotEmpty) address += ', ';
-//           address += place.country!;
-//         }
+        if (mounted) {
+          setState(() {
+            if (isPickup) {
+              _pickupController.text = address;
+            } else {
+              _destinationController.text = address;
+            }
+            _isLoadingAddress = false;
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint('Error getting address: $e');
+      if (mounted) {
+        setState(() {
+          if (isPickup) {
+            _pickupController.text =
+                '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
+          } else {
+            _destinationController.text =
+                '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
+          }
+          _isLoadingAddress = false;
+        });
+      }
+    }
+  }
+  
+  extension on String? Function(int errorCode) {
+  bool? get isNotEmpty => null;
+  }
 
-//         if (address.isEmpty) {
-//           address = '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
-//         }
+  void _startPickupSelection() {
+    setState(() {
+      var _isSelectingPickup = true;
+      var _isSelectingDestination = false;
+    });
 
-//         if (mounted) {
-//           setState(() {
-//             if (isPickup) {
-//               _pickupController.text = address;
-//             } else {
-//               _destinationController.text = address;
-//             }
-//             _isLoadingAddress = false;
-//           });
-//         }
-//       }
-//     } catch (e) {
-//       debugPrint('Error getting address: $e');
-//       if (mounted) {
-//         setState(() {
-//           if (isPickup) {
-//             _pickupController.text = '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
-//           } else {
-//             _destinationController.text = '${position.latitude.toStringAsFixed(4)}, ${position.longitude.toStringAsFixed(4)}';
-//           }
-//           _isLoadingAddress = false;
-//         });
-//       }
-//     }
-//   }
+    _collapseSheet();
 
-//   void _startPickupSelection() {
-//     setState(() {
-//       _isSelectingPickup = true;
-//       _isSelectingDestination = false;
-//     });
-    
-//     _collapseSheet();
-    
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(
-//         content: Text('👆 Tap anywhere on the map to select pickup location'),
-//         backgroundColor: Colors.green,
-//         duration: Duration(seconds: 2),
-//       ),
-//     );
-//   }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('👆 Tap anywhere on the map to select pickup location'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
 
-//   void _startDestinationSelection() {
-//     if (_pickupLocation == null) {
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(
-//           content: Text('Please select pickup location first'),
-//           backgroundColor: Colors.orange,
-//           duration: Duration(seconds: 2),
-//         ),
-//       );
-//       return;
-//     }
+    // ignore: strict_top_level_inference
+    setState(() {
+      _isSelectingDestination = true;
+      _isSelectingPickup = false;
+    });
 
-//     setState(() {
-//       _isSelectingDestination = true;
-//       _isSelectingPickup = false;
-//     });
-    
-//     _collapseSheet();
-    
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(
-//         content: Text('👆 Tap anywhere on the map to select destination'),
-//         backgroundColor: Colors.red,
-//         duration: Duration(seconds: 2),
-//       ),
-//     );
-//   }
+    _collapseSheet();
 
-//   void _handleMapTap(TapPosition tapPosition, LatLng position) {
-//     if (_isSelectingPickup) {
-//       setState(() {
-//         _pickupLocation = position;
-//         _pickupController.text = 'Loading address...';
-//         _isSelectingPickup = false;
-//       });
+    void ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('👆 Tap anywhere on the map to select destination'),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 2),
+      ),
+    )z
+      _getAddressFromLatLng(position, isPickup: true);
+      _mapController?.move(position, 15.0);
 
-//       _getAddressFromLatLng(position, isPickup: true);
-//       _mapController?.move(position, 15.0);
-      
-//       _expandSheet();
-//     } else if (_isSelectingDestination) {
-//       setState(() {
-//         _destinationLocation = position;
-//         _destinationController.text = 'Loading address...';
-//         _isSelectingDestination = false;
-//       });
+      _expandSheet();
+    } else if (_isSelectingDestination) {
+      setState(() {
+        _destinationLocation = position;
+        _destinationController.text = 'Loading address...';
+        _isSelectingDestination = false;
+      });
 
 //       _getAddressFromLatLng(position, isPickup: false);
 
-//       if (_pickupLocation != null) {
-//         double centerLat = (_pickupLocation!.latitude + position.latitude) / 2;
-//         double centerLng = (_pickupLocation!.longitude + position.longitude) / 2;
-//         _mapController?.move(LatLng(centerLat, centerLng), 13.0);
-//       }
-      
-//       _expandSheet();
-//     } else {
-//       _collapseSheet();
-//     }
-//   }
+      if (_pickupLocation != null) {
+        double centerLat = (_pickupLocation!.latitude + position.latitude) / 2;
+        double centerLng =
+            (_pickupLocation!.longitude + position.longitude) / 2;
+        _mapController?.move(LatLng(centerLat, centerLng), 13.0);
+      }
+
+      _expandSheet();
+    } else {
+      _collapseSheet();
+    }
+  }
 
 //   void _cancelSelection() {
 //     setState(() {
@@ -281,145 +274,152 @@
 //     _getCurrentLocation();
 //   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       key: _scaffoldKey,
-//       drawer: const ProfileDrawer(),
-//       body: Stack(
-//         children: [
-//           // Map Layer
-//           _isLoadingLocation
-//               ? Center(
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: const [
-//                       CircularProgressIndicator(color: Colors.orange),
-//                       SizedBox(height: 16),
-//                       Text(
-//                         'Getting your location...',
-//                         style: TextStyle(fontSize: 16, color: Colors.grey),
-//                       ),
-//                     ],
-//                   ),
-//                 )
-//               : FlutterMap(
-//                   mapController: _mapController,
-//                   options: MapOptions(
-//                     initialCenter: _currentLocation,
-//                     initialZoom: 15.0,
-//                     minZoom: 10.0,
-//                     maxZoom: 18.0,
-//                     onTap: _handleMapTap,
-//                     interactionOptions: const InteractionOptions(
-//                       flags: InteractiveFlag.all,
-//                     ),
-//                   ),
-//                   children: [
-//                     TileLayer(
-//                       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-//                       userAgentPackageName: 'com.example.gb_ride',
-//                     ),
-//                     MarkerLayer(
-//                       markers: [
-//                         Marker(
-//                           point: _currentLocation,
-//                           width: 40,
-//                           height: 40,
-//                           child: Container(
-//                             decoration: BoxDecoration(
-//                               color: Colors.blue,
-//                               shape: BoxShape.circle,
-//                               border: Border.all(color: Colors.white, width: 3),
-//                               boxShadow: [
-//                                 BoxShadow(
-//                                   color: Colors.blue.withOpacity(0.5),
-//                                   blurRadius: 10,
-//                                   spreadRadius: 2,
-//                                 ),
-//                               ],
-//                             ),
-//                             child: const Icon(
-//                               Icons.my_location,
-//                               color: Colors.white,
-//                               size: 18,
-//                             ),
-//                           ),
-//                         ),
-//                         if (_pickupLocation != null)
-//                           Marker(
-//                             point: _pickupLocation!,
-//                             width: 50,
-//                             height: 60,
-//                             child: Column(
-//                               children: [
-//                                 Container(
-//                                   padding: const EdgeInsets.all(8),
-//                                   decoration: BoxDecoration(
-//                                     color: Colors.green,
-//                                     shape: BoxShape.circle,
-//                                     border: Border.all(color: Colors.white, width: 3),
-//                                     boxShadow: [
-//                                       BoxShadow(
-//                                         color: Colors.green.withOpacity(0.5),
-//                                         blurRadius: 10,
-//                                         spreadRadius: 2,
-//                                       ),
-//                                     ],
-//                                   ),
-//                                   child: const Icon(
-//                                     Icons.person_pin_circle,
-//                                     color: Colors.white,
-//                                     size: 24,
-//                                   ),
-//                                 ),
-//                                 Container(
-//                                   width: 2,
-//                                   height: 10,
-//                                   color: Colors.green,
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                         if (_destinationLocation != null)
-//                           Marker(
-//                             point: _destinationLocation!,
-//                             width: 50,
-//                             height: 60,
-//                             child: Column(
-//                               children: [
-//                                 Container(
-//                                   padding: const EdgeInsets.all(8),
-//                                   decoration: BoxDecoration(
-//                                     color: Colors.red,
-//                                     shape: BoxShape.circle,
-//                                     border: Border.all(color: Colors.white, width: 3),
-//                                     boxShadow: [
-//                                       BoxShadow(
-//                                         color: Colors.red.withOpacity(0.5),
-//                                         blurRadius: 10,
-//                                         spreadRadius: 2,
-//                                       ),
-//                                     ],
-//                                   ),
-//                                   child: const Icon(
-//                                     Icons.location_on,
-//                                     color: Colors.white,
-//                                     size: 24,
-//                                   ),
-//                                 ),
-//                                 Container(
-//                                   width: 2,
-//                                   height: 10,
-//                                   color: Colors.red,
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                       ],
-//                     ),
-//                   ],
-//                 ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: const ProfileDrawer(),
+      body: Stack(
+        children: [
+          // Map Layer
+          _isLoadingLocation
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      CircularProgressIndicator(color: Colors.orange),
+                      SizedBox(height: 16),
+                      Text(
+                        'Getting your location...',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                )
+              : FlutterMap(
+                  mapController: _mapController,
+                  options: MapOptions(
+                    initialCenter: _currentLocation,
+                    initialZoom: 15.0,
+                    minZoom: 10.0,
+                    maxZoom: 18.0,
+                    onTap: _handleMapTap,
+                    interactionOptions: const InteractionOptions(
+                      flags: InteractiveFlag.all,
+                    ),
+                  ),
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      userAgentPackageName: 'com.example.gb_ride',
+                    ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          point: _currentLocation,
+                          width: 40,
+                          height: 40,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 3),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.blue.withOpacity(0.5),
+                                  blurRadius: 10,
+                                  spreadRadius: 2,
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.my_location,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                        if (_pickupLocation != null)
+                          Marker(
+                            point: _pickupLocation!,
+                            width: 50,
+                            height: 60,
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 3,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.green.withOpacity(0.5),
+                                        blurRadius: 10,
+                                        spreadRadius: 2,
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(
+                                    Icons.person_pin_circle,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                ),
+                                Container(
+                                  width: 2,
+                                  height: 10,
+                                  color: Colors.green,
+                                ),
+                              ],
+                            ),
+                          ),
+                        if (_destinationLocation != null)
+                          Marker(
+                            point: _destinationLocation!,
+                            width: 50,
+                            height: 60,
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 3,
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.red.withOpacity(0.5),
+                                        blurRadius: 10,
+                                        spreadRadius: 2,
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(
+                                    Icons.location_on,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                ),
+                                Container(
+                                  width: 2,
+                                  height: 10,
+                                  color: Colors.red,
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
 
 //           // Loading indicator
 //           if (_isLoadingAddress)
@@ -631,21 +631,20 @@
 //               ),
 //             ),
 
-//           // Refresh Location Button
-//           if (!_isSelectingPickup && !_isSelectingDestination && !_isLoadingLocation)
-//             Positioned(
-//               right: 16,
-//               top: 120,
-//               child: FloatingActionButton(
-//                 mini: true,
-//                 backgroundColor: Colors.white,
-//                 onPressed: _refreshCurrentLocation,
-//                 child: const Icon(
-//                   Icons.my_location,
-//                   color: Colors.orange,
-//                 ),
-//               ),
-//             ),
+          // Refresh Location Button
+          if (!_isSelectingPickup &&
+              !_isSelectingDestination &&
+              !_isLoadingLocation)
+            Positioned(
+              right: 16,
+              top: 120,
+              child: FloatingActionButton(
+                mini: true,
+                backgroundColor: Colors.white,
+                onPressed: _refreshCurrentLocation,
+                child: const Icon(Icons.my_location, color: Colors.orange),
+              ),
+            ),
 
 //           // Draggable Bottom Sheet
 //           if (!_isSelectingPickup && !_isSelectingDestination)
@@ -689,293 +688,327 @@
 //                       ),
 //                       const SizedBox(height: 20),
 
-//                       // Pickup Location with Autocomplete
-//                       Container(
-//                         decoration: BoxDecoration(
-//                           color: Colors.green.shade50,
-//                           border: Border.all(
-//                             color: Colors.green.shade200,
-//                             width: 2,
-//                           ),
-//                           borderRadius: BorderRadius.circular(12),
-//                         ),
-//                         child: Row(
-//                           children: [
-//                             Padding(
-//                               padding: const EdgeInsets.all(12.0),
-//                               child: Container(
-//                                 padding: const EdgeInsets.all(8),
-//                                 decoration: const BoxDecoration(
-//                                   color: Colors.green,
-//                                   shape: BoxShape.circle,
-//                                 ),
-//                                 child: const Icon(
-//                                   Icons.person_pin_circle,
-//                                   color: Colors.white,
-//                                   size: 20,
-//                                 ),
-//                               ),
-//                             ),
-//                             Expanded(
-//                               child: TypeAheadField<LocationSuggestion>(
-//                                 controller: _pickupController,
-//                                 builder: (context, controller, focusNode) {
-//                                   return TextField(
-//                                     controller: controller,
-//                                     focusNode: focusNode,
-//                                     decoration: const InputDecoration(
-//                                       hintText: 'Enter pickup location',
-//                                       hintStyle: TextStyle(color: Colors.grey),
-//                                       border: InputBorder.none,
-//                                       isDense: true,
-//                                     ),
-//                                     style: const TextStyle(
-//                                       fontSize: 14,
-//                                       fontWeight: FontWeight.w500,
-//                                     ),
-//                                     onTap: () {
-//                                       _expandSheet();
-//                                     },
-//                                   );
-//                                 },
-//                                 suggestionsCallback: (search) async {
-//                                   if (search.isEmpty || search.length < 2) return [];
-//                                   return await LocationSearchService.searchLocations(search);
-//                                 },
-//                                 itemBuilder: (context, LocationSuggestion suggestion) {
-//                                   return ListTile(
-//                                     dense: true,
-//                                     leading: const Icon(
-//                                       Icons.location_on,
-//                                       color: Colors.green,
-//                                       size: 20,
-//                                     ),
-//                                     title: Text(
-//                                       suggestion.displayName.split(',').first,
-//                                       style: const TextStyle(
-//                                         fontWeight: FontWeight.w600,
-//                                         fontSize: 13,
-//                                       ),
-//                                       maxLines: 1,
-//                                       overflow: TextOverflow.ellipsis,
-//                                     ),
-//                                     subtitle: Text(
-//                                       suggestion.displayName,
-//                                       style: const TextStyle(fontSize: 11),
-//                                       maxLines: 1,
-//                                       overflow: TextOverflow.ellipsis,
-//                                     ),
-//                                   );
-//                                 },
-//                                 onSelected: (LocationSuggestion suggestion) {
-//                                   final position = LatLng(
-//                                     suggestion.latitude,
-//                                     suggestion.longitude,
-//                                   );
+                      // Pickup Location with Autocomplete
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green.shade50,
+                          border: Border.all(
+                            color: Colors.green.shade200,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.person_pin_circle,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: TypeAheadField<LocationSuggestion>(
+                                controller: _pickupController,
+                                builder: (context, controller, focusNode) {
+                                  return TextField(
+                                    controller: controller,
+                                    focusNode: focusNode,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Enter pickup location',
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                      isDense: true,
+                                    ),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    onTap: () {
+                                      _expandSheet();
+                                    },
+                                  );
+                                },
+                                suggestionsCallback: (search) async {
+                                  if (search.isEmpty || search.length < 2)
+                                    return [];
+                                  return await LocationSearchService.searchLocations(
+                                    search,
+                                  );
+                                },
+                                itemBuilder:
+                                    (context, LocationSuggestion suggestion) {
+                                      return ListTile(
+                                        dense: true,
+                                        leading: const Icon(
+                                          Icons.location_on,
+                                          color: Colors.green,
+                                          size: 20,
+                                        ),
+                                        title: Text(
+                                          suggestion.displayName
+                                              .split(',')
+                                              .first,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        subtitle: Text(
+                                          suggestion.displayName,
+                                          style: const TextStyle(fontSize: 11),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      );
+                                    },
+                                onSelected: (LocationSuggestion suggestion) {
+                                  final position = LatLng(
+                                    suggestion.latitude,
+                                    suggestion.longitude,
+                                  );
 
-//                                   setState(() {
-//                                     _pickupLocation = position;
-//                                     _pickupController.text = suggestion.displayName.split(',').first;
-//                                   });
-
-//                                   _mapController?.move(position, 15.0);
-
-//                                   ScaffoldMessenger.of(context).showSnackBar(
-//                                     const SnackBar(
-//                                       content: Text('✓ Pickup location set'),
-//                                       backgroundColor: Colors.green,
-//                                       duration: Duration(seconds: 1),
-//                                     ),
-//                                   );
-//                                 },
-//                                 emptyBuilder: (context) => const Padding(
-//                                   padding: EdgeInsets.all(8.0),
-//                                   child: Text(
-//                                     'No locations found',
-//                                     style: TextStyle(color: Colors.grey, fontSize: 12),
-//                                   ),
-//                                 ),
-//                                 loadingBuilder: (context) => const Padding(
-//                                   padding: EdgeInsets.all(8.0),
-//                                   child: SizedBox(
-//                                     height: 20,
-//                                     width: 20,
-//                                     child: CircularProgressIndicator(strokeWidth: 2),
-//                                   ),
-//                                 ),
-//                                 errorBuilder: (context, error) => const Padding(
-//                                   padding: EdgeInsets.all(8.0),
-//                                   child: Text(
-//                                     'Error loading suggestions',
-//                                     style: TextStyle(color: Colors.red, fontSize: 12),
-//                                   ),
-//                                 ),
-//                                 decorationBuilder: (context, child) {
-//                                   return Material(
-//                                     elevation: 4,
-//                                     borderRadius: BorderRadius.circular(8),
-//                                     child: child,
-//                                   );
-//                                 },
-//                               ),
-//                             ),
-//                             IconButton(
-//                               icon: const Icon(
-//                                 Icons.map,
-//                                 color: Colors.green,
-//                                 size: 24,
-//                               ),
-//                               onPressed: _startPickupSelection,
-//                               tooltip: 'Select on map',
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       const SizedBox(height: 12),
-
-//                       // Destination with Autocomplete
-//                       Container(
-//                         decoration: BoxDecoration(
-//                           color: Colors.red.shade50,
-//                           border: Border.all(
-//                             color: Colors.red.shade200,
-//                             width: 2,
-//                           ),
-//                           borderRadius: BorderRadius.circular(12),
-//                         ),
-//                         child: Row(
-//                           children: [
-//                             Padding(
-//                               padding: const EdgeInsets.all(12.0),
-//                               child: Container(
-//                                 padding: const EdgeInsets.all(8),
-//                                 decoration: const BoxDecoration(
-//                                   color: Colors.red,
-//                                   shape: BoxShape.circle,
-//                                 ),
-//                                 child: const Icon(
-//                                   Icons.location_on,
-//                                   color: Colors.white,
-//                                   size: 20,
-//                                 ),
-//                               ),
-//                             ),
-//                             Expanded(
-//                               child: TypeAheadField<LocationSuggestion>(
-//                                 controller: _destinationController,
-//                                 builder: (context, controller, focusNode) {
-//                                   return TextField(
-//                                     controller: controller,
-//                                     focusNode: focusNode,
-//                                     decoration: const InputDecoration(
-//                                       hintText: 'Where to?',
-//                                       hintStyle: TextStyle(color: Colors.grey),
-//                                       border: InputBorder.none,
-//                                       isDense: true,
-//                                     ),
-//                                     style: const TextStyle(
-//                                       fontSize: 14,
-//                                       fontWeight: FontWeight.w500,
-//                                     ),
-//                                     onTap: () {
-//                                       _expandSheet();
-//                                     },
-//                                   );
-//                                 },
-//                                 suggestionsCallback: (search) async {
-//                                   if (search.isEmpty || search.length < 2) return [];
-//                                   return await LocationSearchService.searchLocations(search);
-//                                 },
-//                                 itemBuilder: (context, LocationSuggestion suggestion) {
-//                                   return ListTile(
-//                                     dense: true,
-//                                     leading: const Icon(
-//                                       Icons.location_on,
-//                                       color: Colors.red,
-//                                       size: 20,
-//                                     ),
-//                                     title: Text(
-//                                       suggestion.displayName.split(',').first,
-//                                       style: const TextStyle(
-//                                         fontWeight: FontWeight.w600,
-//                                         fontSize: 13,
-//                                       ),
-//                                       maxLines: 1,
-//                                       overflow: TextOverflow.ellipsis,
-//                                     ),
-//                                     subtitle: Text(
-//                                       suggestion.displayName,
-//                                       style: const TextStyle(fontSize: 11),
-//                                       maxLines: 1,
-//                                       overflow: TextOverflow.ellipsis,
-//                                     ),
-//                                   );
-//                                 },
-//                                 onSelected: (LocationSuggestion suggestion) {
-//                                   final position = LatLng(
-//                                     suggestion.latitude,
-//                                     suggestion.longitude,
-//                                   );
-
-//                                   setState(() {
-//                                     _destinationLocation = position;
-//                                     _destinationController.text = suggestion.displayName.split(',').first;
-//                                   });
+                                  setState(() {
+                                    _pickupLocation = position;
+                                    _pickupController.text = suggestion
+                                        .displayName
+                                        .split(',')
+                                        .first;
+                                  });
 
 //                                   _mapController?.move(position, 15.0);
 
-//                                   ScaffoldMessenger.of(context).showSnackBar(
-//                                     const SnackBar(
-//                                       content: Text('✓ Destination set'),
-//                                       backgroundColor: Colors.green,
-//                                       duration: Duration(seconds: 1),
-//                                     ),
-//                                   );
-//                                 },
-//                                 emptyBuilder: (context) => const Padding(
-//                                   padding: EdgeInsets.all(8.0),
-//                                   child: Text(
-//                                     'No locations found',
-//                                     style: TextStyle(color: Colors.grey, fontSize: 12),
-//                                   ),
-//                                 ),
-//                                 loadingBuilder: (context) => const Padding(
-//                                   padding: EdgeInsets.all(8.0),
-//                                   child: SizedBox(
-//                                     height: 20,
-//                                     width: 20,
-//                                     child: CircularProgressIndicator(strokeWidth: 2),
-//                                   ),
-//                                 ),
-//                                 errorBuilder: (context, error) => const Padding(
-//                                   padding: EdgeInsets.all(8.0),
-//                                   child: Text(
-//                                     'Error loading suggestions',
-//                                     style: TextStyle(color: Colors.red, fontSize: 12),
-//                                   ),
-//                                 ),
-//                                 decorationBuilder: (context, child) {
-//                                   return Material(
-//                                     elevation: 4,
-//                                     borderRadius: BorderRadius.circular(8),
-//                                     child: child,
-//                                   );
-//                                 },
-//                               ),
-//                             ),
-//                             IconButton(
-//                               icon: const Icon(
-//                                 Icons.map,
-//                                 color: Colors.red,
-//                                 size: 24,
-//                               ),
-//                               onPressed: _startDestinationSelection,
-//                               tooltip: 'Select on map',
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       const SizedBox(height: 16),
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('✓ Pickup location set'),
+                                      backgroundColor: Colors.green,
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
+                                emptyBuilder: (context) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'No locations found',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                                loadingBuilder: (context) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  ),
+                                ),
+                                errorBuilder: (context, error) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Error loading suggestions',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                                decorationBuilder: (context, child) {
+                                  return Material(
+                                    elevation: 4,
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.map,
+                                color: Colors.green,
+                                size: 24,
+                              ),
+                              onPressed: _startPickupSelection,
+                              tooltip: 'Select on map',
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Destination with Autocomplete
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade50,
+                          border: Border.all(
+                            color: Colors.red.shade200,
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.location_on,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: TypeAheadField<LocationSuggestion>(
+                                controller: _destinationController,
+                                builder: (context, controller, focusNode) {
+                                  return TextField(
+                                    controller: controller,
+                                    focusNode: focusNode,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Where to?',
+                                      hintStyle: TextStyle(color: Colors.grey),
+                                      border: InputBorder.none,
+                                      isDense: true,
+                                    ),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    onTap: () {
+                                      _expandSheet();
+                                    },
+                                  );
+                                },
+                                suggestionsCallback: (search) async {
+                                  if (search.isEmpty || search.length < 2)
+                                    return [];
+                                  return await LocationSearchService.searchLocations(
+                                    search,
+                                  );
+                                },
+                                itemBuilder:
+                                    (context, LocationSuggestion suggestion) {
+                                      return ListTile(
+                                        dense: true,
+                                        leading: const Icon(
+                                          Icons.location_on,
+                                          color: Colors.red,
+                                          size: 20,
+                                        ),
+                                        title: Text(
+                                          suggestion.displayName
+                                              .split(',')
+                                              .first,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        subtitle: Text(
+                                          suggestion.displayName,
+                                          style: const TextStyle(fontSize: 11),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      );
+                                    },
+                                onSelected: (LocationSuggestion suggestion) {
+                                  final position = LatLng(
+                                    suggestion.latitude,
+                                    suggestion.longitude,
+                                  );
+
+                                  setState(() {
+                                    _destinationLocation = position;
+                                    _destinationController.text = suggestion
+                                        .displayName
+                                        .split(',')
+                                        .first;
+                                  });
+
+//                                   _mapController?.move(position, 15.0);
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('✓ Destination set'),
+                                      backgroundColor: Colors.green,
+                                      duration: Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
+                                emptyBuilder: (context) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'No locations found',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                                loadingBuilder: (context) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  ),
+                                ),
+                                errorBuilder: (context, error) => const Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'Error loading suggestions',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                                decorationBuilder: (context, child) {
+                                  return Material(
+                                    elevation: 4,
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.map,
+                                color: Colors.red,
+                                size: 24,
+                              ),
+                              onPressed: _startDestinationSelection,
+                              tooltip: 'Select on map',
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
 
 //                       // Vehicle Selection
 //                       Row(
@@ -1036,127 +1069,135 @@
 //                       ),
 //                       const SizedBox(height: 16),
 
-//                       // Action Buttons
-//                       Row(
-//                         children: [
-//                           Container(
-//                             decoration: BoxDecoration(
-//                               color: Colors.orange,
-//                               shape: BoxShape.circle,
-//                               boxShadow: [
-//                                 BoxShadow(
-//                                   color: Colors.orange.withOpacity(0.3),
-//                                   blurRadius: 8,
-//                                   offset: const Offset(0, 2),
-//                                 ),
-//                               ],
-//                             ),
-//                             child: IconButton(
-//                               icon: const Icon(
-//                                 Icons.chat_bubble_outline,
-//                                 color: Colors.white,
-//                               ),
-//                               onPressed: () {},
-//                             ),
-//                           ),
-//                           const SizedBox(width: 12),
-//                           Expanded(
-//                             child: ElevatedButton(
-//                               onPressed: () {
-//                                 if (_pickupLocation == null) {
-//                                   ScaffoldMessenger.of(context).showSnackBar(
-//                                     const SnackBar(
-//                                       content: Text('Please select a pickup location'),
-//                                       backgroundColor: Colors.orange,
-//                                     ),
-//                                   );
-//                                   return;
-//                                 }
-//                                 if (_destinationLocation == null) {
-//                                   ScaffoldMessenger.of(context).showSnackBar(
-//                                     const SnackBar(
-//                                       content: Text('Please select a destination'),
-//                                       backgroundColor: Colors.orange,
-//                                     ),
-//                                   );
-//                                   return;
-//                                 }
-//                                 ScaffoldMessenger.of(context).showSnackBar(
-//                                   SnackBar(
-//                                     content: Text(
-//                                       'Searching for $_selectedVehicle drivers...',
-//                                     ),
-//                                     backgroundColor: Colors.green,
-//                                   ),
-//                                 );
-//                               },
-//                               style: ElevatedButton.styleFrom(
-//                                 backgroundColor: Colors.orange,
-//                                 foregroundColor: Colors.white,
-//                                 padding: const EdgeInsets.symmetric(vertical: 16),
-//                                 shape: RoundedRectangleBorder(
-//                                   borderRadius: BorderRadius.circular(12),
-//                                 ),
-//                                 elevation: 4,
-//                               ),
-//                               child: const Text(
-//                                 'Find a Driver',
-//                                 style: TextStyle(
-//                                   fontSize: 16,
-//                                   fontWeight: FontWeight.bold,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                           const SizedBox(width: 12),
-//                           Container(
-//                             decoration: BoxDecoration(
-//                               color: Colors.orange,
-//                               shape: BoxShape.circle,
-//                               boxShadow: [
-//                                 BoxShadow(
-//                                   color: Colors.orange.withOpacity(0.3),
-//                                   blurRadius: 8,
-//                                   offset: const Offset(0, 2),
-//                                 ),
-//                               ],
-//                             ),
-//                             child: IconButton(
-//                               icon: const Icon(
-//                                 Icons.navigation,
-//                                 color: Colors.white,
-//                               ),
-//                               onPressed: () {
-//                                 if (_destinationLocation != null) {
-//                                   ScaffoldMessenger.of(context).showSnackBar(
-//                                     const SnackBar(
-//                                       content: Text('Starting navigation...'),
-//                                       backgroundColor: Colors.blue,
-//                                     ),
-//                                   );
-//                                 } else {
-//                                   ScaffoldMessenger.of(context).showSnackBar(
-//                                     const SnackBar(
-//                                       content: Text('Please select a destination first'),
-//                                       backgroundColor: Colors.orange,
-//                                     ),
-//                                   );
-//                                 }
-//                               },
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       const SizedBox(height: 10),
-//                     ],
-//                   ),
-//                 );
-//               },
-//             ),
-//         ],
-//       ),
-//     );
-//   }
+                      // Action Buttons
+                      Row(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.orange,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.orange.withOpacity(0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.chat_bubble_outline,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (_pickupLocation == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Please select a pickup location',
+                                      ),
+                                      backgroundColor: Colors.orange,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                if (_destinationLocation == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Please select a destination',
+                                      ),
+                                      backgroundColor: Colors.orange,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Searching for $_selectedVehicle drivers...',
+                                    ),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                elevation: 4,
+                              ),
+                              child: const Text(
+                                'Find a Driver',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.orange,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.orange.withOpacity(0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.navigation,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                if (_destinationLocation != null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Starting navigation...'),
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Please select a destination first',
+                                      ),
+                                      backgroundColor: Colors.orange,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                );
+              },
+            ),
+        ],
+      ),
+    );
+  }
 
 //   Widget _buildVehicleOption(String type, String emoji, String label) {
 //     bool isSelected = _selectedVehicle == type;
@@ -1206,12 +1247,12 @@
 //     );
 //   }
 
-//   @override
-//   void dispose() {
-//     _pickupController.dispose();
-//     _destinationController.dispose();
-//     _mapController?.dispose();
-//     _sheetController.dispose();
-//     super.dispose();
-//   }
-// }
+  @override
+  void dispose() {
+    _pickupController.dispose();
+    _destinationController.dispose();
+    _mapController?.dispose();
+    _sheetController.dispose();
+    super.dispose();
+  }
+}

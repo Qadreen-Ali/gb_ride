@@ -38,9 +38,11 @@ class PrimaryButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: isDisabled
+              // ignore: deprecated_member_use
               ? GBColor.secondary.withOpacity(0.5)
               : (backgroundColor ?? GBColor.secondary),
           foregroundColor: isDisabled
+              // ignore: deprecated_member_use
               ? Colors.black.withOpacity(0.5)
               : (textColor ?? Colors.black),
           elevation: 0,
@@ -48,11 +50,14 @@ class PrimaryButton extends StatelessWidget {
             borderRadius: borderRadius ?? BorderRadius.circular(12),
             side: BorderSide(
               color: isDisabled
+                  // ignore: deprecated_member_use
                   ? GBColor.secondary.withOpacity(0.5)
                   : (borderColor ?? GBColor.secondary),
             ),
           ),
+          // ignore: deprecated_member_use
           disabledBackgroundColor: GBColor.secondary.withOpacity(0.5),
+          // ignore: deprecated_member_use
           disabledForegroundColor: Colors.black.withOpacity(0.5),
         ),
         child: Text(
@@ -61,6 +66,7 @@ class PrimaryButton extends StatelessWidget {
             fontSize: fontsize ?? 16,
             fontWeight: weight ?? FontWeight.w600,
             color: isDisabled
+                // ignore: deprecated_member_use
                 ? Colors.black.withOpacity(0.5)
                 : (textColor ?? GBColor.black),
           ),

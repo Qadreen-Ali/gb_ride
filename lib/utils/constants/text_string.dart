@@ -26,6 +26,8 @@ class GBText {
   static const String orContinuewith = "Or Continue with";
   static const String continuewithGoogle = "Continue with Google";
   static const String continuewithApple = "Continue with Apple";
+  static const String privacyPolicy =
+      "By Continuing you agree to our Privacy Policy.";
   static const String termsofServices =
       "By Continuing you agree to our Terms of Services and Privacy Policy.";
   static const String alreadyhaveAnAccount = "Already have an Account? Sign In";
