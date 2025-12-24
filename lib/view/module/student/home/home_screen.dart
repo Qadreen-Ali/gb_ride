@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isSelectingPickup = false;
   bool _isSelectingDestination = false;
   bool _isLoadingAddress = false;
+  // ignore: unused_field
   bool _isSheetExpanded = true;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();

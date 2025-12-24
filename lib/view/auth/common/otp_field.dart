@@ -67,8 +67,8 @@ class _OTPFieldState extends State<OTPField> {
     }
   }
 
-  void _onKeyEvent(RawKeyEvent event, int index) {
-    if (event is RawKeyDownEvent) {
+  void _onKeyEvent(KeyEvent event, int index) {
+    if (event is KeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.backspace) {
         if (_controllers[index].text.isEmpty && index > 0) {
           // Move to previous field when backspace on empty field
@@ -107,9 +107,9 @@ class _OTPFieldState extends State<OTPField> {
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: Colors.grey.shade300, width: 1),
           ),
-          child: RawKeyboardListener(
-            focusNode: FocusNode(),
-            onKey: (event) => _onKeyEvent(event, index),
+          child: KeyboardListener(
+            focusNode: _focusNodes[index],
+            onKeyEvent: (event) => _onKeyEvent(event, index),
             child: TextField(
               controller: _controllers[index],
               focusNode: _focusNodes[index],

@@ -38,22 +38,22 @@ class PrimaryButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: isDisabled
-              ? GBColor.secondary.withOpacity(0.5)
+              ? GBColor.secondary.withValues(alpha: 0.5)
               : (backgroundColor ?? GBColor.secondary),
           foregroundColor: isDisabled
-              ? Colors.black.withOpacity(0.5)
+              ? Colors.black.withValues(alpha: 0.5)
               : (textColor ?? Colors.black),
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(12),
             side: BorderSide(
               color: isDisabled
-                  ? GBColor.secondary.withOpacity(0.5)
+                  ? GBColor.secondary.withValues(alpha: 0.5)
                   : (borderColor ?? GBColor.secondary),
             ),
           ),
-          disabledBackgroundColor: GBColor.secondary.withOpacity(0.5),
-          disabledForegroundColor: Colors.black.withOpacity(0.5),
+          disabledBackgroundColor: GBColor.secondary.withValues(alpha: 0.5),
+          disabledForegroundColor: Colors.black.withValues(alpha: 0.5),
         ),
         child: Text(
           title,
@@ -61,7 +61,7 @@ class PrimaryButton extends StatelessWidget {
             fontSize: fontsize ?? 16,
             fontWeight: weight ?? FontWeight.w600,
             color: isDisabled
-                ? Colors.black.withOpacity(0.5)
+                ? Colors.black.withValues(alpha: 0.5)
                 : (textColor ?? GBColor.black),
           ),
         ),
