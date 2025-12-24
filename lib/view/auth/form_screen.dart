@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/common/form_button.dart';
-// import 'package:gb_ride/common/textField.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
-// import 'package:gb_ride/utils/logger.dart';
+import 'package:gb_ride/utils/logger.dart';
 import 'package:gb_ride/view/module/driver/auth/driver_form.dart';
 import 'package:gb_ride/view/module/local/auth/local_form.dart';
 import 'package:gb_ride/view/module/student/auth/student_form.dart';
@@ -140,6 +139,7 @@ class _FormScreenState extends State<FormScreen> {
                 title: GBText.continueBtn,
                 onPressed: () {
                   Navigator.pushNamed(context, '/home');
+                  logger.i('form button pressed');
                 },
               ),
             ],

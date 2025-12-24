@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/common/bottom_navbar.dart';
-import 'package:gb_ride/setting/profile_screen.dart';
+// import 'package:gb_ride/setting/profile_screen.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
 import 'package:gb_ride/view/auth/otp_verification_screen.dart';
 import 'package:gb_ride/view/module/student/home/home_screen.dart';
@@ -8,7 +8,7 @@ import 'package:gb_ride/view/splash/splash_screen.dart';
 // import 'package:gb_ride/view/home/home_screen.dart';
 // import 'package:logger/logger.dart';
 import 'package:gb_ride/view/auth/form_screen.dart';
-import 'package:gb_ride/setting/setting_screen.dart';
+// import 'package:gb_ride/setting/setting_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,8 +35,6 @@ class MyApp extends StatelessWidget {
         '/form': (context) => const FormScreen(),
         '/bottomnavbar': (context) => const BottomNavBar(),
         '/home': (context) => const HomeScreen(),
-        '/settings': (context) => const SettingsScreen(),
-        '/profile': (context) => const ProfileScreen(),
       },
     );
   }

@@ -104,9 +104,9 @@ class _OTPFieldState extends State<OTPField> {
             borderRadius: BorderRadius.circular(14),
             border: Border.all(color: Colors.grey.shade300, width: 1),
           ),
-          child: RawKeyboardListener(
+          child: KeyboardListener(
             focusNode: FocusNode(),
-            onKey: (event) => _onKeyEvent(event as KeyEvent, index),
+            onKeyEvent: (event) => _onKeyEvent(event, index),
             child: TextField(
               controller: _controllers[index],
               focusNode: _focusNodes[index],

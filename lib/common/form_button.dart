@@ -43,7 +43,7 @@ class _FormButtonState extends State<FormButton> {
         decoration: BoxDecoration(
           color: widget.enabled
               ? GBColor.secondary
-              : GBColor.gray.withOpacity(0.4),
+              : GBColor.gray.withValues(alpha: 0.4),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: widget.isSelected ? GBColor.primary : GBColor.lineColor,
@@ -52,7 +52,7 @@ class _FormButtonState extends State<FormButton> {
           boxShadow: _pressed
               ? [
                   BoxShadow(
-                    color: GBColor.primary.withOpacity(0.25),
+                    color: GBColor.primary.withValues(alpha: 0.25),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),

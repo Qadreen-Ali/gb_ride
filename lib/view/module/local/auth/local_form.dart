@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/common/textfield.dart';
+import 'package:gb_ride/common/text_field.dart';
 import 'package:gb_ride/view/auth/common/bottom_sheet_selector.dart';
 
 class LocalForm extends StatefulWidget {
