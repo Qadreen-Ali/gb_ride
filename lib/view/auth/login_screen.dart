@@ -5,7 +5,7 @@ import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/utils/constants/social_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
 import 'package:gb_ride/utils/logger.dart';
-import '../../common/textfield.dart';
+import '../../common/text_field.dart';
 import 'package:flutter/services.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 // import 'package:country_code_picker/country_code_picker.dart';
