@@ -1,13 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-// import 'package:gb_ride/utils/constants/image_string.dart';
-import 'package:gb_ride/utils/constants/primary_button.dart';
-// import 'package:gb_ride/utils/constants/social_button.dart';
+import 'package:gb_ride/utils/constants/secondary_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
 import 'package:gb_ride/utils/logger.dart';
 import 'package:gb_ride/view/auth/common/otp_field.dart';
-// import '../../common/textfield.dart';
 
 class OTPVerificationScreen extends StatefulWidget {
   // const OTPVerificationScreen({super.key});
@@ -19,21 +16,25 @@ class OTPVerificationScreen extends StatefulWidget {
 }
 
 class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
-  String _otp = '';
-  bool _isOTPComplete = false;
+  // String _otp = '';
+  // bool _isOTPComplete = false;
 
   @override
   Widget build(BuildContext context) {
+    // final keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom > 0;
     return Scaffold(
-      backgroundColor: GBColor.primary,
-      // resizeToAvoidBottomInset: true,
+      backgroundColor: GBColor.secondary,
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
+        // onTap: () => FocusScope.of(context).unfocus(),
+        // child: SingleChildScrollView(
+        // physics: const NeverScrollableScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 14.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 140),
+              SizedBox(height: 60),
 
               Text(
                 GBText.verificationCode,
@@ -56,17 +57,18 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                   color: GBColor.gray,
                 ),
               ),
+              const SizedBox(height: 5),
               Text(
                 '+92 ${widget.phoneNumber}',
                 style: const TextStyle(
                   fontSize: 16,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
-                  color: GBColor.black,
+                  color: GBColor.primary,
                 ),
               ),
               // const SizedBox(height: 10),
-              const SizedBox(height: 50),
+              SizedBox(height: 60),
 
               OTPField(
                 length: 6,
@@ -75,98 +77,64 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                 spacing: 10,
                 onChanged: (value) {
                   setState(() {
-                    _otp = value;
-                    _isOTPComplete = value.length == 6;
+                    // _otp = value;
+                    // _isOTPComplete = value.length == 6;
                   });
                   logger.i('OTP Changed: $value');
                 },
                 onCompleted: (value) {
                   setState(() {
-                    _otp = value;
-                    _isOTPComplete = true;
+                    // _otp = value;
+                    // _isOTPComplete = true;
                   });
                   logger.i('OTP Completed: $value');
                 },
               ),
+              const SizedBox(height: 20),
               //Primary Button
-              PrimaryButton(
-                title: GBText.signUp,
-                onPressed: _isOTPComplete
-                    ? () {
-                        // Sign up logic here
-                        logger.i('Verifying OTP: $_otp');
-                      }
-                    : null,
+              SecondaryButton(
+                title: GBText.continueBtn,
+                // backgroundColor: GBColor.secondary,
+                onPressed:
+                    // _isOTPComplete?
+                    () {
+                      // Sign up logic here
+                      Navigator.pushNamed(context, '/form');
+                      // logger.i('Verifying OTP: $_otp');
+                    },
+                // : null,
               ),
-              const SizedBox(height: 30),
-              //Divider with text "Or continue with"
+              const SizedBox(height: 10),
               Row(
                 children: [
-                  Expanded(child: Container(height: 1.5, color: Colors.grey)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  InkWell(
+                    onTap: () {
+                      // Navigator.pushNamed(context, '/login');
+                    },
                     child: Text(
-                      GBText.orContinuewith,
+                      GBText.resendcode,
                       style: const TextStyle(
-                        fontSize: 12,
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.w500,
-                        color: GBColor.gray,
+                        color: GBColor.primary,
                       ),
                     ),
                   ),
-                  Expanded(child: Container(height: 1.5, color: Colors.grey)),
+                  Spacer(),
+                  Text(
+                    GBText.sendBySMS,
+                    style: TextStyle(
+                      color: GBColor.textFieldText,
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ],
               ),
-              const SizedBox(height: 40),
-              //Social Media Buttons
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     SocialSignInButton(
-              //       title: '',
-              //       leadingIcon: Image.asset(
-              //         GBImagePath.google,
-              //         width: 32,
-              //         height: 32,
-              //       ),
-              //       onPressed: () {
-              //         // Handle Google sign-in
-              //         logger.i('Google Sign-In Pressed');
-              //       },
-              //     ),
-              //     const SizedBox(width: 25),
-              //     //apple button
-              //     SocialSignInButton(
-              //       title: '',
-              //       leadingIcon: Image.asset(
-              //         GBImagePath.apple,
-              //         width: 32,
-              //         height: 32,
-              //       ),
-              //       // backgroundColor: GBColor.containerColor,
-              //       onPressed: () {
-              //         // Handle Apple sign-in
-              //         logger.i('Apple Sign-In Pressed');
-              //       },
-              //     ),
-              //     //facebook button
-              //     const SizedBox(width: 25),
-              //     SocialSignInButton(
-              //       title: '',
-              //       leadingIcon: Image.asset(
-              //         GBImagePath.facebook,
-              //         width: 32,
-              //         height: 32,
-              //       ),
-              //       // backgroundColor: GBColor.containerColor,
-              //       onPressed: () {
-              //         // Handle Apple sign-in
-              //         logger.i('Apple Sign-In Pressed');
-              //       },
-              //     ),
-              //   ],
-              // ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
+              const Spacer(),
               //Terms of Service Text
               RichText(
                 textAlign: TextAlign.center,
@@ -182,7 +150,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                     TextSpan(
                       text: GBText.termsofServices,
                       style: const TextStyle(
-                        color: GBColor.textOrange,
+                        color: GBColor.primary,
                         // decoration: TextDecoration.underline,
                       ),
                       recognizer: TapGestureRecognizer()
@@ -194,7 +162,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                     TextSpan(
                       text: GBText.privacyPolicy,
                       style: const TextStyle(
-                        color: GBColor.textOrange,
+                        color: GBColor.primary,
                         // decoration: TextDecoration.underline,
                       ),
                       recognizer: TapGestureRecognizer()
@@ -206,37 +174,6 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 120),
-
-              //Already have an account? Sign In
-              // RichText(
-              //   textAlign: TextAlign.center,
-              //   text: TextSpan(
-              //     text: GBText.alreadyhaveAnAccount,
-              //     style: const TextStyle(
-              //       fontSize: 14,
-              //       fontFamily: 'Poppins',
-              //       fontWeight: FontWeight.w500,
-              //       color: GBColor.gray,
-              //     ),
-              //     children: [
-              //       TextSpan(
-              //         text: GBText.signIn,
-              //         style: const TextStyle(
-              //           fontSize: 14,
-              //           fontWeight: FontWeight.w500,
-              //           color: GBColor.textOrange,
-              //         ),
-              //         recognizer: TapGestureRecognizer()
-              //           ..onTap = () {
-              //             Navigator.pushNamed(context, '/login');
-              //             logger.i('Navigate to sign-In Screen');
-              //           },
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // const SizedBox(height: 10),
             ],
           ),
         ),

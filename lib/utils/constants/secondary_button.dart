@@ -33,7 +33,7 @@ class SecondaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? GBColor.secondary,
+          backgroundColor: backgroundColor ?? GBColor.primary,
           foregroundColor: Colors.black,
           elevation: 0,
           shape: RoundedRectangleBorder(
@@ -51,9 +51,10 @@ class SecondaryButton extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                fontSize: 14.2,
-                fontWeight: FontWeight.w500,
-                color: textColor ?? GBColor.black,
+                fontSize: 16,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                color: textColor ?? GBColor.secondary,
               ),
             ),
           ],

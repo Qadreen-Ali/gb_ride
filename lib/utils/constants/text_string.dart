@@ -7,6 +7,7 @@ class GBText {
   static const String forgotPassword = "Forgot Password";
   static const String logIn = "Log In";
   static const String signUp = "Sign Up";
+  static const String continueBtn = "Continue";
 
   static const String createYourAccount = "Create your account";
   static const String connectingGilgitBaltistan =
@@ -32,4 +33,7 @@ class GBText {
       "By Continuing you agree to our Terms of Services and Privacy Policy.";
   static const String alreadyhaveAnAccount = "Already have an Account? Sign In";
   static const String signIn = "Sign In";
+  static const String resendcode = "Resend Code";
+  static const String sendBySMS = "Send By SMS";
+  static const String continueAs = "Continue as";
 }

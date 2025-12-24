@@ -24,7 +24,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  // Bottom snack bar tap
   void _onBottomTap(int index) {
     setState(() {
       _selectedIndex = index;
@@ -37,7 +36,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icon: Icons.person,
         title: 'Profile Information',
-        onTap: () => _onTap(context, 'Profile'),
+        onTap: () {
+          Navigator.of(context).pushNamed('/profile');
+        },
       ),
       SettingsItem(
         icon: Icons.lock,
@@ -45,7 +46,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         onTap: () => _onTap(context, 'Manage Payment Methods'),
       ),
       SettingsItem(
-        icon: Icons.notifications,
+        icon: Icons.lock,
         title: 'Change Password',
         onTap: () => _onTap(context, 'Change Password'),
       ),
@@ -118,32 +119,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       backgroundColor: const Color(0xFFF5F5F7),
 
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            SettingsContainer(
-              title: "Account",
-              items: account,
-              iconBackgroundColor: Colors.grey[200]!,
-            ),
-            const SizedBox(height: 15),
-            SettingsContainer(
-              title: "Preferences",
-              items: preferences,
-              iconBackgroundColor: Colors.grey[200]!,
-            ),
-            const SizedBox(height: 15),
-            SettingsContainer(
-              title: "Support & Legal",
-              items: supportAndLegal,
-              iconBackgroundColor: Colors.grey[200]!,
-            ),
-            SettingsContainer(title: '', items: last),
-          ],
+      body: ScrollConfiguration(
+        behavior: ScrollBehavior().copyWith(
+          overscroll: false, // removes glow
+          scrollbars: false, // removes scroll bar
+        ),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(), // allows natural swipe
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              SettingsContainer(
+                title: "Account",
+                items: account,
+                iconBackgroundColor: Colors.grey[200]!,
+              ),
+              const SizedBox(height: 15),
+              SettingsContainer(
+                title: "Preferences",
+                items: preferences,
+                iconBackgroundColor: Colors.grey[200]!,
+              ),
+              const SizedBox(height: 15),
+              SettingsContainer(
+                title: "Support & Legal",
+                items: supportAndLegal,
+                iconBackgroundColor: Colors.grey[200]!,
+              ),
+              const SizedBox(height: 15),
+              SettingsContainer(title: '', items: last),
+            ],
+          ),
         ),
       ),
+
       bottomNavigationBar: GlobalBottomBar(
         selectedIndex: _selectedIndex,
         onItemTap: _onBottomTap,
