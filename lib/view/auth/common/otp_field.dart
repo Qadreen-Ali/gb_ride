@@ -109,7 +109,7 @@ class _OTPFieldState extends State<OTPField> {
             onKeyEvent: (event) => _onKeyEvent(event, index),
             child: TextField(
               controller: _controllers[index],
-              focusNode: _focusNodes[index],
+              focusNode: FocusNode(),
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
               maxLength: 1,
