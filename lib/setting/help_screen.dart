@@ -14,12 +14,12 @@ class HelpScreen extends StatefulWidget {
 class _HelpScreenState extends State<HelpScreen> {
   final faqs = [
     SettingsItem(
-      icon: SolarLinearIcons.user,
+      icons: SolarLinearIcons.user,
       title: 'Rider FAQs',
       onTap: () {},
     ),
     SettingsItem(
-      icon: SolarLinearIcons.questionCircle,
+      icons: SolarLinearIcons.questionCircle,
       title: 'Driver FAQs',
       onTap: () {},
     ),
@@ -27,12 +27,12 @@ class _HelpScreenState extends State<HelpScreen> {
 
   final tutorialsandguides = [
     SettingsItem(
-      icon: SolarLinearIcons.mapPoint,
+      icons: SolarLinearIcons.mapPoint,
       title: 'How to book a ride',
       onTap: () {},
     ),
     SettingsItem(
-      icon: SolarLinearIcons.handMoney,
+      icons: SolarLinearIcons.handMoney,
       title: 'How to accept a fare',
       onTap: () {},
     ),
@@ -40,18 +40,18 @@ class _HelpScreenState extends State<HelpScreen> {
 
   final contactsupport = [
     SettingsItem(
-      icon: SolarLinearIcons.headphonesRound,
+      icons: SolarLinearIcons.headphonesRound,
       title: 'Contact support',
       onTap: () {},
     ),
-    SettingsItem(icon: SolarLinearIcons.letter, title: 'Email', onTap: () {}),
+    SettingsItem(icons: SolarLinearIcons.letter, title: 'Email', onTap: () {}),
     SettingsItem(
-      icon: SolarLinearIcons.shieldCheck,
+      icons: SolarLinearIcons.shieldCheck,
       title: 'Privacy Policy',
       onTap: () {},
     ),
     SettingsItem(
-      icon: SolarLinearIcons.documentText,
+      icons: SolarLinearIcons.documentText,
       title: 'Terms of Services',
       onTap: () {},
     ),

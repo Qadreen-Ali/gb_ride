@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/utils/constants/color_string.dart';
 
 /// Model for each item
 class SettingsItem {
-  final IconData icon;
+  final IconData icons;
   final String title;
   final VoidCallback onTap;
   final Color? iconColor; // optional icon color
   final Color? textColor;
+  final Color? arrowColor;
 
   const SettingsItem({
-    required this.icon,
+    required this.icons,
     required this.title,
     required this.onTap,
     this.iconColor, // optional
     this.textColor,
+    this.arrowColor,
   });
 }
 
@@ -35,10 +38,10 @@ class SettingsTile extends StatelessWidget {
         radius: 20,
         backgroundColor: iconBackgroundColor,
         child: Icon(
-          item.icon,
+          item.icons,
           color:
               item.iconColor ??
-              Colors.black, // use custom icon color if provided
+              GBColor.gray, // use custom icon color if provided
           size: 20,
         ),
       ),
@@ -52,9 +55,13 @@ class SettingsTile extends StatelessWidget {
         ),
       ),
 
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        size: 16,
+        color: item.arrowColor ?? Colors.grey, // use arrowColor if provided
+      ),
       onTap: item.onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     );
   }
 }
@@ -83,7 +90,7 @@ class SettingsContainer extends StatelessWidget {
       children: [
         // Title text
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Text(
             title,
             style: TextStyle(
@@ -93,7 +100,7 @@ class SettingsContainer extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 5),
 
         // Main container
         Container(
@@ -123,9 +130,12 @@ class SettingsContainer extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 33),
                       height: 1,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12,
+                        horizontal: 12,
+                      ),
                       decoration: BoxDecoration(
-                        // ignore: deprecated_member_use
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),

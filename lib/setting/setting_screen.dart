@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/utils/constants/bottom_bar.dart';
 import 'package:gb_ride/utils/constants/settings.dart';
+import 'package:solar_icon_pack/solar_icon_pack.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -33,19 +34,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final account = [
       SettingsItem(
-        icon: Icons.person,
+        icons: SolarLinearIcons.user,
         title: 'Profile Information',
         onTap: () {
           Navigator.of(context).pushNamed('/profile');
         },
       ),
       SettingsItem(
-        icon: Icons.lock,
+        icons: SolarLinearIcons.card,
         title: 'Manage Payment Methods',
         onTap: () => _onTap(context, 'Manage Payment Methods'),
       ),
       SettingsItem(
-        icon: Icons.lock,
+        icons: SolarLinearIcons.lock,
         title: 'Change Password',
         onTap: () => _onTap(context, 'Change Password'),
       ),
@@ -53,17 +54,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     final preferences = [
       SettingsItem(
-        icon: Icons.notifications,
+        icons: SolarLinearIcons.bell,
         title: 'Notifications',
         onTap: () => _onTap(context, 'Notifications'),
       ),
       SettingsItem(
-        icon: Icons.payment,
+        icons: SolarLinearIcons.shieldKeyhole,
         title: 'Privacy & Security',
         onTap: () => _onTap(context, 'Privacy & Security'),
       ),
       SettingsItem(
-        icon: Icons.language,
+        icons: SolarLinearIcons.global,
         title: 'Language',
         onTap: () => _onTap(context, 'Language'),
       ),
@@ -71,22 +72,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     final supportAndLegal = [
       SettingsItem(
-        icon: Icons.help,
+        icons: SolarLinearIcons.help,
         title: 'Help Center / FAQs',
         onTap: () => _onTap(context, 'Help Center / FAQs'),
       ),
       SettingsItem(
-        icon: Icons.support,
+        icons: SolarLinearIcons.headphonesSquare,
         title: 'Contact Support',
         onTap: () => _onTap(context, 'Contact Support'),
       ),
       SettingsItem(
-        icon: Icons.pages,
+        icons: SolarLinearIcons.document,
         title: 'Terms of Service',
         onTap: () => _onTap(context, 'Terms of Service'),
       ),
       SettingsItem(
-        icon: Icons.policy,
+        icons: SolarLinearIcons.shield,
         title: 'Privacy Policy',
         onTap: () => _onTap(context, 'Privacy Policy'),
       ),
@@ -94,15 +95,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     final last = [
       SettingsItem(
-        icon: Icons.logout,
+        icons: SolarLinearIcons.logout,
         title: 'LogOut',
         onTap: () => _onTap(context, 'Logout'),
       ),
       SettingsItem(
-        icon: Icons.delete,
+        icons: Icons.delete,
         iconColor: Colors.red,
         title: 'Delete Account',
-        textColor: const Color.fromARGB(255, 181, 41, 31),
+        textColor: Colors.red,
+        arrowColor: Colors.red,
         onTap: () => _onTap(context, 'Delete Account'),
       ),
     ];

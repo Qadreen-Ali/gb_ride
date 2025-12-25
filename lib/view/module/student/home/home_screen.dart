@@ -643,7 +643,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           Icons.notifications_outlined,
                           color: Colors.white,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/notication');
+                        },
                       ),
                     ),
                   ],
