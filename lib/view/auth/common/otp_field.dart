@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
+// import 'package:gb_ride/view/auth/otp_verification_screen.dart';
 
 class OTPField extends StatefulWidget {
   final int length;
@@ -25,8 +26,8 @@ class OTPField extends StatefulWidget {
 }
 
 class _OTPFieldState extends State<OTPField> {
-  late final List<TextEditingController> _controllers;
-  late final List<FocusNode> _focusNodes;
+  late List<TextEditingController> _controllers;
+  late List<FocusNode> _focusNodes;
 
   @override
   void initState() {
@@ -61,7 +62,9 @@ class _OTPFieldState extends State<OTPField> {
       }
     }
 
-    widget.onChanged?.call(_getOTP());
+    if (widget.onChanged != null) {
+      widget.onChanged!(_getOTP());
+    }
   }
 
   void _onKeyEvent(KeyEvent event, int index) {
@@ -77,7 +80,7 @@ class _OTPFieldState extends State<OTPField> {
   }
 
   void _checkCompletion() {
-    final otp = _getOTP();
+    String otp = _getOTP();
     if (otp.length == widget.length) {
       widget.onCompleted(otp);
     }
@@ -109,7 +112,7 @@ class _OTPFieldState extends State<OTPField> {
             onKeyEvent: (event) => _onKeyEvent(event, index),
             child: TextField(
               controller: _controllers[index],
-              focusNode: FocusNode(),
+              focusNode: _focusNodes[index],
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
               maxLength: 1,

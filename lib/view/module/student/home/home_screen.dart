@@ -758,8 +758,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   );
                                 },
                                 suggestionsCallback: (search) async {
-                                  if (search.isEmpty || search.length < 2)
+                                  if (search.isEmpty || search.length < 2) {
                                     return [];
+                                  }
                                   return await LocationSearchService.searchLocations(
                                     search,
                                   );
@@ -919,8 +920,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   );
                                 },
                                 suggestionsCallback: (search) async {
-                                  if (search.isEmpty || search.length < 2)
+                                  if (search.isEmpty || search.length < 2) {
                                     return [];
+                                  }
                                   return await LocationSearchService.searchLocations(
                                     search,
                                   );

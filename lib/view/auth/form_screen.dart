@@ -44,7 +44,7 @@ class _FormScreenState extends State<FormScreen> {
             children: [
               const SizedBox(height: 40),
 
-              // 🔹 Title
+              // title
               Text(
                 GBText.createYourAccount,
                 textAlign: TextAlign.center,
@@ -70,7 +70,7 @@ class _FormScreenState extends State<FormScreen> {
 
               const SizedBox(height: 16),
 
-              // 🔹 Role buttons
+              // buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
