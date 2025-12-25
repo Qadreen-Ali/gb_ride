@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/setting/help_screen.dart';
 
 class ProfileDrawer extends StatelessWidget {
   const ProfileDrawer({super.key});
@@ -115,8 +116,11 @@ class ProfileDrawer extends StatelessWidget {
                     icon: Icons.help_outline,
                     label: 'Help',
                     onTap: () {
-                      Navigator.pop(context);
-                      // Navigate to help
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const HelpScreen(),
+                        ),
+                      );
                     },
                   ),
                   _DrawerMenuItem(

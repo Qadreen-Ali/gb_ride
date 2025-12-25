@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/global_appbar.dart';
+import 'package:gb_ride/utils/logger.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -19,7 +20,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           profileImage: 'assets/icons/profile.jpg',
           title: 'Notications',
           showProfile: true,
-          showSettings: false,
+          // showSettings: false,
           onCloseTap: () => Navigator.pop(context),
           onProfileTap: () {},
         ),
@@ -29,7 +30,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             SizedBox(width: 65),
             GestureDetector(
               onTap: () {
-                print('All clicked !');
+                logger.i('All clicked !');
               },
               child: Text(
                 'All',
@@ -39,7 +40,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             SizedBox(width: 170),
             GestureDetector(
               onTap: () {
-                print('Messages Got clicked !');
+                logger.i('Messages Got clicked !');
               },
               child: Text(
                 'Messages',

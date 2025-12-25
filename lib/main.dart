@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/common/bottom_navbar.dart';
+import 'package:gb_ride/setting/help_screen.dart';
 import 'package:gb_ride/setting/profile_screen.dart';
 import 'package:gb_ride/setting/setting_screen.dart';
 // import 'package:gb_ride/setting/profile_screen.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/profile': (context) => const ProfileScreen(),
+        '/help': (context) => const HelpScreen(),
       },
     );
   }

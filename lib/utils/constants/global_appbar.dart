@@ -6,7 +6,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onProfileTap; // optional override
   final VoidCallback? onCloseTap;
   final String? profileImage; // optional
-  final bool showSettings;
+  // final bool showSettings;
 
   const GlobalAppBar({
     super.key,
@@ -15,7 +15,7 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onProfileTap,
     this.onCloseTap,
     this.profileImage,
-    this.showSettings = true,
+    // this.showSettings = true,
   });
 
   void _defaultProfileTap(BuildContext context) {

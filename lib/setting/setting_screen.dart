@@ -11,9 +11,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  int _selectedIndex = 0;
+  // int _selectedIndex = 0;
 
-  // Snackbar for settings items
   void _onTap(BuildContext context, String name) {
     GlobalBottomBar.show(
       context,
@@ -24,11 +23,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  void _onBottomTap(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  // void _onBottomTap(int index) {
+  //   setState(() {
+  //     _selectedIndex = index;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +112,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         profileImage: 'assets/icons/profile.jpg',
         title: 'Settings',
         showProfile: true,
-        showSettings: false,
+        // showSettings: false,
         onCloseTap: () => Navigator.pop(context),
         onProfileTap: () {},
       ),
@@ -153,10 +152,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
 
-      bottomNavigationBar: GlobalBottomBar(
-        selectedIndex: _selectedIndex,
-        onItemTap: _onBottomTap,
-      ),
+      // bottomNavigationBar: GlobalBottomBar(
+      //   selectedIndex: _selectedIndex,
+      //   onItemTap: _onBottomTap,
+      // ),
     );
   }
 }
