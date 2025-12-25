@@ -29,8 +29,11 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      scrolledUnderElevation: 0,
-      surfaceTintColor: Colors.transparent,
+      centerTitle: true,
+      backgroundColor: Colors.white,
+      elevation: 0,
+      leadingWidth: 72,
+      toolbarHeight: 120,
       leading: showProfile
           ? GestureDetector(
               onTap: () {
@@ -41,12 +44,10 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                 }
               },
               child: Padding(
-                padding: const EdgeInsets.only(left: 16.0),
+                padding: const EdgeInsets.only(left: 12.0),
                 child: CircleAvatar(
-                  radius: 18,
-                  backgroundImage: AssetImage(
-                    profileImage ?? 'assets/icons/profile.png',
-                  ),
+                  radius: 8,
+                  backgroundImage: AssetImage(profileImage ?? ''),
                 ),
               ),
             )
@@ -59,31 +60,31 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.black,
         ),
       ),
-      centerTitle: true,
       actions: [
         if (onCloseTap != null)
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: IconButton(
-              icon: const Icon(Icons.close),
-              iconSize: 24,
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
-              splashRadius: 20,
-              color: Colors.black,
-              onPressed: onCloseTap,
+            child: GestureDetector(
+              onTap: onCloseTap,
+              child: Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.close, size: 20, color: Colors.black),
+              ),
             ),
           )
         else
           const SizedBox(width: 12),
       ],
-      backgroundColor: Colors.white,
-      elevation: 0,
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(110);
 }
 
 // Example default profile screen
