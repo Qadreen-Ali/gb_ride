@@ -3,7 +3,7 @@ import 'package:gb_ride/common/bottom_navbar.dart';
 // import 'package:gb_ride/setting/help_screen.dart';
 import 'package:gb_ride/setting/profile_screen.dart';
 import 'package:gb_ride/setting/setting_screen.dart';
-import 'package:gb_ride/view/auth/common/notification_screen.dart';
+import 'package:gb_ride/view/module/notifications/notification_screen.dart';
 // import 'package:gb_ride/setting/profile_screen.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
 import 'package:gb_ride/view/auth/otp_verification_screen.dart';

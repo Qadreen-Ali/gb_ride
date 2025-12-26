@@ -19,4 +19,5 @@ class GBColor {
   static const Color yellow = Color(0xFFFFCC00);
   static const Color green = Color(0xFF319F43);
   static const Color textFieldText = Color(0xFF868080);
+  static const Color lightGrey = Color.fromARGB(255, 217, 217, 217);
 }
