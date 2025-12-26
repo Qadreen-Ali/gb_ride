@@ -1,12 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/utils/constants/social_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
 import 'package:gb_ride/utils/logger.dart';
-import '../../common/textfield.dart';
-import 'package:flutter/services.dart';
+import '../../common/text_field.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 // import 'package:country_code_picker/country_code_picker.dart';
 // import 'package:gb_ride/view/home/home.dart';
@@ -63,7 +63,10 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             physics: const NeverScrollableScrollPhysics(),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 14.0,
+              ),
               child: Column(
                 children: [
                   SizedBox(height: keyboardIsOpen ? 60 : 180),
@@ -85,15 +88,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     titleText: GBText.phoneNumber,
                     hintText: '000 0000000',
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      PakPhoneFormatter(),
-                      // LengthLimitingTextInputFormatter(10),
-                      // FilteringTextInputFormatter.digitsOnly,
-                    ],
+                    inputFormatters: [PakPhoneFormatter()],
 
                     prefixIcon: Row(
-                      mainAxisSize: MainAxisSize
-                          .min, // Vital: prevents the Row from taking full width
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         const SizedBox(width: 12),
                         Icon(SolarLinearIcons.phone),
@@ -103,12 +101,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: Colors.black, // Ensure color is visible
+                            color: Colors.black,
                           ),
                         ),
                       ],
                     ),
-                    // Remove the separate 'prefix' property as it is now inside prefixIcon
                   ),
 
                   const SizedBox(height: 20),
@@ -116,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   PrimaryButton(
                     title: GBText.signIn,
                     onPressed: () {
-                      Navigator.pushNamed(context, '/bottomnavbar');
+                      Navigator.pushNamed(context, '/otp');
                       // Sign In logic here
                       logger.i('Sign In button pressed');
                     },
@@ -191,7 +188,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30),
+                  // const Spacer(),
+                  const SizedBox(height: 50),
                   //Terms of Service Text
                   RichText(
                     textAlign: TextAlign.center,
@@ -231,7 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  // const SizedBox(height: 10),
                 ],
               ),
             ),

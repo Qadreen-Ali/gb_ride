@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/setting/help_screen.dart';
 
 class ProfileDrawer extends StatelessWidget {
-  const ProfileDrawer({Key? key}) : super(key: key);
+  const ProfileDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +108,7 @@ class ProfileDrawer extends StatelessWidget {
                     icon: Icons.settings_outlined,
                     label: 'Setting',
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/settings');
                       // Navigate to settings
                     },
                   ),
@@ -115,8 +116,11 @@ class ProfileDrawer extends StatelessWidget {
                     icon: Icons.help_outline,
                     label: 'Help',
                     onTap: () {
-                      Navigator.pop(context);
-                      // Navigate to help
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const HelpScreen(),
+                        ),
+                      );
                     },
                   ),
                   _DrawerMenuItem(
@@ -152,12 +156,11 @@ class _DrawerMenuItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const _DrawerMenuItem({
-    Key? key,
     required this.icon,
     required this.label,
     this.isSelected = false,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +173,7 @@ class _DrawerMenuItem extends StatelessWidget {
       child: ListTile(
         leading: Icon(
           icon,
-          color: isSelected ? Colors.orange:Colors.black87,
+          color: isSelected ? Colors.orange : Colors.black87,
           size: 22,
         ),
         title: Text(
@@ -178,26 +181,26 @@ class _DrawerMenuItem extends StatelessWidget {
           style: TextStyle(
             fontSize: 15,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-            color: isSelected ? Colors.orange: Colors.black87,
+            color: isSelected ? Colors.orange : Colors.black87,
           ),
         ),
-       // trailing: badge != null
-         //   ? Container(
-           //     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-             //   decoration: BoxDecoration(
-               //   color: Colors.red,
+        // trailing: badge != null
+        //   ? Container(
+        //     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        //   decoration: BoxDecoration(
+        //   color: Colors.red,
         //          borderRadius: BorderRadius.circular(10),
-          //      ),
-            //    child: Text(
-              //    badge!,
-                //  style: const TextStyle(
-                  //  color: Colors.white,
-                    //fontSize: 12,
-                 //   fontWeight: FontWeight.w600,
-                //  ),
-                //),
-             // )
-          //  : null,
+        //      ),
+        //    child: Text(
+        //    badge!,
+        //  style: const TextStyle(
+        //  color: Colors.white,
+        //fontSize: 12,
+        //   fontWeight: FontWeight.w600,
+        //  ),
+        //),
+        // )
+        //  : null,
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),

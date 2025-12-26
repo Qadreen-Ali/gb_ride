@@ -35,7 +35,6 @@ class _BottomNavBarScreenState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: _screens[_selectedIndex],
 
       bottomNavigationBar: Theme(
@@ -51,7 +50,7 @@ class _BottomNavBarScreenState extends State<BottomNavBar> {
             borderRadius: BorderRadius.circular(100),
           ),
           child: ClipRRect(
-            borderRadius:BorderRadiusGeometry.circular(100),
+            borderRadius: BorderRadiusGeometry.circular(100),
             child: BottomNavigationBar(
               currentIndex: _selectedIndex,
               onTap: _onTabTapped,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/common/bottom_navbar.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
 
 import '../../utils/constants/color_string.dart';
@@ -23,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // Delay for 3 seconds then navigate
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
         context,
         MaterialPageRoute(builder: (context) => LoginScreen()),
       );
@@ -36,7 +36,6 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Column(
         children: [
           const SizedBox(height: 120),
-
           Text(
             GBText.welcometoGBRide,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),

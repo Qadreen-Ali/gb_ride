@@ -7,7 +7,7 @@ class GBText {
   static const String forgotPassword = "Forgot Password";
   static const String logIn = "Log In";
   static const String signUp = "Sign Up";
-
+  static const String continueBtn = "Continue";
 
   static const String createYourAccount = "Create your account";
   static const String connectingGilgitBaltistan =
@@ -23,13 +23,15 @@ class GBText {
   //     "Email or Phone Number"; //added new string for dynamic login approach
   static const String phone = "Phone";
   static const String password = "Password";
-  //static const String forgotPassword = "Forgot Password?";
-  //static const String signUp = "Sign Up";
+  static const String signup = "Sign Up";
   static const String orContinuewith = "Or Continue with";
   static const String continuewithGoogle = "Continue with Google";
   static const String continuewithApple = "Continue with Apple";
+  static const String privacyPolicy = "Privacy Policy.";
   static const String termsofServices = "Terms of Services";
-  static const String privacyPolicy = "privacy Policy";
-  static const String alreadyhaveAnAccount = "Already have an Account? ";
+  static const String alreadyhaveAnAccount = "Already have an Account? Sign In";
   static const String signIn = "Sign In";
+  static const String resendcode = "Resend Code";
+  static const String sendBySMS = "Send By SMS";
+  static const String continueAs = "Continue as";
 }

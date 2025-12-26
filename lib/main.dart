@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/common/bottom_navbar.dart';
+// import 'package:gb_ride/setting/help_screen.dart';
+import 'package:gb_ride/setting/profile_screen.dart';
+import 'package:gb_ride/setting/setting_screen.dart';
+import 'package:gb_ride/view/auth/common/notification_screen.dart';
+// import 'package:gb_ride/setting/profile_screen.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
 import 'package:gb_ride/view/auth/otp_verification_screen.dart';
 import 'package:gb_ride/view/module/student/home/home_screen.dart';
 import 'package:gb_ride/view/splash/splash_screen.dart';
-//import 'package:gb_ride/view/home/home_screen.dart';
+// import 'package:gb_ride/view/home/home_screen.dart';
 // import 'package:logger/logger.dart';
+import 'package:gb_ride/view/auth/form_screen.dart';
+// import 'package:gb_ride/setting/setting_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,9 +35,13 @@ class MyApp extends StatelessWidget {
         '/': (context) => SplashScreen(), //initial Screen
         '/login': (context) => const LoginScreen(),
         '/otp': (context) =>
-            const OTPVerificationScreen(phoneNumber: '3001234567'),
+            const OTPVerificationScreen(phoneNumber: '3465407068'),
+        '/form': (context) => const FormScreen(),
         '/bottomnavbar': (context) => const BottomNavBar(),
         '/home': (context) => const HomeScreen(),
+        '/settings': (context) => const SettingsScreen(),
+        '/profile': (context) => const ProfileScreen(),
+        '/notification': (context) => const NotificationScreen(),
       },
     );
   }

@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:gb_ride/utils/logger.dart';
 import 'package:http/http.dart' as http;
 // import 'package:latlong2/latlong.dart';
-import 'package:gb_ride/utils/logger.dart';
+
 
 class LocationSuggestion {
   final String displayName;
@@ -57,7 +58,6 @@ class LocationSearchService {
       return [];
     }
   }
-
   // Get location from coordinates (reverse geocoding)
   static Future<String?> getAddressFromCoordinates(
     double lat,
