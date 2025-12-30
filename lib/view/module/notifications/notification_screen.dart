@@ -1,24 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/global_appbar.dart';
-// import 'package:gb_ride/utils/logger.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
+import 'package:gb_ride/view/module/notifications/all_notifications_screen.dart';
+import 'package:gb_ride/view/module/notifications/message_notifiactions_screen.dart';
 
-class NotificationScreen extends StatefulWidget {
+class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
 
-  @override
-  State<NotificationScreen> createState() => _NotificationScreenState();
-}
-
-Widget _allNotifications() {
-  return const Center(child: Text('All Notifications'));
-}
-
-Widget _messagesNotifications() {
-  return const Center(child: Text('Messages Notifications'));
-}
-
-class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -62,7 +50,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
             Expanded(
               child: TabBarView(
-                children: [_allNotifications(), _messagesNotifications()],
+                children: [
+                  AllNotificationScreen(),
+                  MessageNotificationsScreen(),
+                ],
               ),
             ),
           ],
