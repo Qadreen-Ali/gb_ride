@@ -12,9 +12,12 @@ import 'package:gb_ride/view/splash/splash_screen.dart';
 // import 'package:gb_ride/view/home/home_screen.dart';
 // import 'package:logger/logger.dart';
 import 'package:gb_ride/view/auth/form_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 // import 'package:gb_ride/setting/setting_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -34,8 +37,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(), //initial Screen
         '/login': (context) => const LoginScreen(),
-        '/otp': (context) =>
-            const OTPVerificationScreen(phoneNumber: '3465407068'),
+        '/otp': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as String?;
+          return OTPVerificationScreen(phoneNumber: args ?? '');
+        },
         '/form': (context) => const FormScreen(),
         '/bottomnavbar': (context) => const BottomNavBar(),
         '/home': (context) => const HomeScreen(),

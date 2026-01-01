@@ -21,7 +21,7 @@ class NotificationTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,7 +55,7 @@ class NotificationTile extends StatelessWidget {
                   subtitle,
                   style: const TextStyle(fontSize: 13, color: Colors.grey),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
                   time,
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -66,12 +66,15 @@ class NotificationTile extends StatelessWidget {
 
           // Right side indicator
           if (unread)
-            Container(
-              width: 8,
-              height: 8,
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-                shape: BoxShape.circle,
+            Padding(
+              padding: const EdgeInsets.only(top: 22.0),
+              child: Container(
+                width: 10,
+                height: 10,
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  shape: BoxShape.circle,
+                ),
               ),
             ),
 

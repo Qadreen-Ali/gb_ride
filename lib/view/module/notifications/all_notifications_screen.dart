@@ -126,6 +126,6 @@ class AllNotificationScreen extends StatelessWidget {
   }
 
   Widget _divider() {
-    return Divider(height: 1, thickness: 1, color: Colors.grey.shade300);
+    return Divider(height: 16, thickness: 1, color: Colors.grey.shade300);
   }
 }
