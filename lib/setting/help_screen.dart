@@ -67,24 +67,34 @@ class _HelpScreenState extends State<HelpScreen> {
         profileImage: 'assets/icons/profile.jpg',
         onCloseTap: () => Navigator.pop(context),
       ),
-      body: Column(
-        children: [
-          SettingsContainer(
-            title: 'FAQs',
-            items: faqs,
-            iconBackgroundColor: Colors.grey[200]!,
+      body: ScrollConfiguration(
+        behavior: ScrollBehavior().copyWith(
+          overscroll: false, // removes glow
+          scrollbars: false, // removes scroll bar
+        ),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(), // allows natural swipe
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              SettingsContainer(
+                title: 'FAQs',
+                items: faqs,
+                iconBackgroundColor: Colors.grey[200]!,
+              ),
+              SettingsContainer(
+                title: 'Tutorials & Guides',
+                items: tutorialsandguides,
+                iconBackgroundColor: Colors.grey[200]!,
+              ),
+              SettingsContainer(
+                title: 'Contact and Support',
+                items: contactsupport,
+                iconBackgroundColor: Colors.grey[200]!,
+              ),
+            ],
           ),
-          SettingsContainer(
-            title: 'Tutorials & Guides',
-            items: tutorialsandguides,
-            iconBackgroundColor: Colors.grey[200]!,
-          ),
-          SettingsContainer(
-            title: 'Contact and Support',
-            items: contactsupport,
-            iconBackgroundColor: Colors.grey[200]!,
-          ),
-        ],
+        ),
       ),
     );
   }
