@@ -15,4 +15,13 @@ class GBImagePath {
    static final String home = "assets/icons/home.png";
    static final String ride = "assets/icons/ride.png";
    static final String booking = "assets/icons/booking.png";
+   static final String brush = "assets/images/brush.png";
+   static final String chat = "assets/images/chat.png";
+   static final String location = "assets/images/gblocation.png";
+   static final String card = "assets/images/card.png";
+   static final String profile = "assets/images/profile.png";
+   static final String emergency = "assets/icons/emergency.png";
+   static final String loading = "assets/images/loading.png";
+   static final String safety = "assets/icons/safety.png";
+   static final String help = "assets/icons/help.png";
 }

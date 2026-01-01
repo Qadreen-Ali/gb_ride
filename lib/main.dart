@@ -3,6 +3,7 @@ import 'package:gb_ride/common/bottom_navbar.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
 import 'package:gb_ride/view/auth/otp_verification_screen.dart';
 import 'package:gb_ride/view/module/student/home/home_screen.dart';
+import 'package:gb_ride/view/module/student/home/home_screen.dart';
 import 'package:gb_ride/view/splash/splash_screen.dart';
 //import 'package:gb_ride/view/home/home_screen.dart';
 // import 'package:logger/logger.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/otp': (context) =>
             const OTPVerificationScreen(phoneNumber: '3001234567'),
-        '/bottomnavbar': (context) => const BottomNavBar(),
+        // '/bottomnavbar': (context) => const BottomNavBar(),
         '/home': (context) => const HomeScreen(),
       },
     );
