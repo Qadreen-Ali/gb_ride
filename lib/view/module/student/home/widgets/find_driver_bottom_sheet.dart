@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
-import '../../../../../common/textField.dart';
+import '../../../../../common/text_field.dart';
 import '../../../../../utils/constants/color_string.dart';
 import '../../../../../utils/constants/text_string.dart';
 import '../../../../../utils/constants/primary_button.dart';

@@ -5,7 +5,7 @@ class GBColor {
   static const Color secondary = Color(
     0xFFFFFFFF,
   ); // Updated Secondary - Shade 500
-  static const Color lineColor = Color(0xFF999999);
+  static const Color lineColor = Color.fromARGB(255, 190, 187, 187);
   static const Color error = Color(0xFFF13F3F);
   static const Color lightred = Color(0xFFFF383C);
   static const Color gray = Color(0xFF625A5A);
@@ -24,4 +24,5 @@ class GBColor {
   static const Color buttonTextText = Color(0xFF4C4848);
   static const Color messageTextColor = Color(0xFF424242);
   static const Color driverContainerColor = Color(0xFF979797);
+  static const Color lightGrey = Color.fromARGB(255, 217, 217, 217);
 }
