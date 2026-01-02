@@ -170,7 +170,7 @@ class SettingsContainer extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 33),
                       height: 1,
-                      color: Colors.black.withOpacity(0.2),
+                      color: Colors.black.withValues(alpha: .2),
                     ),
                     const SizedBox(height: 15),
                   ],

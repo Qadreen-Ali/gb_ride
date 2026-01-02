@@ -91,11 +91,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       backgroundColor: const Color(0xFFF5F5F7),
       body: ScrollConfiguration(
-        behavior: ScrollConfiguration.of(
-          context,
-        ).copyWith(scrollbars: false, overscroll: false),
+        behavior: ScrollBehavior().copyWith(
+          overscroll: false, // removes glow
+          scrollbars: false, // removes scroll bar
+        ),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          physics: const BouncingScrollPhysics(), // allows natural swipe
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
