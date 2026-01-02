@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../common/textField.dart';
+import '../../../../../../common/text_field.dart';
 import '../../../../../../utils/constants/color_string.dart';
 import '../../../../../../utils/constants/image_string.dart';
-import '../../../../../../utils/constants/primary_button.dart';
-import '../../../../../../utils/constants/text_string.dart';
 import '../action_circle.dart';
 import '../location_container.dart';
 import '../rating_widget.dart';
