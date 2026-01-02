@@ -1,12 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/utils/constants/social_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
 import 'package:gb_ride/utils/logger.dart';
-import '../../common/textfield.dart';
-import 'package:flutter/services.dart';
+import '../../common/text_field.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 // import 'package:country_code_picker/country_code_picker.dart';
 // import 'package:gb_ride/view/home/home.dart';
@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   PrimaryButton(
                     title: GBText.signIn,
                     onPressed: () {
-                      Navigator.pushNamed(context, '/bottomnavbar');
+                      Navigator.pushNamed(context, '/home');
                       // Sign In logic here
                       logger.i('Sign In button pressed');
                     },
