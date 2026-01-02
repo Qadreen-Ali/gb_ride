@@ -66,4 +66,39 @@ class GBText {
   static const String resendcode = "Resend Code";
   static const String sendBySMS = "Send By SMS";
   static const String continueAs = "Continue as";
+  static const String resendcode = "Resend Code";
+  static const String sendBySMS = "Send By SMS";
+  static const String continueAs = "Continue as";
+
+  // home
+  static const String offerYourFare =  "Offer Your Fare";
+  static const String pkr =  'PKR';
+  static const String cash = "Cash";
+  static const String done = "Done";
+  static const String locationServicesAre = "Location services are disabled. Please enable them.";
+  static const String gilgitPakistan = "Gilgit, Pakistan (Default)";
+  static const String setting = "Settings";
+  static const String chooseOnMap = "Choose on map";
+  static const String cityTocity = "city to city";
+  static const String schoolbus = "schoolbus";
+  static const String bike = "Bike";
+  static const String findADriver = "Find a Driver";
+  static const String selectPaymentMethod = "Select Payment Method";
+  static const String card = "Card";
+  static const String easyPaisa = "EasyPaisa";
+  static const String cancel = "Cancel";
+  static const String cancelRequest = "Cancel Request";
+  static const String raiseFare = "Raise fare";
+  static const String sonikotGilgit = "Sonikot Gilgit";
+  static const String siliconGlobalTech = "Silicon Global Tech";
+  static const String waitingForOffersFromDrivers = "Waiting for offers from drivers";
+  static const String automaticallyAcceptTheNearestDriver =  "Automatically accept the \n nearest driver for PK 60";
+  static const String driverArriveIn2Min =  "Driver is arriving in \n 2 min";
+  static const String startRide =  "Start Ride";
+  static const String driverArrived =  "Driver Arrived";
+  static const String startJourney =  "Start Journey . . .";
+  static const String accepeted =  "Accepeted";
+  static const String yourDestination=  "Your Destination is \n Arrived";
+  static const String endRide=  "End Ride";
+
 }

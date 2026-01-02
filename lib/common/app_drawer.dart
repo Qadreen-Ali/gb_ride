@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/utils/constants/color_string.dart';
+import 'package:gb_ride/utils/constants/image_string.dart';
 
 class ProfileDrawer extends StatelessWidget {
   const ProfileDrawer({Key? key}) : super(key: key);
@@ -42,8 +44,8 @@ class ProfileDrawer extends StatelessWidget {
                     child: Text(
                       'Profile',
                       style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
                         color: Colors.black87,
                       ),
                     ),
@@ -62,7 +64,7 @@ class ProfileDrawer extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 children: [
-                  _DrawerMenuItem(
+                  DrawerMenuItem(
                     icon: Icons.home_outlined,
                     label: 'Home',
                     isSelected: true,
@@ -71,63 +73,46 @@ class ProfileDrawer extends StatelessWidget {
                       // Navigate to home
                     },
                   ),
-                  _DrawerMenuItem(
-                    icon: Icons.pedal_bike_outlined,
+                  DrawerMenuItem(
+                    image: Image.asset(GBImagePath.ride),
                     label: 'Ride',
                     onTap: () {
                       Navigator.pop(context);
                       // Navigate to ride
                     },
                   ),
-                  _DrawerMenuItem(
-                    icon: Icons.calendar_today_outlined,
+                  DrawerMenuItem(
+                    image: Image.asset(GBImagePath.booking),
                     label: 'Bookings',
                     onTap: () {
                       Navigator.pop(context);
                       // Navigate to bookings
                     },
                   ),
-                  _DrawerMenuItem(
-                    icon: Icons.notifications_outlined,
-                    label: 'Notifications',
+                  DrawerMenuItem(
+                  image:Image.asset(GBImagePath.safety,fit: BoxFit.contain,) ,
+                    label: 'Safety',
+
                     onTap: () {
-                      Navigator.pop(context);
-                      // Navigate to notifications
+
                     },
                   ),
-                  _DrawerMenuItem(
-                    icon: Icons.shield_outlined,
-                    label: 'Safety',
+                  DrawerMenuItem(
+                    icon: Icons.settings_sharp,
+                    label: 'Setting',
                     onTap: () {
                       Navigator.pop(context);
                       // Navigate to safety
                     },
                   ),
-                  _DrawerMenuItem(
-                    icon: Icons.settings_outlined,
-                    label: 'Setting',
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Navigate to settings
-                    },
+                  DrawerMenuItem(
+                    image: Image.asset(GBImagePath.help, fit: BoxFit.contain,),
+                    label: 'Help', onTap: () {  },
+
+
                   ),
-                  _DrawerMenuItem(
-                    icon: Icons.help_outline,
-                    label: 'Help',
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Navigate to help
-                    },
-                  ),
-                  _DrawerMenuItem(
-                    icon: Icons.headset_mic_outlined,
-                    label: 'Support',
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Navigate to support
-                    },
-                  ),
-                  _DrawerMenuItem(
+
+                  DrawerMenuItem(
                     icon: Icons.history_outlined,
                     label: 'History',
                     onTap: () {
@@ -145,15 +130,17 @@ class ProfileDrawer extends StatelessWidget {
   }
 }
 
-class _DrawerMenuItem extends StatelessWidget {
-  final IconData icon;
+class DrawerMenuItem extends StatelessWidget {
+  final IconData? icon;
+  final Image? image;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const _DrawerMenuItem({
+  const DrawerMenuItem({
     Key? key,
-    required this.icon,
+    this.icon,
+    this.image,
     required this.label,
     this.isSelected = false,
     required this.onTap,
@@ -162,46 +149,45 @@ class _DrawerMenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 2),
       decoration: BoxDecoration(
-        color: isSelected ? Colors.blue.shade50 : Colors.transparent,
+        color: isSelected ? GBColor.primary : GBColor.secondary,
         borderRadius: BorderRadius.circular(8),
       ),
       child: ListTile(
-        leading: Icon(
-          icon,
-          color: isSelected ? Colors.orange:Colors.black87,
-          size: 22,
-        ),
+        leading: _buildIcon(),
         title: Text(
           label,
           style: TextStyle(
-            fontSize: 15,
+            fontSize: 18,
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-            color: isSelected ? Colors.orange: Colors.black87,
+            color: isSelected ? GBColor.secondary : Colors.black,
           ),
         ),
-       // trailing: badge != null
-         //   ? Container(
-           //     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-             //   decoration: BoxDecoration(
-               //   color: Colors.red,
-        //          borderRadius: BorderRadius.circular(10),
-          //      ),
-            //    child: Text(
-              //    badge!,
-                //  style: const TextStyle(
-                  //  color: Colors.white,
-                    //fontSize: 12,
-                 //   fontWeight: FontWeight.w600,
-                //  ),
-                //),
-             // )
-          //  : null,
         onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
+  }
+
+  Widget _buildIcon() {
+    if (image != null) {
+      return SizedBox(
+        width: 24,
+        height: 24,
+        child: FittedBox(
+          fit: BoxFit.contain,
+          child: image!,
+        ),
+      );
+    } else if (icon != null) {
+      return Icon(
+        icon,
+        color: isSelected ? GBColor.secondary : Colors.black,
+        size: 24,
+      );
+    } else {
+      return const SizedBox(width: 24);
+    }
   }
 }

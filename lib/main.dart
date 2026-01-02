@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/common/bottom_navbar.dart';
+// import 'package:gb_ride/setting/help_screen.dart';
+import 'package:gb_ride/setting/profile_screen.dart';
+import 'package:gb_ride/setting/setting_screen.dart';
+import 'package:gb_ride/view/module/notifications/notification_screen.dart';
+// import 'package:gb_ride/setting/profile_screen.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
 import 'package:gb_ride/view/auth/otp_verification_screen.dart';
 import 'package:gb_ride/view/module/student/home/home_screen.dart';
 import 'package:gb_ride/view/splash/splash_screen.dart';
-//import 'package:gb_ride/view/home/home_screen.dart';
+// import 'package:gb_ride/view/home/home_screen.dart';
 // import 'package:logger/logger.dart';
+import 'package:gb_ride/view/auth/form_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+// import 'package:gb_ride/setting/setting_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -27,10 +37,16 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(), //initial Screen
         '/login': (context) => const LoginScreen(),
-        '/otp': (context) =>
-            const OTPVerificationScreen(phoneNumber: '3001234567'),
-        '/bottomnavbar': (context) => const BottomNavBar(),
+        '/otp': (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as String?;
+          return OTPVerificationScreen(phoneNumber: args ?? '');
+        },
+        '/form': (context) => const FormScreen(),
+        //'/bottomnavbar': (context) => const BottomNavBar(),
         '/home': (context) => const HomeScreen(),
+        '/settings': (context) => const SettingsScreen(),
+        '/profile': (context) => const ProfileScreen(),
+        '/notification': (context) => const NotificationScreen(),
       },
     );
   }
