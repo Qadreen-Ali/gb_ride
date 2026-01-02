@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/global_appbar.dart';
-import 'package:gb_ride/utils/constants/bottom_bar.dart';
 import 'package:gb_ride/utils/constants/settings.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 
@@ -12,23 +11,11 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // int _selectedIndex = 0;
-
   void _onTap(BuildContext context, String name) {
-    GlobalBottomBar.show(
+    ScaffoldMessenger.of(
       context,
-      message: 'Tapped $name',
-      icon1: Icons.check_circle_outline,
-      icon2: Icons.info_outline,
-      icon3: Icons.star_outline,
-    );
+    ).showSnackBar(SnackBar(content: Text('Tapped $name')));
   }
-
-  // void _onBottomTap(int index) {
-  //   setState(() {
-  //     _selectedIndex = index;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +23,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.user,
         title: 'Profile Information',
-        onTap: () {
-          Navigator.of(context).pushNamed('/profile');
-        },
+        onTap: () {},
       ),
       SettingsItem(
         icons: SolarLinearIcons.card,
         title: 'Manage Payment Methods',
-        onTap: () => _onTap(context, 'Manage Payment Methods'),
+        onTap: () {},
       ),
       SettingsItem(
         icons: SolarLinearIcons.lock,
         title: 'Change Password',
-        onTap: () => _onTap(context, 'Change Password'),
+        onTap: () {},
       ),
     ];
 
@@ -56,70 +41,55 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.bell,
         title: 'Notifications',
-        onTap: () => _onTap(context, 'Notifications'),
+        onTap: () {},
       ),
       SettingsItem(
         icons: SolarLinearIcons.shieldKeyhole,
         title: 'Privacy & Security',
-        onTap: () => _onTap(context, 'Privacy & Security'),
+        onTap: () {},
       ),
       SettingsItem(
         icons: SolarLinearIcons.global,
         title: 'Language',
-        onTap: () => _onTap(context, 'Language'),
+        onTap: () {},
       ),
     ];
 
-    final supportAndLegal = [
+    final support = [
       SettingsItem(
         icons: SolarLinearIcons.help,
-        title: 'Help Center / FAQs',
-        onTap: () => _onTap(context, 'Help Center / FAQs'),
-      ),
-      SettingsItem(
-        icons: SolarLinearIcons.headphonesSquare,
-        title: 'Contact Support',
-        onTap: () => _onTap(context, 'Contact Support'),
+        title: 'Help Center',
+        onTap: () {},
       ),
       SettingsItem(
         icons: SolarLinearIcons.document,
         title: 'Terms of Service',
-        onTap: () => _onTap(context, 'Terms of Service'),
-      ),
-      SettingsItem(
-        icons: SolarLinearIcons.shield,
-        title: 'Privacy Policy',
-        onTap: () => _onTap(context, 'Privacy Policy'),
+        onTap: () {},
       ),
     ];
 
-    final last = [
-      SettingsItem(
-        icons: SolarLinearIcons.logout,
-        title: 'LogOut',
-        onTap: () => _onTap(context, 'Logout'),
-      ),
-      SettingsItem(
-        icons: Icons.delete,
-        iconColor: Colors.red,
-        title: 'Delete Account',
-        textColor: Colors.red,
-        arrowColor: Colors.red,
-        onTap: () => _onTap(context, 'Delete Account'),
-      ),
-    ];
+    final logout = SettingsItem(
+      icons: SolarLinearIcons.logout,
+      title: 'Logout',
+      onTap: () => _onTap(context, 'Logout'),
+    );
+
+    final delete = SettingsItem(
+      icons: Icons.delete,
+      title: 'Delete Account',
+      iconColor: Colors.red,
+      textColor: Colors.red,
+      arrowColor: Colors.red,
+      onTap: () => _onTap(context, 'Delete Account'),
+    );
 
     return Scaffold(
       appBar: GlobalAppBar(
-        profileImage: 'assets/icons/profile.jpg',
         title: 'Settings',
-        showProfile: true,
-        // showSettings: false,
+        profileImage: 'assets/icons/profile.jpg',
         onCloseTap: () => Navigator.pop(context),
-        onProfileTap: () {},
       ),
       backgroundColor: const Color(0xFFF5F5F7),
-
       body: ScrollConfiguration(
         behavior: ScrollBehavior().copyWith(
           overscroll: false, // removes glow
@@ -129,35 +99,54 @@ class _SettingsScreenState extends State<SettingsScreen> {
           physics: const BouncingScrollPhysics(), // allows natural swipe
           padding: const EdgeInsets.all(16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SettingsContainer(
-                title: "Account",
-                items: account,
-                iconBackgroundColor: Colors.grey[200]!,
+              const Text(
+                'Account',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 15),
-              SettingsContainer(
-                title: "Preferences",
-                items: preferences,
-                iconBackgroundColor: Colors.grey[200]!,
+              const SizedBox(height: 8),
+              ...account.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: SettingsSingleContainer(item: item),
+                ),
               ),
-              const SizedBox(height: 15),
-              SettingsContainer(
-                title: "Support & Legal",
-                items: supportAndLegal,
-                iconBackgroundColor: Colors.grey[200]!,
+
+              const SizedBox(height: 20),
+              const Text(
+                'Preferences',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 15),
-              SettingsContainer(title: '', items: last),
+              const SizedBox(height: 8),
+              ...preferences.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: SettingsSingleContainer(item: item),
+                ),
+              ),
+
+              const SizedBox(height: 20),
+              const Text(
+                'Support & Legal',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              ...support.map(
+                (item) => Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: SettingsSingleContainer(item: item),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+              SettingsSingleContainer(item: logout),
+              const SizedBox(height: 12),
+              SettingsSingleContainer(item: delete),
             ],
           ),
         ),
       ),
-
-      // bottomNavigationBar: GlobalBottomBar(
-      //   selectedIndex: _selectedIndex,
-      //   onItemTap: _onBottomTap,
-      // ),
     );
   }
 }
