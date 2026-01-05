@@ -1,0 +1,61 @@
+[33m5c65242[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m HEAD@{0}: pull --rebase origin develop (finish): returning to refs/heads/develop
+[33m5c65242[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m, [m[1;31morigin/develop[m[33m)[m HEAD@{1}: pull --rebase origin develop (start): checkout 5c6524283f23e47387e9bd6a73db721543c816c8
+[33me3a10f1[m HEAD@{2}: reset: moving to HEAD
+[33me3a10f1[m HEAD@{3}: reset: moving to HEAD
+[33me3a10f1[m HEAD@{4}: reset: moving to HEAD
+[33me3a10f1[m HEAD@{5}: pull origin develop: Merge made by the 'ort' strategy.
+[33m5c2c807[m HEAD@{6}: commit: added otp logic based on firebase
+[33m6fa98ab[m HEAD@{7}: commit: added notification files in notifications
+[33m11721e3[m HEAD@{8}: commit: updated notification screen, global appbar, setting screen
+[33m046ce44[m HEAD@{9}: pull origin develop: Fast-forward
+[33mc9f9c46[m HEAD@{10}: reset: moving to HEAD
+[33mc9f9c46[m HEAD@{11}: pull origin develop: Fast-forward
+[33mc8fffed[m HEAD@{12}: checkout: moving from balaj to develop
+[33m35d9e19[m[33m ([m[1;31morigin/balaj[m[33m, [m[1;32mbalaj[m[33m)[m HEAD@{13}: reset: moving to HEAD
+[33m35d9e19[m[33m ([m[1;31morigin/balaj[m[33m, [m[1;32mbalaj[m[33m)[m HEAD@{14}: checkout: moving from develop to balaj
+[33mc8fffed[m HEAD@{15}: commit: commit
+[33m67cbdbe[m HEAD@{16}: commit: updated otp field lints
+[33m252f3ac[m HEAD@{17}: commit: changed minor changes in the text_strings
+[33m0b9880a[m HEAD@{18}: pull origin develop: Fast-forward
+[33m752b2d5[m HEAD@{19}: reset: moving to HEAD
+[33m752b2d5[m HEAD@{20}: commit: changed otp_field snippet
+[33m99738f0[m HEAD@{21}: commit: fixed linting errors in files
+[33md005489[m HEAD@{22}: commit: formScreen added with it's formbutton and bottomSheetSelector
+[33m8a2af1e[m HEAD@{23}: commit: new code
+[33ma1f7512[m HEAD@{24}: commit (merge): code changed
+[33m8ad925d[m HEAD@{25}: commit: upadted otp screen
+[33m4042a31[m HEAD@{26}: pull origin develop: Fast-forward
+[33m49724f5[m HEAD@{27}: reset: moving to HEAD
+[33m49724f5[m HEAD@{28}: checkout: moving from qbranch to develop
+[33mbb851e2[m[33m ([m[1;32mqbranch[m[33m)[m HEAD@{29}: reset: moving to HEAD
+[33mbb851e2[m[33m ([m[1;32mqbranch[m[33m)[m HEAD@{30}: checkout: moving from develop to qbranch
+[33m49724f5[m HEAD@{31}: reset: moving to HEAD
+[33m49724f5[m HEAD@{32}: checkout: moving from qbranch to develop
+[33mbb851e2[m[33m ([m[1;32mqbranch[m[33m)[m HEAD@{33}: commit: updated code files of qbranch
+[33mcb88dca[m HEAD@{34}: checkout: moving from develop to qbranch
+[33m49724f5[m HEAD@{35}: commit: added otp screen with login screen updated
+[33mc9dbbd2[m HEAD@{36}: reset: moving to HEAD
+[33mc9dbbd2[m HEAD@{37}: checkout: moving from qbranch to develop
+[33mcb88dca[m HEAD@{38}: reset: moving to HEAD
+[33mcb88dca[m HEAD@{39}: checkout: moving from develop to qbranch
+[33mc9dbbd2[m HEAD@{40}: commit: updated login country code
+[33mae7fa8e[m HEAD@{41}: commit: updated splsh screr
+[33m84a7239[m HEAD@{42}: checkout: moving from develop to develop
+[33m84a7239[m HEAD@{43}: commit: updated auth,
+[33m35d9e19[m[33m ([m[1;31morigin/balaj[m[33m, [m[1;32mbalaj[m[33m)[m HEAD@{44}: Branch: renamed refs/heads/balaj to refs/heads/develop
+[33m35d9e19[m[33m ([m[1;31morigin/balaj[m[33m, [m[1;32mbalaj[m[33m)[m HEAD@{46}: commit: added signup and sigin screen, globals changed
+[33m019d27a[m HEAD@{47}: commit (merge): Resolve merge conflicts - accept incoming changes from main
+[33mcae7efa[m HEAD@{48}: reset: moving to HEAD
+[33mcae7efa[m HEAD@{49}: checkout: moving from main to balaj
+[33mfe18c9f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{50}: reset: moving to HEAD
+[33mfe18c9f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{51}: checkout: moving from balaj to main
+[33mcae7efa[m HEAD@{52}: commit: splash
+[33m0424a13[m HEAD@{53}: checkout: moving from main to balaj
+[33mfe18c9f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{54}: reset: moving to HEAD
+[33mfe18c9f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{55}: checkout: moving from gorgan to main
+[33m03817b1[m[33m ([m[1;32mgorgan[m[33m)[m HEAD@{56}: checkout: moving from balaj to gorgan
+[33m0424a13[m HEAD@{57}: commit: updated files
+[33mfe18c9f[m[33m ([m[1;32mmain[m[33m)[m HEAD@{58}: pull origin main: Fast-forward
+[33m3fd35cb[m HEAD@{59}: checkout: moving from balaj to balaj
+[33m3fd35cb[m HEAD@{60}: Branch: renamed refs/heads/main to refs/heads/balaj
+[33m3fd35cb[m HEAD@{62}: clone: from https://github.com/Qadreen-Ali/gb_ride.git

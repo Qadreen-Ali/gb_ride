@@ -31,6 +31,9 @@ class GBText {
   static const String termsofServices = "Terms of Services";
   static const String alreadyhaveAnAccount = "Already have an Account? Sign In";
   static const String signIn = "Sign In";
+  static const String resendcode = "Resend Code";
+  static const String sendBySMS = "Send By SMS";
+  static const String continueAs = "Continue as";
 
   // home
   static const String offerYourFare =  "Offer Your Fare";
@@ -62,10 +65,5 @@ class GBText {
   static const String accepeted =  "Accepeted";
   static const String yourDestination=  "Your Destination is \n Arrived";
   static const String endRide=  "End Ride";
-
-  static const String resendcode = "Resend Code";
-  static const String sendBySMS = "Send By SMS";
-  static const String continueAs = "Continue as";
-
 
 }
