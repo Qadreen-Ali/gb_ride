@@ -87,9 +87,9 @@ class HomeBottomSheet extends StatelessWidget {
                     controller: pickupController,
                     hintText: 'From',
                     themeColor: GBColor.secondary,
-                    borderColor: GBColor.borderColor,
+                   // borderColor: GBColor.borderColor,
                     iconData: Icons.radio_button_checked,
-                    iconColor: Colors.black,
+                   // iconColor: Colors.black,
                     onMapIconPressed: onStartPickupSelection,
                     onExpandSheet: onExpandSheet,
                     onLocationSelected: (position, displayName) {
@@ -107,9 +107,9 @@ class HomeBottomSheet extends StatelessWidget {
                     controller: destinationController,
                     hintText: 'To',
                     themeColor: GBColor.secondary,
-                    borderColor: GBColor.borderColor,
+                  //  borderColor: GBColor.borderColor,
                     iconData: Icons.location_on,
-                    iconColor: GBColor.primary,
+                  //  iconColor: GBColor.primary,
                     onMapIconPressed: onStartDestinationSelection,
                     onExpandSheet: onExpandSheet,
                     onLocationSelected: (position, displayName) {
