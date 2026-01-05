@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:gb_ride/view/module/local/home/app_drawer/app_drawer.dart';
 import 'package:gb_ride/view/module/student/home/widgets/fare_bottom_sheet.dart';
 import 'package:gb_ride/view/module/student/home/widgets/find_driver_bottom_sheet.dart';
 import 'package:gb_ride/view/module/student/home/widgets/vehicle_option.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:gb_ride/common/app_drawer.dart';
+// import 'package:gb_ride/common/app_drawer.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import '../../../../utils/constants/color_string.dart';
-import '../../../../utils/constants/image_string.dart';
-import '../../../../utils/constants/primary_button.dart';
-import '../../../../utils/constants/text_string.dart';
 import 'home_bottom_sheet.dart';
-import 'widgets/location_input_field.dart';
 import 'widgets/map_markers.dart';
 import 'widgets/map_selection_overlay.dart';
 import 'widgets/top_bar.dart';
@@ -340,10 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 );
               },
-            )
-
-
-
+            ),
         ],
       ),
     );
@@ -358,4 +351,3 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 }
-

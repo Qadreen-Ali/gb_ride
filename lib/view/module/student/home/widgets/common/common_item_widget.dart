@@ -3,16 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../../../../common/text_field.dart';
 import '../../../../../../utils/constants/color_string.dart';
 import '../../../../../../utils/constants/image_string.dart';
-<<<<<<< HEAD
-import '../../../../../../utils/constants/primary_button.dart';
-import '../../../../../../utils/constants/text_string.dart';
-import '../action_circle.dart';
-import '../location_container.dart';
-import '../rating_widget.dart';
-
-class CommonItemWidget extends StatelessWidget {
-  const CommonItemWidget({super.key});
-=======
 import '../action_circle.dart';
 import '../location_container.dart';
 import '../rating_widget.dart';
@@ -20,16 +10,11 @@ class CommonItemWidget extends StatelessWidget {
   const CommonItemWidget({
     super.key,
   });
->>>>>>> 1d74f430651599d8135ed11545ff0192188f626b
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-<<<<<<< HEAD
-=======
-
->>>>>>> 1d74f430651599d8135ed11545ff0192188f626b
         /// Car + Plate Row
         Row(
           children: [
@@ -82,13 +67,9 @@ class CommonItemWidget extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 24,
-<<<<<<< HEAD
-                            backgroundImage: AssetImage(GBImagePath.profile),
-=======
                             backgroundImage: AssetImage(
                               GBImagePath.profile,
                             ),
->>>>>>> 1d74f430651599d8135ed11545ff0192188f626b
                           ),
                           const Text(
                             "Hassan",
@@ -152,11 +133,7 @@ class CommonItemWidget extends StatelessWidget {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-<<<<<<< HEAD
-            children: [
-=======
             children:  [
->>>>>>> 1d74f430651599d8135ed11545ff0192188f626b
               Icon(Icons.message_outlined, color: GBColor.messageTextColor),
               Text(
                 "Any Message For Driver",
@@ -168,11 +145,7 @@ class CommonItemWidget extends StatelessWidget {
                 ),
               ),
               InkWell(
-<<<<<<< HEAD
-                onTap: () {},
-=======
                 onTap: (){ },
->>>>>>> 1d74f430651599d8135ed11545ff0192188f626b
                 child: Icon(
                   Icons.arrow_forward_ios_rounded,
                   color: GBColor.messageTextColor,
@@ -238,16 +211,9 @@ class CommonItemWidget extends StatelessWidget {
         ),
 
         const SizedBox(height: 16),
-<<<<<<< HEAD
-      ],
-    );
-  }
-}
-=======
 
 
       ],
     );
   }
 }
->>>>>>> 1d74f430651599d8135ed11545ff0192188f626b
