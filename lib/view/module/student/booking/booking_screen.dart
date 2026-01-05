@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // TODO: Add these imports based on your data source:
 // import 'package:http/http.dart' as http;  // For API calls
-// import 'dart:convert';  // For JSON parsing
+import 'dart:convert';  // For JSON parsing
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
@@ -25,9 +25,6 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     super.dispose();
   }
 
-  // ============================================================================
-  // DATA FETCHING METHODS - Replace these with your actual API/Database calls
-  // ============================================================================
 
   /// Fetch ongoing bookings from your backend
   Future<List<Map<String, dynamic>>> _fetchOngoingBookings() async {
