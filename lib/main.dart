@@ -1,9 +1,9 @@
 // 03465407068
 import 'package:flutter/material.dart';
-import 'package:gb_ride/setting/profile_screen.dart';
-import 'package:gb_ride/setting/setting_screen.dart';
 import 'package:gb_ride/view/module/local/home/home_screen.dart';
-import 'package:gb_ride/view/module/notifications/notification_screen.dart';
+import 'package:gb_ride/view/module/local/notifications/notification_screen.dart';
+import 'package:gb_ride/view/module/local/setting/profile/profile_screen.dart';
+import 'package:gb_ride/view/module/local/setting/setting_screen.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
 import 'package:gb_ride/view/auth/otp_verification_screen.dart';
 import 'package:gb_ride/view/splash/splash_screen.dart';

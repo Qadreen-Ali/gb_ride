@@ -73,29 +73,13 @@ class ProfileDrawer extends StatelessWidget {
                       // Navigate to home
                     },
                   ),
+
                   DrawerMenuItem(
-                    image: Image.asset(GBImagePath.ride),
-                    label: 'Ride',
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Navigate to ride
-                    },
-                  ),
-                  DrawerMenuItem(
-                    image: Image.asset(GBImagePath.booking),
-                    label: 'Bookings',
-                    onTap: () {
-                      Navigator.pop(context);
-                      // Navigate to bookings
-                    },
-                  ),
-                  DrawerMenuItem(
-                  image:Image.asset(GBImagePath.safety,fit: BoxFit.contain,) ,
+                    image: Image.asset(GBImagePath.safety, fit: BoxFit.contain),
                     label: 'Safety',
+                    imageColor: Colors.black,
 
-                    onTap: () {
-
-                    },
+                    onTap: () {},
                   ),
                   DrawerMenuItem(
                     icon: Icons.settings_sharp,
@@ -106,10 +90,10 @@ class ProfileDrawer extends StatelessWidget {
                     },
                   ),
                   DrawerMenuItem(
-                    image: Image.asset(GBImagePath.help, fit: BoxFit.contain,),
-                    label: 'Help', onTap: () {  },
-
-
+                    image: Image.asset(GBImagePath.help, fit: BoxFit.contain),
+                    label: 'Help',
+                    imageColor: Colors.black,
+                    onTap: () {},
                   ),
 
                   DrawerMenuItem(
@@ -133,6 +117,8 @@ class ProfileDrawer extends StatelessWidget {
 class DrawerMenuItem extends StatelessWidget {
   final IconData? icon;
   final Image? image;
+  final Color? imageColor;
+  final Color? selectedImageColor;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
@@ -143,7 +129,7 @@ class DrawerMenuItem extends StatelessWidget {
     this.image,
     required this.label,
     this.isSelected = false,
-    required this.onTap,
+    required this.onTap, this.imageColor, this.selectedImageColor,
   }) : super(key: key);
 
   @override
@@ -175,9 +161,17 @@ class DrawerMenuItem extends StatelessWidget {
       return SizedBox(
         width: 24,
         height: 24,
-        child: FittedBox(
-          fit: BoxFit.contain,
-          child: image!,
+        child: ColorFiltered(
+          colorFilter: ColorFilter.mode(
+            isSelected
+                ? (selectedImageColor ?? GBColor.secondary)
+                : (imageColor ?? Colors.black),
+            BlendMode.srcIn,
+          ),
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: image!,
+          ),
         ),
       );
     } else if (icon != null) {
@@ -190,4 +184,5 @@ class DrawerMenuItem extends StatelessWidget {
       return const SizedBox(width: 24);
     }
   }
+
 }

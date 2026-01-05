@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import 'package:gb_ride/view/module/notifications/notification_tile.dart';
+
+import 'notification_tile.dart';
 
 class AllNotificationScreen extends StatelessWidget {
   const AllNotificationScreen({super.key});

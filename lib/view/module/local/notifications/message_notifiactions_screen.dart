@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/view/module/notifications/notification_tile.dart';
+
+import 'notification_tile.dart';
 
 class MessageNotificationsScreen extends StatelessWidget {
   const MessageNotificationsScreen({super.key});

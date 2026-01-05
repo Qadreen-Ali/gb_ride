@@ -1,6 +1,6 @@
 import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
-import 'package:gb_ride/view/module/student/home/widgets/payment_method_bottom_sheet.dart';
+import 'package:gb_ride/view/module/local/home/widgets/payment_method_bottom_sheet.dart';
 import '../../../../../common/text_field.dart';
 import '../../../../../utils/constants/color_string.dart';
 import '../../../../../utils/constants/primary_button.dart';

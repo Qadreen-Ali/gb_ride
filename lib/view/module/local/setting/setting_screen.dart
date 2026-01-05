@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/global_appbar.dart';
-import 'package:gb_ride/utils/constants/settings.dart';
+import 'package:gb_ride/view/module/local/setting/widget/settings_widget.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 
 class SettingsScreen extends StatefulWidget {

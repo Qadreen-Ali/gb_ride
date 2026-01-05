@@ -4,10 +4,10 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
-import 'package:gb_ride/view/module/student/home/widgets/fare_bottom_sheet.dart';
-import 'package:gb_ride/view/module/student/home/widgets/find_driver_bottom_sheet.dart';
-import 'package:gb_ride/view/module/student/home/widgets/location_input_field.dart';
-import 'package:gb_ride/view/module/student/home/widgets/vehicle_option.dart';
+import 'package:gb_ride/view/module/local/home/widgets/fare_bottom_sheet.dart';
+import 'package:gb_ride/view/module/local/home/widgets/find_driver_bottom_sheet.dart';
+import 'package:gb_ride/view/module/local/home/widgets/location_input_field.dart';
+import 'package:gb_ride/view/module/local/home/widgets/vehicle_option.dart';
 import 'package:latlong2/latlong.dart';
 
 class HomeBottomSheet extends StatelessWidget {
@@ -90,9 +90,9 @@ class HomeBottomSheet extends StatelessWidget {
                     controller: pickupController,
                     hintText: 'From',
                     themeColor: GBColor.secondary,
-                    borderColor: GBColor.borderColor,
+                   // borderColor: GBColor.borderColor,
                     iconData: Icons.radio_button_checked,
-                    iconColor: Colors.black,
+                   // iconColor: Colors.black,
                     onMapIconPressed: onStartPickupSelection,
                     onExpandSheet: onExpandSheet,
                     onLocationSelected: (position, displayName) {
@@ -110,9 +110,9 @@ class HomeBottomSheet extends StatelessWidget {
                     controller: destinationController,
                     hintText: 'To',
                     themeColor: GBColor.secondary,
-                    borderColor: GBColor.borderColor,
+                  //  borderColor: GBColor.borderColor,
                     iconData: Icons.location_on,
-                    iconColor: GBColor.primary,
+                  //  iconColor: GBColor.primary,
                     onMapIconPressed: onStartDestinationSelection,
                     onExpandSheet: onExpandSheet,
                     onLocationSelected: (position, displayName) {
@@ -231,7 +231,7 @@ class HomeBottomSheet extends StatelessWidget {
                               context: context,
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,
-                              builder: (_) => const FindDriverBottomSheet(),
+                              builder: (_) =>  FindDriverBottomSheet(),
                             );
                           },
                         ),

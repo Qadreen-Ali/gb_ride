@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
-import 'package:gb_ride/view/module/student/home/widgets/common/common_item_widget.dart';
-import 'package:gb_ride/view/module/student/home/widgets/rating_widget.dart';
-import 'package:gb_ride/view/module/student/home/widgets/start_ride_bottom_sheet.dart';
+import 'package:gb_ride/view/module/local/home/widgets/start_ride_bottom_sheet.dart';
 import '../../../../../utils/constants/color_string.dart';
 import '../../../../../utils/constants/text_string.dart';
 import '../../../../../utils/constants/primary_button.dart';
 import 'action_circle.dart';
 import 'bottom_sheet_title.dart';
+import 'common/common_item_widget.dart';
 import 'location_container.dart';
 
 class DriveArrivingBottomSheet extends StatelessWidget {

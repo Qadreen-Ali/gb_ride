@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:gb_ride/view/module/student/home/widgets/rating_widget.dart';
 import '../../../../../utils/constants/color_string.dart';
 import '../../../../../utils/constants/image_string.dart';
 import '../../../../../utils/constants/primary_button.dart';
