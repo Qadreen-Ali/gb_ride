@@ -73,6 +73,7 @@ class ProfileDrawer extends StatelessWidget {
                       // Navigate to home
                     },
                   ),
+<<<<<<< HEAD:lib/common/app_drawer.dart
                   DrawerMenuItem(
                     image: Image.asset(GBImagePath.ride),
                     label: 'Ride',
@@ -96,6 +97,15 @@ class ProfileDrawer extends StatelessWidget {
                     onTap: () {
 
                     },
+=======
+
+                  DrawerMenuItem(
+                    image: Image.asset(GBImagePath.safety, fit: BoxFit.contain),
+                    label: 'Safety',
+                    imageColor: Colors.black,
+
+                    onTap: () {},
+>>>>>>> 1d74f430651599d8135ed11545ff0192188f626b:lib/view/module/local/home/app_drawer/app_drawer.dart
                   ),
                   DrawerMenuItem(
                     icon: Icons.settings_sharp,
@@ -106,10 +116,17 @@ class ProfileDrawer extends StatelessWidget {
                     },
                   ),
                   DrawerMenuItem(
+<<<<<<< HEAD:lib/common/app_drawer.dart
                     image: Image.asset(GBImagePath.help, fit: BoxFit.contain,),
                     label: 'Help', onTap: () {  },
 
 
+=======
+                    image: Image.asset(GBImagePath.help, fit: BoxFit.contain),
+                    label: 'Help',
+                    imageColor: Colors.black,
+                    onTap: () {},
+>>>>>>> 1d74f430651599d8135ed11545ff0192188f626b:lib/view/module/local/home/app_drawer/app_drawer.dart
                   ),
 
                   DrawerMenuItem(
@@ -133,6 +150,11 @@ class ProfileDrawer extends StatelessWidget {
 class DrawerMenuItem extends StatelessWidget {
   final IconData? icon;
   final Image? image;
+<<<<<<< HEAD:lib/common/app_drawer.dart
+=======
+  final Color? imageColor;
+  final Color? selectedImageColor;
+>>>>>>> 1d74f430651599d8135ed11545ff0192188f626b:lib/view/module/local/home/app_drawer/app_drawer.dart
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
@@ -143,7 +165,7 @@ class DrawerMenuItem extends StatelessWidget {
     this.image,
     required this.label,
     this.isSelected = false,
-    required this.onTap,
+    required this.onTap, this.imageColor, this.selectedImageColor,
   }) : super(key: key);
 
   @override
@@ -175,9 +197,23 @@ class DrawerMenuItem extends StatelessWidget {
       return SizedBox(
         width: 24,
         height: 24,
+<<<<<<< HEAD:lib/common/app_drawer.dart
         child: FittedBox(
           fit: BoxFit.contain,
           child: image!,
+=======
+        child: ColorFiltered(
+          colorFilter: ColorFilter.mode(
+            isSelected
+                ? (selectedImageColor ?? GBColor.secondary)
+                : (imageColor ?? Colors.black),
+            BlendMode.srcIn,
+          ),
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: image!,
+          ),
+>>>>>>> 1d74f430651599d8135ed11545ff0192188f626b:lib/view/module/local/home/app_drawer/app_drawer.dart
         ),
       );
     } else if (icon != null) {
@@ -190,4 +226,8 @@ class DrawerMenuItem extends StatelessWidget {
       return const SizedBox(width: 24);
     }
   }
+<<<<<<< HEAD:lib/common/app_drawer.dart
+=======
+
+>>>>>>> 1d74f430651599d8135ed11545ff0192188f626b:lib/view/module/local/home/app_drawer/app_drawer.dart
 }
