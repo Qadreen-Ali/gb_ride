@@ -140,7 +140,7 @@ class SafetyScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Divider(
-                      color: GBColor.linegrey,
+                      color: GBColor.borderColor,
                       thickness: 1,
                       height: 1,
                     ),
@@ -175,7 +175,7 @@ class SafetyScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Divider(
-                      color: GBColor.linegrey,
+                      color: GBColor.borderColor,
                       thickness: 1,
                       height: 1,
                     ),
@@ -189,7 +189,7 @@ class SafetyScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Divider(
-                      color: GBColor.linegrey,
+                      color: GBColor.borderColor,
                       thickness: 1,
                       height: 1,
                     ),
