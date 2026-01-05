@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/utils/constants/color_string.dart';
 
 class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -31,6 +32,9 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: true,
       backgroundColor: Colors.white,
+      scrolledUnderElevation: 0,
+      surfaceTintColor: Colors.transparent,
+
       elevation: 0,
       leadingWidth: 72,
       toolbarHeight: 120,
@@ -70,10 +74,14 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
                 width: 36,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
+                  color: GBColor.primary,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.close, size: 20, color: Colors.black),
+                child: const Icon(
+                  Icons.close,
+                  size: 20,
+                  color: GBColor.secondary,
+                ),
               ),
             ),
           )

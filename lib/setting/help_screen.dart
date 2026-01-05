@@ -57,6 +57,26 @@ class _HelpScreenState extends State<HelpScreen> {
     ),
   ];
 
+  Widget buildSection(String title, List<SettingsItem> items) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 8),
+        ...items.map(
+          (item) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: SettingsSingleContainer(item: item),
+          ),
+        ),
+        const SizedBox(height: 20),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,24 +87,26 @@ class _HelpScreenState extends State<HelpScreen> {
         profileImage: 'assets/icons/profile.jpg',
         onCloseTap: () => Navigator.pop(context),
       ),
-      body: Column(
-        children: [
-          SettingsContainer(
-            title: 'FAQs',
-            items: faqs,
-            iconBackgroundColor: Colors.grey[200]!,
+      body: ScrollConfiguration(
+        behavior: ScrollBehavior().copyWith(
+          overscroll: false, // removes glow
+          scrollbars: false, // removes scroll bar
+        ),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
           ),
-          SettingsContainer(
-            title: 'Tutorials & Guides',
-            items: tutorialsandguides,
-            iconBackgroundColor: Colors.grey[200]!,
+          // allows natural swipe
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildSection('FAQs', faqs),
+              buildSection('Tutorials & Guides', tutorialsandguides),
+              buildSection('Contact and Support', contactsupport),
+            ],
           ),
-          SettingsContainer(
-            title: 'Contact and Support',
-            items: contactsupport,
-            iconBackgroundColor: Colors.grey[200]!,
-          ),
-        ],
+        ),
       ),
     );
   }

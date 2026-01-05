@@ -9,6 +9,7 @@ class SettingsItem {
   final Color? iconColor; // optional icon color
   final Color? textColor;
   final Color? arrowColor;
+  final Color? headerColor;
 
   const SettingsItem({
     required this.icons,
@@ -17,10 +18,11 @@ class SettingsItem {
     this.iconColor, // optional
     this.textColor,
     this.arrowColor,
+    this.headerColor,
   });
 }
 
-/// Single tile with circular icon background
+/// Single tile with circular icon background (custom row for proper centering)
 class SettingsTile extends StatelessWidget {
   final SettingsItem item;
   final Color iconBackgroundColor;
@@ -28,40 +30,77 @@ class SettingsTile extends StatelessWidget {
   const SettingsTile({
     super.key,
     required this.item,
-    this.iconBackgroundColor = const Color(0xFFE0E0E0),
+    this.iconBackgroundColor = GBColor.gray,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        radius: 20,
-        backgroundColor: iconBackgroundColor,
-        child: Icon(
-          item.icons,
-          color:
-              item.iconColor ??
-              GBColor.gray, // use custom icon color if provided
-          size: 20,
-        ),
-      ),
-      title: Text(
-        item.title,
-        style: TextStyle(
-          fontSize: 18,
-          color:
-              item.textColor ??
-              Colors.black, // use custom text color if provided
-        ),
-      ),
-
-      trailing: Icon(
-        Icons.arrow_forward_ios,
-        size: 16,
-        color: item.arrowColor ?? Colors.grey, // use arrowColor if provided
-      ),
+    return InkWell(
       onTap: item.onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 12,
+              backgroundColor: iconBackgroundColor,
+              child: Icon(
+                item.icons,
+                color: item.iconColor ?? GBColor.secondary,
+                size: 16,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(
+                item.title,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: item.textColor ?? GBColor.gray,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: item.arrowColor ?? GBColor.gray,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Single container for one settings item
+class SettingsSingleContainer extends StatelessWidget {
+  final SettingsItem item;
+  final Color iconBackgroundColor;
+  final double width;
+  final double height;
+
+  const SettingsSingleContainer({
+    super.key,
+    required this.item,
+    this.iconBackgroundColor = GBColor.lineColor,
+    this.width = 392,
+    this.height = 56,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3)),
+        ],
+      ),
+      child: SettingsTile(item: item, iconBackgroundColor: iconBackgroundColor),
     );
   }
 }
@@ -78,7 +117,7 @@ class SettingsContainer extends StatelessWidget {
     super.key,
     required this.title,
     required this.items,
-    this.iconBackgroundColor = const Color(0xFFE0E0E0),
+    this.iconBackgroundColor = GBColor.lineColor,
     this.width = 399,
     this.height,
   });
@@ -89,17 +128,18 @@ class SettingsContainer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Title text
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.grey[800],
+        if (title.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: GBColor.gray,
+              ),
             ),
           ),
-        ),
         const SizedBox(height: 5),
 
         // Main container
@@ -130,14 +170,7 @@ class SettingsContainer extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 33),
                       height: 1,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 12,
-                        horizontal: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+                      color: Colors.black.withValues(alpha: .2),
                     ),
                     const SizedBox(height: 15),
                   ],

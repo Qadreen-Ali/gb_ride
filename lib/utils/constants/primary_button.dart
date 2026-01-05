@@ -24,7 +24,7 @@ class PrimaryButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.borderRadius,
-    this.borderColor,
+    this.borderColor, 
   });
 
   @override

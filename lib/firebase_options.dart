@@ -41,46 +41,48 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCb3nNGrN3mNgMIqOlfrkMDifgqH4SO4TU',
-    appId: '1:560604047926:web:e0df0e24e33dae42ab4697',
-    messagingSenderId: '560604047926',
-    projectId: 'gb-ride-a591a',
-    authDomain: 'gb-ride-a591a.firebaseapp.com',
-    storageBucket: 'gb-ride-a591a.firebasestorage.app',
+    apiKey: 'AIzaSyD-AgqQ1a0sLORWELs5JOtXnjAUGPkQrsc',
+    appId: '1:664347806856:web:0f764be724dac6167e633d',
+    messagingSenderId: '664347806856',
+    projectId: 'gbride-01',
+    authDomain: 'gbride-01.firebaseapp.com',
+    storageBucket: 'gbride-01.firebasestorage.app',
+    measurementId: 'G-W811068JXZ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBqhXVgwZvsUZtBaxDJWgPh0E5mEaaS2hw',
-    appId: '1:560604047926:android:0d59529e23ad976cab4697',
-    messagingSenderId: '560604047926',
-    projectId: 'gb-ride-a591a',
-    storageBucket: 'gb-ride-a591a.firebasestorage.app',
+    apiKey: 'AIzaSyAehLD7H0gEnObartkJSWc7Wyy1kE7Kvxo',
+    appId: '1:664347806856:android:473917b9efea7aa07e633d',
+    messagingSenderId: '664347806856',
+    projectId: 'gbride-01',
+    storageBucket: 'gbride-01.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBpEFB3wEXx2ATJ6ozoBNVvsAjgsMJ3dqQ',
-    appId: '1:560604047926:ios:183b801c2bbae26aab4697',
-    messagingSenderId: '560604047926',
-    projectId: 'gb-ride-a591a',
-    storageBucket: 'gb-ride-a591a.firebasestorage.app',
+    apiKey: 'AIzaSyChAMMqDfQh2GRDApSOuaKAmLSVSvu1wE0',
+    appId: '1:664347806856:ios:a9bee1a8c607b7377e633d',
+    messagingSenderId: '664347806856',
+    projectId: 'gbride-01',
+    storageBucket: 'gbride-01.firebasestorage.app',
     iosBundleId: 'com.example.gbRide',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBpEFB3wEXx2ATJ6ozoBNVvsAjgsMJ3dqQ',
-    appId: '1:560604047926:ios:183b801c2bbae26aab4697',
-    messagingSenderId: '560604047926',
-    projectId: 'gb-ride-a591a',
-    storageBucket: 'gb-ride-a591a.firebasestorage.app',
+    apiKey: 'AIzaSyChAMMqDfQh2GRDApSOuaKAmLSVSvu1wE0',
+    appId: '1:664347806856:ios:a9bee1a8c607b7377e633d',
+    messagingSenderId: '664347806856',
+    projectId: 'gbride-01',
+    storageBucket: 'gbride-01.firebasestorage.app',
     iosBundleId: 'com.example.gbRide',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCb3nNGrN3mNgMIqOlfrkMDifgqH4SO4TU',
-    appId: '1:560604047926:web:778f6f21119b2e01ab4697',
-    messagingSenderId: '560604047926',
-    projectId: 'gb-ride-a591a',
-    authDomain: 'gb-ride-a591a.firebaseapp.com',
-    storageBucket: 'gb-ride-a591a.firebasestorage.app',
+    apiKey: 'AIzaSyD-AgqQ1a0sLORWELs5JOtXnjAUGPkQrsc',
+    appId: '1:664347806856:web:12525bdc85c13e097e633d',
+    messagingSenderId: '664347806856',
+    projectId: 'gbride-01',
+    authDomain: 'gbride-01.firebaseapp.com',
+    storageBucket: 'gbride-01.firebasestorage.app',
+    measurementId: 'G-BVX4KVNS3D',
   );
 }

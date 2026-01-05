@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
@@ -20,6 +18,7 @@ class TTextField extends StatefulWidget {
   final List<TextInputFormatter>? inputFormatters;
   final Color? textColor; // ✅ Custom text color
   final Color? titleTextColor;
+  final Color? hintTextColor;
 
   final dynamic prefix; // ✅ Custom text color
 
@@ -27,6 +26,7 @@ class TTextField extends StatefulWidget {
     super.key,
     required this.titleText,
     required this.hintText,
+    this.hintTextColor,
     this.controller,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
@@ -39,7 +39,10 @@ class TTextField extends StatefulWidget {
     this.readOnly = false,
     this.onTap,
     this.inputFormatters,
-    this.textColor, this.titleTextColor, // ✅ Added
+    this.textColor,
+    this.titleTextColor,
+    ValueChanged<String>? onChanged,
+
   });
 
   @override
@@ -81,14 +84,15 @@ class _TTextFieldState extends State<TTextField> {
               fillColor: GBColor.secondary,
               hintText: widget.hintText,
               hintStyle: TextStyle(
-                color: GBColor.textFieldText,
-                fontSize: 14,
+                color: widget.hintTextColor ?? GBColor.textFieldText,
+                fontSize: 16,
                 fontWeight: FontWeight.w400,
               ),
               contentPadding: const EdgeInsets.symmetric(
                 vertical: 10,
                 horizontal: 18,
               ),
+
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
@@ -105,7 +109,13 @@ class _TTextFieldState extends State<TTextField> {
                 borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(color: GBColor.primary),
               ),
-              prefixIcon: widget.prefixIcon,
+              prefixIcon: widget.prefixIcon == null
+                  ? null
+                  : Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: widget.prefixIcon,
+              ),
+
               suffixIcon: widget.suffixIcon,
             ),
           ),
