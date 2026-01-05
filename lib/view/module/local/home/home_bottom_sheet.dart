@@ -28,7 +28,8 @@ class HomeBottomSheet extends StatelessWidget {
 
   final MapController? mapController;
   final void Function(LatLng position, String displayName) onPickupSelected;
-  final void Function(LatLng position, String displayName) onDestinationSelected;
+  final void Function(LatLng position, String displayName)
+  onDestinationSelected;
 
   const HomeBottomSheet({
     super.key,
@@ -63,8 +64,10 @@ class HomeBottomSheet extends StatelessWidget {
             context: context,
             removeBottom: true,
             child: ListView(
-              controller: scrollController, // ✅ MUST
-              padding: const EdgeInsets.only(top: 10, bottom: 0), // ✅ no extra bottom
+              controller: scrollController,
+              // ✅ MUST
+              padding: const EdgeInsets.only(top: 10, bottom: 0),
+              // ✅ no extra bottom
               physics: const ClampingScrollPhysics(),
               children: [
                 /// Drag Handle
@@ -162,7 +165,10 @@ class HomeBottomSheet extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
                       color: GBColor.secondary,
                       border: Border.all(color: GBColor.borderColor),
@@ -239,7 +245,7 @@ class HomeBottomSheet extends StatelessWidget {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.orange.withOpacity(0.3),
+                              color: GBColor.primary,
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -253,7 +259,6 @@ class HomeBottomSheet extends StatelessWidget {
                     ],
                   ),
                 ),
-
               ],
             ),
           ),
