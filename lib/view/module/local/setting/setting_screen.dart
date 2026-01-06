@@ -23,7 +23,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.user,
         title: 'Profile Information',
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, '/profile');
+        },
       ),
       SettingsItem(
         icons: SolarLinearIcons.card,

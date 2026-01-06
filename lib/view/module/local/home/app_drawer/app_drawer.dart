@@ -85,7 +85,7 @@ class ProfileDrawer extends StatelessWidget {
                     icon: Icons.settings_sharp,
                     label: 'Setting',
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/settings');
                       // Navigate to safety
                     },
                   ),
@@ -129,7 +129,9 @@ class DrawerMenuItem extends StatelessWidget {
     this.image,
     required this.label,
     this.isSelected = false,
-    required this.onTap, this.imageColor, this.selectedImageColor,
+    required this.onTap,
+    this.imageColor,
+    this.selectedImageColor,
   }) : super(key: key);
 
   @override
@@ -168,10 +170,7 @@ class DrawerMenuItem extends StatelessWidget {
                 : (imageColor ?? Colors.black),
             BlendMode.srcIn,
           ),
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: image!,
-          ),
+          child: FittedBox(fit: BoxFit.contain, child: image!),
         ),
       );
     } else if (icon != null) {
@@ -184,5 +183,4 @@ class DrawerMenuItem extends StatelessWidget {
       return const SizedBox(width: 24);
     }
   }
-
 }
