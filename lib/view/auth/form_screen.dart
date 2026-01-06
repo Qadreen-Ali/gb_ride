@@ -4,10 +4,11 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
 import 'package:gb_ride/utils/logger.dart';
 import 'package:gb_ride/view/module/driver/auth/driver_form.dart';
-import 'package:gb_ride/view/module/local/auth/local_form.dart';
-import 'package:gb_ride/view/module/student/auth/student_form.dart';
 
 import 'package:gb_ride/utils/constants/secondary_button.dart';
+
+import '../module/local/auth/local_form.dart';
+import '../module/student/auth/student_form.dart';
 
 enum UserRole { student, local, driver }
 

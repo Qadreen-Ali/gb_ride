@@ -3,7 +3,7 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 
 class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final bool showProfile;
+  final bool? showProfile;
   final VoidCallback? onProfileTap; // optional override
   final VoidCallback? onCloseTap;
   final String? profileImage; // optional

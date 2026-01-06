@@ -1,23 +1,19 @@
+// 03465407068
 import 'package:flutter/material.dart';
-import 'package:gb_ride/common/bottom_navbar.dart';
-// import 'package:gb_ride/setting/help_screen.dart';
-import 'package:gb_ride/setting/profile_screen.dart';
-import 'package:gb_ride/setting/setting_screen.dart';
-import 'package:gb_ride/view/module/notifications/notification_screen.dart';
-// import 'package:gb_ride/setting/profile_screen.dart';
+import 'package:gb_ride/view/module/local/home/home_screen.dart';
+import 'package:gb_ride/view/module/local/notifications/notification_screen.dart';
+import 'package:gb_ride/view/module/local/setting/profile/profile_screen.dart';
+import 'package:gb_ride/view/module/local/setting/setting_screen.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
 import 'package:gb_ride/view/auth/otp_verification_screen.dart';
-import 'package:gb_ride/view/module/student/home/home_screen.dart';
 import 'package:gb_ride/view/splash/splash_screen.dart';
-// import 'package:gb_ride/view/home/home_screen.dart';
-// import 'package:logger/logger.dart';
 import 'package:gb_ride/view/auth/form_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'package:gb_ride/setting/setting_screen.dart';
+import 'package:gb_ride/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -42,7 +38,6 @@ class MyApp extends StatelessWidget {
           return OTPVerificationScreen(phoneNumber: args ?? '');
         },
         '/form': (context) => const FormScreen(),
-        //'/bottomnavbar': (context) => const BottomNavBar(),
         '/home': (context) => const HomeScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/profile': (context) => const ProfileScreen(),
