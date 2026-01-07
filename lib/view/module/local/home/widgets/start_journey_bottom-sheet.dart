@@ -3,11 +3,9 @@ import '../../../../../utils/constants/color_string.dart';
 import '../../../../../utils/constants/image_string.dart';
 import '../../../../../utils/constants/primary_button.dart';
 import '../../../../../utils/constants/text_string.dart';
-import 'action_circle.dart';
 import 'bottom_sheet_title.dart';
 import 'common/common_item_widget.dart';
 import 'destination_bottom_sheet.dart';
-import 'location_container.dart';
 
 class StartJourneyBottomSheet extends StatelessWidget {
   const StartJourneyBottomSheet({super.key});

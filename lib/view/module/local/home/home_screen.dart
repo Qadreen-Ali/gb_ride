@@ -292,7 +292,9 @@ class _HomeScreenState extends State<HomeScreen> {
           if (!_isSelectingPickup && !_isSelectingDestination)
             TopBar(
               onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-              onNotificationPressed: () {},
+              onNotificationPressed: () {
+                Navigator.pushNamed(context, '/notification');
+              },
             ),
 
           // Draggable bottom sheet
@@ -332,10 +334,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 );
               },
-            )
-
-
-
+            ),
         ],
       ),
     );
@@ -350,4 +349,3 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 }
-

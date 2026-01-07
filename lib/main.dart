@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/view/module/local/home/home_screen.dart';
 import 'package:gb_ride/view/module/local/notifications/notification_screen.dart';
+import 'package:gb_ride/view/module/local/setting/help_and_support/help_screen.dart';
 import 'package:gb_ride/view/module/local/setting/profile/profile_screen.dart';
 import 'package:gb_ride/view/module/local/setting/setting_screen.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
@@ -32,16 +33,17 @@ class MyApp extends StatelessWidget {
       //   home: const BottomNavBar(),
       routes: {
         '/': (context) => SplashScreen(), //initial Screen
-        '/login': (context) => const LoginScreen(),
-        '/otp': (context) {
-          final args = ModalRoute.of(context)?.settings.arguments as String?;
-          return OTPVerificationScreen(phoneNumber: args ?? '');
-        },
-        '/form': (context) => const FormScreen(),
+        // '/login': (context) => const LoginScreen(),
+        // '/otp': (context) {
+        //   final args = ModalRoute.of(context)?.settings.arguments as String?;
+        //   return OTPVerificationScreen(phoneNumber: args ?? '');
+        // },
+        // '/form': (context) => const FormScreen(),
         '/home': (context) => const HomeScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/profile': (context) => const ProfileScreen(),
         '/notification': (context) => const NotificationScreen(),
+        '/help': (context) => const HelpScreen(),
       },
     );
   }
