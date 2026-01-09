@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/view/module/local/home/rating/driver_rating_screen.dart';
 
-
 class RatingDialogue extends StatelessWidget {
   final IconData icon;
 

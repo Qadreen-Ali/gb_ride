@@ -21,7 +21,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: GBColor.secondary,
       appBar: GlobalAppBar(
-        showProfile: false,
         title: 'Profile',
         onCloseTap: () => Navigator.pop(context),
       ),

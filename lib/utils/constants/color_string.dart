@@ -14,8 +14,10 @@ class GBColor {
 
   static const Color lightBlue = Color(0xFFB9D6F0);
   static const Color textOrange = Color(0xFFEB8E00);
+  static const Color containerTextColor = Color(0xFF655B5B);
   static const Color lightGray = Color(0xFFD9D9D9);
   static const Color containerColor = Color(0xFFECEFF4);
+  static const Color selectedContainerColor = Color(0xFFFBD7A1);
   static const Color containerGrayColor = Color(0xFFD9D9D9);
   static const Color yellow = Color(0xFFFFCC00);
   static const Color green = Color(0xFF319F43);
