@@ -347,88 +347,87 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
           // Draggable bottom sheet
+          // if (!_isSelectingPickup && !_isSelectingDestination)
+          // DraggableScrollableSheet(
+          //   controller: _sheetController,
+          //   expand: true,
+          //   initialChildSize: 0.52,
+          //   minChildSize: 0.15,
+          //   maxChildSize: 1.0,
+          //   snap: true,
+          //   snapSizes: const [0.15, 0.52, 1.0],
+          //   builder: (context, scrollController) {
+          //     return HomeBottomSheet(
+          //       scrollController: scrollController,
+          //       pickupController: _pickupController,
+          //       destinationController: _destinationController,
+          //       onStartPickupSelection: _startPickupSelection,
+          //       onStartDestinationSelection: _startDestinationSelection,
+          //       onExpandSheet: _expandSheet,
+          //       pickupLocation: _pickupLocation,
+          //       destinationLocation: _destinationLocation,
+          //       selectedVehicle: _selectedVehicle,
+          //       onVehicleSelect: (v) => setState(() => _selectedVehicle = v),
+          //       mapController: _mapController,
+          //       onPickupSelected: (pos, name) {
+          //         setState(() {
+          //           _pickupLocation = pos;
+          //           _pickupController.text = name;
+          //         });
+          //       },
+          //       onDestinationSelected: (pos, name) {
+          //         setState(() {
+          //           _destinationLocation = pos;
+          //           _destinationController.text = name;
+          //         });
+          //       },
+          //     );
+          //   },
+          // ),
           if (!_isSelectingPickup && !_isSelectingDestination)
-            // DraggableScrollableSheet(
-            //   controller: _sheetController,
-            //   expand: true,
-            //   initialChildSize: 0.52,
-            //   minChildSize: 0.15,
-            //   maxChildSize: 1.0,
-            //   snap: true,
-            //   snapSizes: const [0.15, 0.52, 1.0],
-            //   builder: (context, scrollController) {
-            //     return HomeBottomSheet(
-            //       scrollController: scrollController,
-            //       pickupController: _pickupController,
-            //       destinationController: _destinationController,
-            //       onStartPickupSelection: _startPickupSelection,
-            //       onStartDestinationSelection: _startDestinationSelection,
-            //       onExpandSheet: _expandSheet,
-            //       pickupLocation: _pickupLocation,
-            //       destinationLocation: _destinationLocation,
-            //       selectedVehicle: _selectedVehicle,
-            //       onVehicleSelect: (v) => setState(() => _selectedVehicle = v),
-            //       mapController: _mapController,
-            //       onPickupSelected: (pos, name) {
-            //         setState(() {
-            //           _pickupLocation = pos;
-            //           _pickupController.text = name;
-            //         });
-            //       },
-            //       onDestinationSelected: (pos, name) {
-            //         setState(() {
-            //           _destinationLocation = pos;
-            //           _destinationController.text = name;
-            //         });
-            //       },
-            //     );
-            //   },
-            // ),
-            if (!_isSelectingPickup && !_isSelectingDestination)
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: AnimatedSlide(
-                  offset: _showBottomSheet ? Offset.zero : const Offset(0, 1),
-                  duration: const Duration(milliseconds: 250),
-                  curve: Curves.easeOut,
-                  child: HomeBottomSheet(
-                    pickupController: _pickupController,
-                    destinationController: _destinationController,
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: AnimatedSlide(
+                offset: _showBottomSheet ? Offset.zero : const Offset(0, 1),
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeOut,
+                child: HomeBottomSheet(
+                  pickupController: _pickupController,
+                  destinationController: _destinationController,
 
-                    // 🔥 STEP 4 (THIS IS WHAT YOU ASKED)
-                    onPickupTap: () {
-                      _openLocationSearch(isPickup: true);
-                    },
-                    onDestinationTap: () {
-                      _openLocationSearch(isPickup: false);
-                    },
+                  // 🔥 STEP 4 (THIS IS WHAT YOU ASKED)
+                  onPickupTap: () {
+                    _openLocationSearch(isPickup: true);
+                  },
+                  onDestinationTap: () {
+                    _openLocationSearch(isPickup: false);
+                  },
 
-                    onStartPickupSelection: _startPickupSelection,
-                    onStartDestinationSelection: _startDestinationSelection,
-                    onExpandSheet: () {},
-                    pickupLocation: _pickupLocation,
-                    destinationLocation: _destinationLocation,
-                    selectedVehicle: _selectedVehicle,
-                    onVehicleSelect: (v) =>
-                        setState(() => _selectedVehicle = v),
-                    mapController: _mapController,
-                    onPickupSelected: (pos, name) {
-                      setState(() {
-                        _pickupLocation = pos;
-                        _pickupController.text = name;
-                      });
-                    },
-                    onDestinationSelected: (pos, name) {
-                      setState(() {
-                        _destinationLocation = pos;
-                        _destinationController.text = name;
-                      });
-                    },
-                  ),
+                  onStartPickupSelection: _startPickupSelection,
+                  onStartDestinationSelection: _startDestinationSelection,
+                  onExpandSheet: () {},
+                  pickupLocation: _pickupLocation,
+                  destinationLocation: _destinationLocation,
+                  selectedVehicle: _selectedVehicle,
+                  onVehicleSelect: (v) => setState(() => _selectedVehicle = v),
+                  mapController: _mapController,
+                  onPickupSelected: (pos, name) {
+                    setState(() {
+                      _pickupLocation = pos;
+                      _pickupController.text = name;
+                    });
+                  },
+                  onDestinationSelected: (pos, name) {
+                    setState(() {
+                      _destinationLocation = pos;
+                      _destinationController.text = name;
+                    });
+                  },
                 ),
               ),
+            ),
         ],
       ),
     );

@@ -24,7 +24,7 @@ class LocationInputField extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: Colors.grey.shade100,
           borderRadius: BorderRadius.circular(10),
@@ -45,10 +45,10 @@ class LocationInputField extends StatelessWidget {
                 ),
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.map, size: 20),
-              onPressed: onMapIconPressed,
-            ),
+            // IconButton(
+            //   icon: const Icon(Icons.map, size: 20),
+            //   onPressed: onMapIconPressed,
+            // ),
           ],
         ),
       ),

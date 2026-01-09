@@ -60,10 +60,10 @@ class _LocationSearchBottomSheetState extends State<LocationSearchScreen> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        top: 0,
+        top: 1,
         left: 16,
         right: 16,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 180,
       ),
       decoration: const BoxDecoration(
         color: GBColor.secondary,
@@ -72,13 +72,17 @@ class _LocationSearchBottomSheetState extends State<LocationSearchScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // ───── HEADER ─────
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
+          Center(
+            child: Container(
+              width: 55,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade400,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
           ),
-
-          // const SizedBox(height: 12),
+          const SizedBox(height: 12),
 
           // ───── SEARCH FIELD ─────
           Container(
@@ -92,8 +96,10 @@ class _LocationSearchBottomSheetState extends State<LocationSearchScreen> {
             child: Row(
               children: [
                 Icon(
-                  widget.isPickup ? Icons.radio_button_checked : Icons.search,
-                  color: widget.isPickup ? Colors.red : Colors.white,
+                  widget.isPickup
+                      ? Icons.radio_button_checked
+                      : Icons.location_on,
+                  color: widget.isPickup ? Colors.black : Colors.black,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -158,7 +164,11 @@ class _LocationSearchBottomSheetState extends State<LocationSearchScreen> {
 
           // ───── CHOOSE ON MAP ─────
           ListTile(
-            leading: const Icon(Icons.map, color: GBColor.primary),
+            leading: Image.asset(
+              'assets/images/gblocation.png',
+              width: 24,
+              height: 24,
+            ),
             title: const Text(
               'Choose on map',
               style: TextStyle(color: Colors.blue),
@@ -183,7 +193,7 @@ class _LocationSearchBottomSheetState extends State<LocationSearchScreen> {
                   final item = _results[index];
 
                   return ListTile(
-                    leading: const Icon(Icons.place, color: Colors.grey),
+                    leading: const Icon(Icons.place, color: GBColor.primary),
                     title: Text(
                       item.displayName.split(',').first,
                       style: const TextStyle(
@@ -193,12 +203,17 @@ class _LocationSearchBottomSheetState extends State<LocationSearchScreen> {
                     ),
                     subtitle: Text(
                       item.displayName,
-                      style: const TextStyle(color: Colors.grey),
+                      style: const TextStyle(
+                        color: GBColor.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Poppins',
+                      ),
                     ),
-                    trailing: const Text(
-                      '— km',
-                      style: TextStyle(color: Colors.grey),
-                    ),
+                    // trailing: const Text(
+                    //   '— km',
+                    //   style: TextStyle(color: Colors.grey),
+                    // ),
                     onTap: () {
                       final pos = LatLng(item.latitude, item.longitude);
 
