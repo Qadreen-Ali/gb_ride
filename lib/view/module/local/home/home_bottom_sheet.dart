@@ -209,7 +209,17 @@ class HomeBottomSheet extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
                   children: [
-                    Image.asset(GBImagePath.chat, width: 44),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FareBottomSheet(),
+                          ),
+                        );
+                      },
+                      child: Image.asset(GBImagePath.chat, width: 44),
+                    ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: PrimaryButton(

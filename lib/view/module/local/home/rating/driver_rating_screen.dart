@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
+import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 
 class DriverRatingScreen extends StatefulWidget {
@@ -24,13 +25,19 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
 
   final List<Map<String, dynamic>> _tagOptions = [
     {'icon': SolarLinearIcons.userCheck, 'label': 'Polite Driver'},
-   // {'icon': SolarLinearIcons.car, 'label': 'Clean car'},
+    {'icon': Icons.car_crash_outlined, 'label': 'Clean car'},
     {'icon': SolarLinearIcons.musicNote, 'label': 'Great music'},
-    {'icon': SolarLinearIcons.chatRound, 'label': 'Other Conversation'},
-    //{'icon': SolarLinearIcons.road, 'label': 'Smooth Ride'},
+    {'icon': SolarLinearIcons.chatRound, 'label': 'clear Conversation'},
+    {'icon': Icons.add_road_sharp, 'label': 'Smooth Ride'},
   ];
 
   final List<int> _tipAmounts = [20, 30, 40];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedTip = _tipAmounts.first;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +46,7 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        surfaceTintColor: GBColor.secondary,
         leading: IconButton(
           icon: Container(
             padding: const EdgeInsets.all(8),
@@ -55,7 +63,10 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
             padding: const EdgeInsets.only(right: 16),
             child: CircleAvatar(
               backgroundColor: GBColor.primary,
-              child: const Icon(Icons.headset_mic, color: Colors.white),
+              child: const Icon(
+                Icons.notifications_none_outlined,
+                color: Colors.white,
+              ),
             ),
           ),
         ],
@@ -79,11 +90,7 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
                     color: Colors.blue,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.check,
-                    color: Colors.white,
-                    size: 16,
-                  ),
+                  child: const Icon(Icons.check, color: Colors.white, size: 16),
                 ),
               ],
             ),
@@ -92,20 +99,14 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
             // Driver Name
             Text(
               widget.driverName,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600, fontFamily: "Poppins"),
             ),
             const SizedBox(height: 4),
 
             // Tap to rate text
             const Text(
               'Tap to rate your Driver',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: GBColor.black,fontFamily: "Poppins", fontWeight: FontWeight.w400 ),
             ),
             const SizedBox(height: 16),
 
@@ -124,7 +125,7 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
                     child: Icon(
                       index < _rating ? Icons.star : Icons.star_border,
                       size: 36,
-                      color: index < _rating ? Colors.amber : Colors.grey,
+                      color: index < _rating ? GBColor.primary: GBColor.containerTextColor,
                     ),
                   ),
                 );
@@ -139,62 +140,72 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
                 'What went well?',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey.shade800,
+                  fontWeight: FontWeight.w500,
+                  color: GBColor.black,
+                  fontFamily: "Poppins"
+
                 ),
               ),
             ),
             const SizedBox(height: 12),
 
             // Tag buttons
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: _tagOptions.map((tag) {
-                final isSelected = _selectedTags.contains(tag['label']);
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      if (isSelected) {
-                        _selectedTags.remove(tag['label']);
-                      } else {
-                        _selectedTags.add(tag['label']);
-                      }
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected ? GBColor.primary : Colors.grey.shade100,
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          tag['icon'],
-                          size: 18,
-                          color: isSelected ? Colors.white : Colors.black87,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          tag['label'],
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: isSelected ? Colors.white : Colors.black87,
-                          ),
-                        ),
-                      ],
+          Wrap(
+            spacing: 7,
+            runSpacing: 8,
+            children: _tagOptions.map((tag) {
+              final String label = tag['label'];
+              final bool isSelected = _selectedTags.contains(label);
+
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (isSelected) {
+                      _selectedTags.remove(label);
+                    } else {
+                      _selectedTags.add(label);
+                    }
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? GBColor.selectedContainerColor
+                        : GBColor.containerColor,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: isSelected ? GBColor.primary : Colors.transparent,
                     ),
                   ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 32),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        tag['icon'],
+                        size: 18,
+                        color: GBColor.black,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        label,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: GBColor.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+
+          const SizedBox(height: 18),
 
             // Add a tip section
             Align(
@@ -203,8 +214,9 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
                 'Add a tip for ${widget.driverName}',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey.shade800,
+                  fontWeight: FontWeight.w500,
+                  color: GBColor.black,
+                  fontFamily: 'Poppins',
                 ),
               ),
             ),
@@ -227,10 +239,14 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           decoration: BoxDecoration(
-                            color: isSelected ? GBColor.primary : Colors.grey.shade100,
+                            color: isSelected
+                                ? GBColor.selectedContainerColor
+                                : GBColor.containerColor,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: isSelected ? GBColor.primary : Colors.grey.shade300,
+                              color: isSelected
+                                  ? GBColor.primary
+                                  : GBColor.borderColor,
                             ),
                           ),
                           child: Text(
@@ -239,7 +255,7 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: isSelected ? Colors.white : Colors.black87,
+                              color: isSelected ? GBColor.black : GBColor.black,
                             ),
                           ),
                         ),
@@ -256,17 +272,18 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
+                        color: GBColor.containerColor,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey.shade300),
+                        border: Border.all(color: GBColor.borderColor),
                       ),
                       child: const Text(
                         'Custom',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black87,
+                          color: GBColor.black,
+                          fontFamily: 'Poppins',
                         ),
                       ),
                     ),
@@ -274,7 +291,7 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 18),
 
             // Leave a comment section
             Align(
@@ -283,8 +300,9 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
                 'Leave a comment (optional)',
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey.shade800,
+                  fontWeight: FontWeight.w500,
+                  color: GBColor.black,
+                  fontFamily: 'Poppins',
                 ),
               ),
             ),
@@ -296,9 +314,14 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
               maxLines: 4,
               decoration: InputDecoration(
                 hintText: 'Add a comment here',
-                hintStyle: TextStyle(color: Colors.grey.shade400),
+                hintStyle: TextStyle(
+                  color: GBColor.containerTextColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  fontFamily: 'Poppins',
+                ),
                 filled: true,
-                fillColor: Colors.grey.shade100,
+                fillColor: GBColor.containerColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide.none,
@@ -308,27 +331,11 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
             const SizedBox(height: 32),
 
             // Submit button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _rating > 0 ? _submitRating : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: GBColor.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  disabledBackgroundColor: Colors.grey.shade300,
-                ),
-                child: const Text(
-                  'Submit Rating',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+            PrimaryButton(
+              title: "Submit Rating",
+              onPressed: () {},
+              backgroundColor: GBColor.primary,
+              textColor: Colors.white,
             ),
           ],
         ),
@@ -338,10 +345,15 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
 
   void _showCustomTipDialog() {
     final TextEditingController customTipController = TextEditingController();
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Enter Custom Tip'),
+        backgroundColor: GBColor.secondary,
+        title: const Text(
+          'Enter Custom Tip',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
         content: TextField(
           controller: customTipController,
           keyboardType: TextInputType.number,
@@ -353,7 +365,10 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color:GBColor.primary),
+            ),
           ),
           TextButton(
             onPressed: () {
@@ -364,13 +379,21 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
                 });
               }
               Navigator.pop(context);
+
             },
-            child: const Text('Add'),
+            child:  Text(
+              'Add',
+              style: TextStyle(
+                color: GBColor.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
           ),
         ],
       ),
     );
   }
+
 
   void _submitRating() {
     // Handle rating submission

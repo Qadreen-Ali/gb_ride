@@ -13,6 +13,7 @@ class CommonItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         /// Car + Plate Row
         Row(
