@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../../../../common/text_field.dart';
-import '../../../../../../utils/constants/app_sizes.dart';
-import '../../../../../../utils/constants/color_string.dart';
-import '../../../../../../utils/constants/image_string.dart';
-import '../../rating/driver_rating_screen.dart';
-import '../action_circle.dart';
-import '../location_container.dart';
-import '../rating_widget.dart';
+import '../../../../../../../common/text_field.dart';
+import '../../../../../../../utils/constants/app_sizes.dart';
+import '../../../../../../../utils/constants/color_string.dart';
+import '../../../../../../../utils/constants/image_string.dart';
+import '../../../rating/driver_rating_screen.dart';
+import 'action_circle.dart';
+import 'location_container.dart';
+import 'rating_widget.dart';
 
 class CommonItemWidget extends StatelessWidget {
   const CommonItemWidget({super.key});

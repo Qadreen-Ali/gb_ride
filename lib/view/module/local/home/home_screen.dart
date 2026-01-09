@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:gb_ride/view/module/local/home/location_search_screen.dart';
+import 'package:gb_ride/view/module/local/home/widgets/location_search_screen.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:gb_ride/view/module/local/home/app_drawer/app_drawer.dart';
 import 'package:geolocator/geolocator.dart';

@@ -60,7 +60,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
     return Scaffold(
       backgroundColor: GBColor.secondary,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

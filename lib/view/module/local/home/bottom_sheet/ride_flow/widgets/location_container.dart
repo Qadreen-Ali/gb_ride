@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../utils/constants/color_string.dart';
-import '../../../../../utils/constants/text_string.dart';
+import '../../../../../../../utils/constants/color_string.dart';
+import '../../../../../../../utils/constants/text_string.dart';
 import 'location_widget.dart';
 
 class LocationContainer extends StatelessWidget {
@@ -14,7 +14,7 @@ class LocationContainer extends StatelessWidget {
       height: 86,
       decoration: BoxDecoration(
         border: Border.all(color: GBColor.primary),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24),
