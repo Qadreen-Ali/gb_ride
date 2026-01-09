@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:gb_ride/view/module/local/home/location_search_screen.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:gb_ride/view/module/local/home/app_drawer/app_drawer.dart';
+import 'package:geocoding/geocoding.dart';
+// import 'package:gb_ride/common/app_drawer.dart';
+// import 'package:gb_ride/common/app_drawer.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'home_bottom_sheet.dart';
@@ -24,42 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _destinationController = TextEditingController();
   MapController? _mapController;
 
-  bool get _isKeyboardOpen {
-    return MediaQuery.of(context).viewInsets.bottom > 0;
-  }
-
-  // final DraggableScrollableController _sheetController =
-  //     DraggableScrollableController();
-  void _openLocationSearch({required bool isPickup}) async {
-    final result = await showModalBottomSheet<Map<String, dynamic>>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => LocationSearchScreen(
-        isPickup: isPickup,
-        selectedLocationName: isPickup
-            ? _destinationController.text
-            : _pickupController.text,
-      ),
-    );
-
-    if (result == null) return;
-
-    final LatLng latLng = result['latLng'];
-    final String name = result['name'];
-
-    setState(() {
-      if (isPickup) {
-        _pickupLocation = latLng;
-        _pickupController.text = name;
-      } else {
-        _destinationLocation = latLng;
-        _destinationController.text = name;
-      }
-    });
-
-    _mapController?.move(latLng, 15);
-  }
+  final DraggableScrollableController _sheetController =
+      DraggableScrollableController();
 
   LatLng _currentLocation = const LatLng(35.911383, 74.341500);
   LatLng? _pickupLocation;
@@ -69,8 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isSelectingPickup = false;
   bool _isSelectingDestination = false;
   bool _isLoadingAddress = false;
-  bool _showBottomSheet = true;
-  Timer? _mapGestureTimer;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -198,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _isSelectingPickup = true;
       _isSelectingDestination = false;
     });
-    // _collapseSheet();
+    _collapseSheet();
   }
 
   void _startDestinationSelection() {
@@ -207,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _isSelectingDestination = true;
       _isSelectingPickup = false;
     });
-    // _collapseSheet();
+    _collapseSheet();
   }
 
   void _handleMapTap(TapPosition tapPosition, LatLng position) {
@@ -218,6 +181,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _isSelectingPickup = false;
       });
       _getAddressFromLatLng(position, isPickup: true);
+      _mapController?.move(position, 15.0);
+      _expandSheet();
     } else if (_isSelectingDestination) {
       setState(() {
         _destinationLocation = position;
@@ -225,6 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
         _isSelectingDestination = false;
       });
       _getAddressFromLatLng(position, isPickup: false);
+      _expandSheet();
+    } else {
+      _collapseSheet();
     }
   }
 
@@ -233,38 +201,24 @@ class _HomeScreenState extends State<HomeScreen> {
       _isSelectingPickup = false;
       _isSelectingDestination = false;
     });
-    // _expandSheet();
+    _expandSheet();
   }
 
-  void _onMapGesture() {
-    // 🚫 If keyboard is open, DO NOTHING
-    if (_isKeyboardOpen) return;
-    if (_showBottomSheet) {
-      setState(() => _showBottomSheet = false);
-    }
-
-    _mapGestureTimer?.cancel();
-    _mapGestureTimer = Timer(const Duration(milliseconds: 300), () {
-      if (mounted) {
-        setState(() => _showBottomSheet = true);
-      }
-    });
+  void _collapseSheet() {
+    _sheetController.animateTo(
+      0.15,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
   }
-  // void _collapseSheet() {
-  //   _sheetController.animateTo(
-  //     0.15,
-  //     duration: const Duration(milliseconds: 300),
-  //     curve: Curves.easeInOut,
-  //   );
-  // }
 
-  // void _expandSheet() {
-  //   _sheetController.animateTo(
-  //     0.7,
-  //     duration: const Duration(milliseconds: 300),
-  //     curve: Curves.easeInOut,
-  //   );
-  // }
+  void _expandSheet() {
+    _sheetController.animateTo(
+      0.7,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       drawer: const ProfileDrawer(),
 
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
 
       body: Stack(
         children: [
@@ -283,12 +237,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   options: MapOptions(
                     initialCenter: _currentLocation,
                     initialZoom: 15.0,
+                    minZoom: 10.0,
+                    maxZoom: 18.0,
                     onTap: _handleMapTap,
-                    onPositionChanged: (position, hasGesture) {
-                      if (hasGesture) {
-                        _onMapGesture();
-                      }
-                    },
                     interactionOptions: const InteractionOptions(
                       flags: InteractiveFlag.all,
                     ),
@@ -347,67 +298,23 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
           // Draggable bottom sheet
-          // if (!_isSelectingPickup && !_isSelectingDestination)
-          // DraggableScrollableSheet(
-          //   controller: _sheetController,
-          //   expand: true,
-          //   initialChildSize: 0.52,
-          //   minChildSize: 0.15,
-          //   maxChildSize: 1.0,
-          //   snap: true,
-          //   snapSizes: const [0.15, 0.52, 1.0],
-          //   builder: (context, scrollController) {
-          //     return HomeBottomSheet(
-          //       scrollController: scrollController,
-          //       pickupController: _pickupController,
-          //       destinationController: _destinationController,
-          //       onStartPickupSelection: _startPickupSelection,
-          //       onStartDestinationSelection: _startDestinationSelection,
-          //       onExpandSheet: _expandSheet,
-          //       pickupLocation: _pickupLocation,
-          //       destinationLocation: _destinationLocation,
-          //       selectedVehicle: _selectedVehicle,
-          //       onVehicleSelect: (v) => setState(() => _selectedVehicle = v),
-          //       mapController: _mapController,
-          //       onPickupSelected: (pos, name) {
-          //         setState(() {
-          //           _pickupLocation = pos;
-          //           _pickupController.text = name;
-          //         });
-          //       },
-          //       onDestinationSelected: (pos, name) {
-          //         setState(() {
-          //           _destinationLocation = pos;
-          //           _destinationController.text = name;
-          //         });
-          //       },
-          //     );
-          //   },
-          // ),
           if (!_isSelectingPickup && !_isSelectingDestination)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: AnimatedSlide(
-                offset: _showBottomSheet ? Offset.zero : const Offset(0, 1),
-                duration: const Duration(milliseconds: 250),
-                curve: Curves.easeOut,
-                child: HomeBottomSheet(
+            DraggableScrollableSheet(
+              controller: _sheetController,
+              expand: true,
+              initialChildSize: 0.52,
+              minChildSize: 0.15,
+              maxChildSize: 1.0,
+              snap: true,
+              snapSizes: const [0.15, 0.52, 1.0],
+              builder: (context, scrollController) {
+                return HomeBottomSheet(
+                  scrollController: scrollController,
                   pickupController: _pickupController,
                   destinationController: _destinationController,
-
-                  // 🔥 STEP 4 (THIS IS WHAT YOU ASKED)
-                  onPickupTap: () {
-                    _openLocationSearch(isPickup: true);
-                  },
-                  onDestinationTap: () {
-                    _openLocationSearch(isPickup: false);
-                  },
-
                   onStartPickupSelection: _startPickupSelection,
                   onStartDestinationSelection: _startDestinationSelection,
-                  onExpandSheet: () {},
+                  onExpandSheet: _expandSheet,
                   pickupLocation: _pickupLocation,
                   destinationLocation: _destinationLocation,
                   selectedVehicle: _selectedVehicle,
@@ -425,8 +332,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       _destinationController.text = name;
                     });
                   },
-                ),
-              ),
+                );
+              },
             ),
         ],
       ),
@@ -438,7 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _pickupController.dispose();
     _destinationController.dispose();
     _mapController?.dispose();
-    // _sheetController.dispose();
+    _sheetController.dispose();
     super.dispose();
   }
 }

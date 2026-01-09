@@ -9,7 +9,6 @@ import 'package:gb_ride/view/auth/otp_verification_screen.dart';
 import 'package:gb_ride/view/splash/splash_screen.dart';
 import 'package:gb_ride/view/auth/form_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:gb_ride/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
