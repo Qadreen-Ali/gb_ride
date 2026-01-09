@@ -246,7 +246,7 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
                       ),
                     ),
                   );
-                }).toList(),
+                }),
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
