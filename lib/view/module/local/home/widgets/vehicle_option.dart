@@ -25,7 +25,7 @@ class VehicleOptionCard extends StatelessWidget {
     final Color bgColor = isSelected
         ? Colors.orange.shade50
         : GBColor.secondary;
-    final Color iconColor = isSelected ? Colors.orange : Colors.black;
+    // final Color iconColor = isSelected ? Colors.orange : Colors.black;
 
     return GestureDetector(
       onTap: onTap,

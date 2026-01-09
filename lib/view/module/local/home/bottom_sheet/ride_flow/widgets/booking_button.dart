@@ -5,11 +5,7 @@ class BookingsButton extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
 
-  const BookingsButton({
-    super.key,
-    required this.text,
-    required this.onTap,
-  });
+  const BookingsButton({super.key, required this.text, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

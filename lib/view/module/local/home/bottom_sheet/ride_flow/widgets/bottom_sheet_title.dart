@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../../../../utils/constants/text_string.dart';
 
 class BottomSheetTopTitle extends StatelessWidget {
   final String tiltetext;
