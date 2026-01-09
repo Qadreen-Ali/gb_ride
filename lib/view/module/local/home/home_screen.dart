@@ -12,14 +12,14 @@ import 'widgets/map_markers.dart';
 import 'widgets/map_selection_overlay.dart';
 import 'widgets/top_bar.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class LocalHomeScreen extends StatefulWidget {
+  const LocalHomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<LocalHomeScreen> createState() => _LocalHomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _LocalHomeScreenState extends State<LocalHomeScreen> {
   final TextEditingController _pickupController = TextEditingController();
   final TextEditingController _destinationController = TextEditingController();
   MapController? _mapController;
@@ -28,8 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return MediaQuery.of(context).viewInsets.bottom > 0;
   }
 
-  // final DraggableScrollableController _sheetController =
-  //     DraggableScrollableController();
+
   void _openLocationSearch({required bool isPickup}) async {
     final result = await showModalBottomSheet<Map<String, dynamic>>(
       context: context,
@@ -345,6 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
               onNotificationPressed: () {},
             ),
+
 
           // Draggable bottom sheet
 
