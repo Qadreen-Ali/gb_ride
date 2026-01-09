@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import '../../../../../utils/constants/app_sizes.dart';
-import '../../../../../utils/constants/color_string.dart';
-import '../../../../../utils/constants/image_string.dart';
-import '../../../../../utils/constants/primary_button.dart';
-import '../../../../../utils/constants/text_string.dart';
-import 'bottom_sheet_title.dart';
-import 'common/common_item_widget.dart';
+import '../../../../../../utils/constants/app_sizes.dart';
+import '../../../../../../utils/constants/color_string.dart';
+import '../../../../../../utils/constants/image_string.dart';
+import '../../../../../../utils/constants/primary_button.dart';
+import '../../../../../../utils/constants/text_string.dart';
+import 'widgets/bottom_sheet_title.dart';
+import 'widgets/common_item_widget.dart';
 
 enum RideSheetStep {
   driverArriving,

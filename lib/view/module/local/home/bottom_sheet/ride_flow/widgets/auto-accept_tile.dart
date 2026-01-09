@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../utils/constants/color_string.dart';
-import '../../../../../utils/constants/text_string.dart';
+import '../../../../../../../utils/constants/color_string.dart';
+import '../../../../../../../utils/constants/text_string.dart';
 class AutoAcceptTile extends StatelessWidget {
   final bool value;
   final ValueChanged<bool> onChanged;

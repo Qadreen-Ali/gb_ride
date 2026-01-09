@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           return OTPVerificationScreen(phoneNumber: args ?? '');
         },
         '/form': (context) => const FormScreen(),
-        '/home': (context) => const HomeScreen(),
+        '/home': (context) => const LocalHomeScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/profile': (context) => const ProfileScreen(),
         '/notification': (context) => const NotificationScreen(),

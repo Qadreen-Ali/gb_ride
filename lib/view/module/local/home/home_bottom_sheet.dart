@@ -5,7 +5,7 @@ import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
 import 'package:gb_ride/view/module/local/home/widgets/fare_bottom_sheet.dart';
-import 'package:gb_ride/view/module/local/home/widgets/find_driver_bottom_sheet.dart';
+import 'package:gb_ride/view/module/local/home/bottom_sheet/find_driver_bottom_sheet.dart';
 import 'package:gb_ride/view/module/local/home/widgets/location_input_field.dart';
 import 'package:gb_ride/view/module/local/home/widgets/vehicle_option.dart';
 import 'package:latlong2/latlong.dart';
