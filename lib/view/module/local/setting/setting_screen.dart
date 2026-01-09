@@ -33,11 +33,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: 'Manage Payment Methods',
         onTap: () {},
       ),
-      SettingsItem(
-        icons: SolarLinearIcons.lock,
-        title: 'Change Password',
-        onTap: () {},
-      ),
     ];
 
     final preferences = [
@@ -49,27 +44,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.shieldKeyhole,
         title: 'Privacy & Security',
-        onTap: () {},
-      ),
-      SettingsItem(
-        icons: SolarLinearIcons.global,
-        title: 'Language',
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, '/safety');
+        },
       ),
     ];
 
     final support = [
       SettingsItem(
         icons: SolarLinearIcons.help,
-        title: 'Help Center',
+        title: 'Help Center/FAQs',
         onTap: () {
           Navigator.pushNamed(context, '/help');
         },
-      ),
-      SettingsItem(
-        icons: SolarLinearIcons.document,
-        title: 'Terms of Service',
-        onTap: () {},
       ),
     ];
 
@@ -114,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ...account.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item , isExpanded: false,),
+                  child: SettingsSingleContainer(item: item, isExpanded: false),
                 ),
               ),
 
@@ -127,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ...preferences.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item , isExpanded: false,),
+                  child: SettingsSingleContainer(item: item, isExpanded: false),
                 ),
               ),
 
@@ -140,14 +127,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ...support.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item , isExpanded: false,),
+                  child: SettingsSingleContainer(item: item, isExpanded: false),
                 ),
               ),
 
-              const SizedBox(height: 24),
-              SettingsSingleContainer(item: logout , isExpanded: false,),
               const SizedBox(height: 12),
-              SettingsSingleContainer(item: delete ,  isExpanded: false,),
+              SettingsSingleContainer(item: logout, isExpanded: false),
+              const SizedBox(height: 12),
+              SettingsSingleContainer(item: delete, isExpanded: false),
             ],
           ),
         ),

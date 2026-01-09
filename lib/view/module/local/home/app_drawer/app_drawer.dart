@@ -79,7 +79,9 @@ class ProfileDrawer extends StatelessWidget {
                     label: 'Safety',
                     imageColor: Colors.black,
 
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(context, '/safety');
+                    },
                   ),
                   DrawerMenuItem(
                     icon: Icons.settings_sharp,

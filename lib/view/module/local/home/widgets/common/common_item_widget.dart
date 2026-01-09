@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/view/module/local/home/bottom_sheet/ride_flow/widgets/action_circle.dart';
+import 'package:gb_ride/view/module/local/home/bottom_sheet/ride_flow/widgets/location_container.dart';
+import 'package:gb_ride/view/module/local/home/bottom_sheet/ride_flow/widgets/rating_widget.dart';
 
 import '../../../../../../common/text_field.dart';
 import '../../../../../../utils/constants/color_string.dart';
 import '../../../../../../utils/constants/image_string.dart';
-import '../action_circle.dart';
-import '../location_container.dart';
-import '../rating_widget.dart';
+
 class CommonItemWidget extends StatelessWidget {
-  const CommonItemWidget({
-    super.key,
-  });
+  const CommonItemWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         /// Car + Plate Row
         Row(
           children: [
@@ -68,9 +66,7 @@ class CommonItemWidget extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 24,
-                            backgroundImage: AssetImage(
-                              GBImagePath.profile,
-                            ),
+                            backgroundImage: AssetImage(GBImagePath.profile),
                           ),
                           const Text(
                             "Hassan",
@@ -134,7 +130,7 @@ class CommonItemWidget extends StatelessWidget {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children:  [
+            children: [
               Icon(Icons.message_outlined, color: GBColor.messageTextColor),
               Text(
                 "Any Message For Driver",
@@ -146,7 +142,7 @@ class CommonItemWidget extends StatelessWidget {
                 ),
               ),
               InkWell(
-                onTap: (){ },
+                onTap: () {},
                 child: Icon(
                   Icons.arrow_forward_ios_rounded,
                   color: GBColor.messageTextColor,
@@ -212,8 +208,6 @@ class CommonItemWidget extends StatelessWidget {
         ),
 
         const SizedBox(height: 16),
-
-
       ],
     );
   }
