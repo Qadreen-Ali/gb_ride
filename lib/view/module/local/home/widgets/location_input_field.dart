@@ -45,10 +45,7 @@ class LocationInputField extends StatelessWidget {
                 ),
               ),
             ),
-            // IconButton(
-            //   icon: const Icon(Icons.map, size: 20),
-            //   onPressed: onMapIconPressed,
-            // ),
+
           ],
         ),
       ),

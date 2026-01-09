@@ -9,10 +9,8 @@ import 'package:gb_ride/utils/logger.dart';
 import 'package:gb_ride/view/auth/controller/auth_controller.dart';
 import '../../common/text_field.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
-// import 'package:country_code_picker/country_code_picker.dart';
-// import 'package:gb_ride/view/home/home.dart';
 
-// import 'package:country_code_picker/country_code_picker.dart';
+import '../../utils/constants/app_sizes.dart';
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -21,6 +19,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  //added controller for phone
+  final TextEditingController _phoneController = TextEditingController();
+  final AuthController _authController = AuthController.instance;
+
   @override
   void dispose() {
     _phoneController.dispose();
@@ -45,21 +47,22 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushNamed(context, '/otp', arguments: phone);
       },
       onError: (error) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(error)));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
       },
     );
   }
 
-  //added controller for phone
-  final TextEditingController _phoneController = TextEditingController();
-  // final AuthController _authController = AuthController();
-  final AuthController _authController = AuthController.instance;
+  /// ✅ small helper: scales your fixed sizes on different screens (keeps same UI)
+  double _scale(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final s = w / 390.0;
+    return s.clamp(0.85, 1.15);
+  }
 
   @override
   Widget build(BuildContext context) {
-    // final keyboardIsOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final s = _scale(context);
+
     return Scaffold(
       backgroundColor: GBColor.primary,
       resizeToAvoidBottomInset: true,
@@ -67,25 +70,26 @@ class _LoginScreenState extends State<LoginScreen> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24.0,
-              vertical: 14.0,
+            padding: EdgeInsets.symmetric(
+              horizontal: GBSizes.lg * s, // was 24
+              vertical: (GBSizes.sm + GBSizes.xs) * s, // ~12-14
             ),
             child: Column(
               children: [
-                const Spacer(flex: 2),
+                Spacer(flex: (2 * s).round()),
 
-                // const SizedBox(height: 10),
                 Text(
                   GBText.gbRide,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 50,
+                  style: TextStyle(
+                    fontSize: 50 * s, // was 50
                     fontWeight: FontWeight.w600,
                     color: GBColor.black,
                   ),
                 ),
-                const Spacer(flex: 3),
+
+                Spacer(flex: (3 * s).round()),
+
                 //Input Fields
                 TTextField(
                   controller: _phoneController,
@@ -93,17 +97,19 @@ class _LoginScreenState extends State<LoginScreen> {
                   hintText: '000 0000000',
                   keyboardType: TextInputType.number,
                   inputFormatters: [PakPhoneFormatter()],
-
                   prefixIcon: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const SizedBox(width: 12),
-                      Icon(SolarLinearIcons.phone),
-                      const SizedBox(width: 8),
-                      const Text(
+                      SizedBox(width: (GBSizes.md - GBSizes.xs) * s), // was 12
+                      Icon(
+                        SolarLinearIcons.phone,
+                        size: GBSizes.iconMd * s,
+                      ),
+                      SizedBox(width: GBSizes.sm * s), // was 8
+                      Text(
                         '+92',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: GBSizes.fontSizeSm * s, // was 14
                           fontWeight: FontWeight.w500,
                           color: Colors.black,
                         ),
@@ -112,33 +118,47 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 20),
-                //Primary Button
-                PrimaryButton(title: GBText.signIn, onPressed: _onSignIn),
-                const SizedBox(height: 30),
+                SizedBox(height: (GBSizes.md + GBSizes.xs) * s), // was 20
+
+                //Primary Button (keep your button widget, just spacing responsive)
+                PrimaryButton(
+                  title: GBText.signIn,
+                  onPressed: _onSignIn,
+                ),
+
+                SizedBox(height: (GBSizes.lg + GBSizes.sm) * s), // was 30
+
                 //Divider with text "Or continue with"
                 Row(
                   children: [
                     Expanded(
-                      child: Container(height: 1.5, color: GBColor.secondary),
+                      child: Container(
+                        height: (GBSizes.dividerHeight + 0.5) * s, // ~1.5
+                        color: GBColor.secondary,
+                      ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      padding: EdgeInsets.symmetric(horizontal: (GBSizes.sm + GBSizes.xs) * s), // was 12
                       child: Text(
                         GBText.orContinuewith,
-                        style: const TextStyle(
-                          fontSize: 12,
+                        style: TextStyle(
+                          fontSize: GBSizes.fontSizeESm * s, // was 12
                           fontWeight: FontWeight.w500,
                           color: GBColor.black,
                         ),
                       ),
                     ),
                     Expanded(
-                      child: Container(height: 1.5, color: GBColor.secondary),
+                      child: Container(
+                        height: (GBSizes.dividerHeight + 0.5) * s,
+                        color: GBColor.secondary,
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
+
+                SizedBox(height: (GBSizes.lg + GBSizes.sm) * s), // was 30
+
                 //Social Media Buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -147,52 +167,48 @@ class _LoginScreenState extends State<LoginScreen> {
                       title: '',
                       leadingIcon: Image.asset(
                         'assets/icons/google.png',
-                        width: 32,
-                        height: 32,
+                        width: 32 * s,
+                        height: 32 * s,
                       ),
                       onPressed: () {
-                        // Handle Google sign-in
                         logger.i('Google Sign-In Pressed');
                       },
                     ),
-                    const SizedBox(width: 25),
+                    SizedBox(width: (GBSizes.lg + GBSizes.xs) * s), // was 25
                     SocialSignInButton(
                       title: '',
                       leadingIcon: Image.asset(
                         'assets/icons/apple.png',
-                        width: 32,
-                        height: 32,
+                        width: 32 * s,
+                        height: 32 * s,
                       ),
-                      // backgroundColor: GBColor.containerColor,
                       onPressed: () {
-                        // Handle Apple sign-in
                         logger.i('Apple Sign-In Pressed');
                       },
                     ),
-                    const SizedBox(width: 25),
+                    SizedBox(width: (GBSizes.lg + GBSizes.xs) * s), // was 25
                     SocialSignInButton(
                       title: '',
                       leadingIcon: Image.asset(
                         'assets/icons/facebook.png',
-                        width: 32,
-                        height: 32,
+                        width: 32 * s,
+                        height: 32 * s,
                       ),
-                      // backgroundColor: GBColor.containerColor,
                       onPressed: () {
-                        // Handle Apple sign-in
-                        logger.i('Apple Sign-In Pressed');
+                        logger.i('Facebook Sign-In Pressed');
                       },
                     ),
                   ],
                 ),
-                // const Spacer(),
-                const SizedBox(height: 50),
+
+                SizedBox(height: (GBSizes.spaceBtwSections + GBSizes.md) * s), // was 50
+
                 //Terms of Service Text
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: const TextStyle(
-                      fontSize: 12,
+                    style: TextStyle(
+                      fontSize: GBSizes.fontSizeESm * s, // was 12
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       color: GBColor.gray,
@@ -201,10 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const TextSpan(text: "By Continuing you agree to our "),
                       TextSpan(
                         text: GBText.termsofServices,
-                        style: const TextStyle(
-                          color: GBColor.secondary,
-                          // decoration: TextDecoration.underline,
-                        ),
+                        style: const TextStyle(color: GBColor.secondary),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             logger.i('Terms of Services Tapped');
@@ -213,10 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const TextSpan(text: " and "),
                       TextSpan(
                         text: GBText.privacyPolicy,
-                        style: const TextStyle(
-                          color: GBColor.secondary,
-                          // decoration: TextDecoration.underline,
-                        ),
+                        style: const TextStyle(color: GBColor.secondary),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             logger.i('Privacy Policy Tapped');
@@ -226,7 +236,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-                // const SizedBox(height: 10),
               ],
             ),
           ),

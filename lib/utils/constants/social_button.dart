@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 
+import 'app_sizes.dart';
+
+
 class SocialSignInButton extends StatelessWidget {
-  // We mirror the parameters used in your SecondaryButton,
-  // even if title/textColor aren't visually used for the icon-only look.
-  final String
-  title; // Required by your template, but we will ignore it in the build
+  final String title; // (kept as you have it)
   final VoidCallback onPressed;
   final double? width;
   final double? height;
   final Color? backgroundColor;
   final BorderRadius? borderRadius;
   final Color? borderColor;
-  final Color? textColor; // Ignored for the icon-only look
-  final Widget? leadingIcon; // This holds the Google/Apple Icon/Image
+  final Color? textColor;
+  final Widget? leadingIcon;
 
   const SocialSignInButton({
     super.key,
@@ -28,11 +28,20 @@ class SocialSignInButton extends StatelessWidget {
     this.leadingIcon,
   });
 
+  double _scale(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final s = w / 390.0; // base design width
+    return s.clamp(0.85, 1.15);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final s = _scale(context);
+
     return SizedBox(
-      width: width ?? 92,
-      height: height ?? 68,
+      // ✅ using GBSizes + responsive scaling
+      width: width ?? (92 * s),
+      height: height ?? (68 * s),
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
@@ -40,15 +49,28 @@ class SocialSignInButton extends StatelessWidget {
           foregroundColor: textColor ?? GBColor.containerGrayColor,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: borderRadius ?? BorderRadius.circular(25),
+            borderRadius:
+            borderRadius ?? BorderRadius.circular((GBSizes.buttonRadius + 13) * s), // 25 approx
           ),
           side: BorderSide(
             color: borderColor ?? GBColor.containerColor,
-            width: 1.8,
+            width: (GBSizes.dividerHeight + 0.8) * s, // ~1.8
           ),
-          padding: EdgeInsets.zero, // ← Remove padding so image fills button
+          padding: EdgeInsets.zero,
         ),
-        child: leadingIcon,
+
+        child: leadingIcon == null
+            ? const SizedBox.shrink()
+            : Center(
+          child: SizedBox(
+            width: (GBSizes.iconLg) * s,  // 32
+            height: (GBSizes.iconLg) * s, // 32
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: leadingIcon!,
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/utils/constants/image_string.dart';
+import 'package:gb_ride/view/module/local/home/widgets/ride_flow_bottom_sheet.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../../../../../common/text_field.dart';
+import '../../../../../utils/constants/app_sizes.dart';
 import '../../../../../utils/constants/color_string.dart';
-import '../../../../../utils/constants/text_string.dart';
+import '../../../../../utils/constants/image_string.dart';
 import '../../../../../utils/constants/primary_button.dart';
-import 'auto_accept_tile.dart';
-import 'booking_button.dart';
-import 'bottom_sheet_title.dart';
-import 'driver_arrive_bottom_sheet.dart';
-import 'location_container.dart';
+import '../../../../../utils/constants/text_string.dart';
+import '../../../student/home/widgets/auto_accept_tile.dart';
+import '../../../student/home/widgets/booking_button.dart';
+import '../../../student/home/widgets/bottom_sheet_title.dart';
+import '../../../student/home/widgets/driver_arrive_bottom_sheet.dart';
+import '../../../student/home/widgets/location_container.dart';
 
 class FindDriverBottomSheet extends StatefulWidget {
   const FindDriverBottomSheet({super.key});
@@ -21,132 +24,230 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
   bool isAutoAccept = false;
   int fare = 60;
 
+  final PanelController _panelController = PanelController();
+
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      expand: true,
-      //  IMPORTANT: allows scroll inside
-      initialChildSize: 0.55,
-      // enough space for fixed header (prevents overflow)
-      minChildSize: 0.55,
-      maxChildSize: 0.99,
+    final h = MediaQuery.of(context).size.height;
 
-      builder: (context, scrollController) {
-        return SafeArea(
-          top: false,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pop(context); // close bottom sheet
+        return false;
+      },
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+
+
+        onTap: () {
+          FocusScope.of(context).unfocus();
+          Navigator.pop(context);
+        },
+
+        child: GestureDetector(
+
+          onTap: () {},
+
+          child: SlidingUpPanel(
+            controller: _panelController,
+            minHeight: h * 0.42,
+            maxHeight: h * 0.70,
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(GBSizes.cardRadiusLg),
             ),
-            child: Column(
-              children: [
-                /// DRAG HANDLE
-                Container(
-                  width: 40,
-                  height: 2,
-                  decoration: BoxDecoration(
-                    color: GBColor.black,
-                    borderRadius: BorderRadius.circular(10),
+            color: Colors.white,
+            panelSnapping: true,
+            backdropEnabled: false,
+
+            body: const SizedBox.expand(),
+
+            panelBuilder: (ScrollController sc) {
+              return SafeArea(
+                top: false,
+                bottom: true,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: GBSizes.lg, // 24
+                    vertical: GBSizes.sm,  // 8
                   ),
-                ),
-                const SizedBox(height: 12),
-
-                /// ✅ FIXED HEADER (Always visible)
-                BottomSheetTopTitle(
-                  tiltetext: GBText.waitingForOffersFromDrivers,
-                  image: Image.asset(GBImagePath.loading),
-                ),
-                const SizedBox(height: 12),
-
-                Row(
-                  children: [
-                    BookingsButton(
-                      text: '-5',
-                      onTap: () {
-                        if (fare > 5) setState(() => fare -= 5);
-                      },
-                    ),
-                    const Spacer(),
-                    BookingsButton(
-                      text: '+5',
-                      onTap: () => setState(() => fare += 5),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 12),
-
-                PrimaryButton(
-                  width: double.infinity,
-                  height: 50,
-                  title: GBText.raiseFare,
-                  backgroundColor: Colors.green,
-                  textColor: GBColor.secondary,
-                  borderRadius: BorderRadius.circular(15),
-                  onPressed: () => setState(() => fare += 5),
-                ),
-
-                const SizedBox(height: 12),
-
-                AutoAcceptTile(
-                  value: isAutoAccept,
-                  onChanged: (v) => setState(() => isAutoAccept = v),
-                ),
-
-                const SizedBox(height: 10),
-
-                TTextField(
-                  titleText: 'PKR $fare',
-                  hintText: 'PKR $fare',
-                  hintTextColor: Colors.black,
-                  suffixIcon: Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Text(
-                      GBText.cash,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: GBColor.buttonTextText,
-                      ),
-                    ),
-                  ),
-                  prefixIcon: Image.asset(GBImagePath.card, width: 28),
-                ),
-
-                const SizedBox(height: 8),
-
-                /// ✅ SCROLLABLE AREA (Location + Cancel will appear on scroll)
-                Expanded(
-                  child: ListView(
-                    controller: scrollController,
-                    padding: const EdgeInsets.only(top: 12, bottom: 24),
+                  child: Column(
                     children: [
-                      const LocationContainer(),
-                      const SizedBox(height: 16),
+                      // FIXED HEADER
+                      Center(
+                        child: Container(
+                          width: 40, // keep same UI
+                          height: 2,
+                          decoration: BoxDecoration(
+                            color: GBColor.black,
+                            borderRadius:
+                            BorderRadius.circular(GBSizes.borderRadiusLg), // ✅
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: GBSizes.spaceBtwItems - 4), // ✅ (12)
 
-                      PrimaryButton(
-                        title: GBText.cancelRequest,
-                        backgroundColor: GBColor.primary,
-                        textColor: GBColor.secondary,
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (_) => const DriveArrivingBottomSheet(),
-                          );
-                        },
+                      BottomSheetTopTitle(
+                        tiltetext: GBText.waitingForOffersFromDrivers,
+                        image: Image.asset(GBImagePath.loading),
+                      ),
+                      const SizedBox(height: GBSizes.spaceBtwItems - 4), // ✅ (12)
+
+                      Expanded(
+                        child: SingleChildScrollView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  BookingsButton(
+                                    text: '-5',
+                                    onTap: () {
+                                      if (fare > 5) setState(() => fare -= 5);
+                                    },
+                                  ),
+                                  const Spacer(),
+                                  BookingsButton(
+                                    text: '+5',
+                                    onTap: () => setState(() => fare += 5),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: GBSizes.spaceBtwItems - 4), // ✅ (12)
+
+                              PrimaryButton(
+                                width: double.infinity,
+                                height: 50, // keep same UI
+                                title: GBText.raiseFare,
+                                backgroundColor: Colors.green,
+                                textColor: GBColor.secondary,
+                                borderRadius:
+                                BorderRadius.circular(GBSizes.buttonRadius + 3), // ✅ (15)
+                                onPressed: () => setState(() => fare += 5),
+                              ),
+                              const SizedBox(height: GBSizes.spaceBtwItems - 4), // ✅ (12)
+
+                              AutoAcceptTile(
+                                value: isAutoAccept,
+                                onChanged: (v) =>
+                                    setState(() => isAutoAccept = v),
+                              ),
+
+                              TTextField(
+                                titleText: 'PKR $fare',
+                                hintText: 'PKR $fare',
+                                hintTextColor: Colors.black,
+                                suffixIcon: Padding(
+                                  // ✅
+                                  padding: const EdgeInsets.only(top: GBSizes.md), // 16
+                                  child: Text(
+                                    GBText.cash,
+                                    style: const TextStyle(
+                                      fontSize: GBSizes.fontSizeSm, // ✅ 14
+                                      fontWeight: FontWeight.w500,
+                                      color: GBColor.buttonTextText,
+                                    ),
+                                  ),
+                                ),
+                                prefixIcon:
+                                Image.asset(GBImagePath.card, width: 28),
+                              ),
+                              const SizedBox(height: GBSizes.spaceBtwInputFields - 2), // ✅ (14)
+
+                              const LocationContainer(),
+                              const SizedBox(height: GBSizes.spaceBtwItems), // ✅ 16
+
+                              PrimaryButton(
+                                title: GBText.cancelRequest,
+                                backgroundColor: GBColor.primary,
+                                textColor: GBColor.secondary,
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      backgroundColor: GBColor.secondary,
+
+                                      // ✅ Reduce space around content
+                                      contentPadding: const EdgeInsets.fromLTRB(24, 12, 24, 4),
+
+                                      // ✅ Reduce space above buttons
+                                      actionsPadding: const EdgeInsets.only(
+                                        left: 16,
+                                        right: 16,
+                                        bottom: 8,
+                                        top: 0,
+                                      ),
+
+                                      title: const Text(
+                                        'Cancel Request',
+                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                                      ),
+
+                                      content: const Text(
+                                        'Are you sure you want to cancel this request?',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w400,
+                                          color: GBColor.messageTextColor,
+                                        ),
+                                      ),
+
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context),
+                                          child: const Text(
+                                            'No',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                            // cancel logic here
+                                          },
+                                          child: const Text(
+                                            'Yes',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+
+
+                              SizedBox(height: 10,),
+                              PrimaryButton(title: "Drive Arrive",
+                                  borderColor:GBColor.borderColor,onPressed: (){
+                                    showModalBottomSheet(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      backgroundColor: Colors.transparent,
+                                      builder: (_) => const RideFlowBottomSheet(),
+                                    );
+                              }),
+
+                              const SizedBox(height: GBSizes.defaultSpace),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              );
+            },
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

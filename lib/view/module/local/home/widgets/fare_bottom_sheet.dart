@@ -43,7 +43,7 @@ class _FareBottomSheetState extends State<FareBottomSheet> {
         ),
         child: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -53,7 +53,7 @@ class _FareBottomSheetState extends State<FareBottomSheet> {
               children: [
                 /// DRAG HANDLE
                 Container(
-                  width: 40,
+                  width: 60,
                   height: 4,
                   decoration: BoxDecoration(
                     color: GBColor.borderColor,

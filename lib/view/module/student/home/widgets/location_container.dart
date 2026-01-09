@@ -14,7 +14,7 @@ class LocationContainer extends StatelessWidget {
       height: 86,
       decoration: BoxDecoration(
         border: Border.all(color: GBColor.primary),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24),

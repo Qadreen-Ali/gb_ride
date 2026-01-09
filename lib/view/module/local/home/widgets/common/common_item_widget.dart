@@ -1,81 +1,87 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/view/module/local/home/widgets/find_driver_bottom_sheet.dart';
-
 import '../../../../../../common/text_field.dart';
+import '../../../../../../utils/constants/app_sizes.dart';
 import '../../../../../../utils/constants/color_string.dart';
 import '../../../../../../utils/constants/image_string.dart';
-import '../../../../../../utils/constants/primary_button.dart';
-import '../../../../../../utils/constants/text_string.dart';
 import '../../rating/driver_rating_screen.dart';
 import '../action_circle.dart';
 import '../location_container.dart';
 import '../rating_widget.dart';
+
 class CommonItemWidget extends StatelessWidget {
-  const CommonItemWidget({
-    super.key,
-  });
+  const CommonItemWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         /// Car + Plate Row
         Row(
           children: [
-            const Text(
-              "Yellow Alto",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-                fontFamily: 'Poppins',
+            const Expanded(
+              child: Text(
+                "Yellow Alto",
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: GBSizes.fontSizeMd,
+                  fontFamily: 'Poppins',
+                ),
               ),
             ),
-            const Spacer(),
+            const SizedBox(width: GBSizes.sm),
             Container(
-              width: 73,
-              height: 25,
+              padding: const EdgeInsets.symmetric(
+                horizontal: GBSizes.sm,
+                vertical: GBSizes.xs,
+              ),
               decoration: BoxDecoration(
                 color: GBColor.primary,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(GBSizes.borderRadiusLg),
               ),
-              child: const Center(
-                child: Text(
-                  "SMz4U",
-                  style: TextStyle(
-                    color: GBColor.secondary,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                  ),
+              child: const Text(
+                "SMz4U",
+                style: TextStyle(
+                  color: GBColor.secondary,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                  fontSize: GBSizes.fontSizeSm,
                 ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 14),
+
+        const SizedBox(height: GBSizes.spaceBtwItems),
 
         /// Driver Row
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
+          padding: const EdgeInsets.symmetric(horizontal: GBSizes.sm),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              /// Left: profile + name + rating
               Expanded(
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
+                    const SizedBox(width: GBSizes.sm),
                     Expanded(
-                      child: Column(
+                      child:  Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
                         children: [
                           CircleAvatar(
-                            radius: 24,
-                            backgroundImage: AssetImage(
-                              GBImagePath.profile,
-                            ),
+                            radius: GBSizes.iconLg,
+                            backgroundImage: AssetImage(GBImagePath.profile),
                           ),
+
+                          const SizedBox(height: GBSizes.xs),
+
                           const Text(
                             "Hassan",
                             maxLines: 1,
@@ -83,87 +89,107 @@ class CommonItemWidget extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.black,
                               fontFamily: 'Poppins',
-                              fontSize: 14,
+                              fontSize: GBSizes.fontSizeSm,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          const SizedBox(height: 2),
-                          Row(
-                            children: const [
-                              RatingWidget(icon: Icons.star),
-                              RatingWidget(icon: Icons.star),
-                              RatingWidget(icon: Icons.star),
-                              RatingWidget(icon: Icons.star_half),
 
-                              SizedBox(width: 2),
-                              Text(
-                                "(5)",
-                                style: TextStyle(
-                                  color: GBColor.messageTextColor,
-                                  fontSize: 12,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500,
+                          const SizedBox(height: GBSizes.xs),
+
+                          // ✅ FIX OVERFLOW: make it flexible
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                RatingWidget(icon: Icons.star),
+                                RatingWidget(icon: Icons.star),
+                                RatingWidget(icon: Icons.star),
+                                RatingWidget(icon: Icons.star_half),
+                                SizedBox(width: GBSizes.xs),
+                                Text(
+                                  "(5)",
+                                  style: TextStyle(
+                                    color: GBColor.messageTextColor,
+                                    fontSize: GBSizes.fontSizeESm,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
+                                            ),
                       ),
-                    ),
+
+              ),
                   ],
                 ),
               ),
+
+
+
+              /// Right: actions (kept same UI, but safe)
               ActionCircle(
                 icon: Icons.call,
                 label: "Contact Driver",
-                onTap: () {
-                  // TODO: call driver logic
-                },
+                onTap: () {},
               ),
-              ActionCircle(icon: Icons.verified, label: "Verified"),
+              const SizedBox(width: GBSizes.sm),
+              const ActionCircle(
+                icon: Icons.verified,
+                label: "Verified",
+              ),
             ],
           ),
         ),
 
-        const SizedBox(height: 14),
-
-        /// Message box
         Container(
           width: double.infinity,
           height: 50,
+          padding: const EdgeInsets.symmetric(horizontal: GBSizes.sm),
           decoration: BoxDecoration(
             color: GBColor.secondary,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(GBSizes.inputFieldRadius),
             border: Border.all(color: GBColor.borderColor),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children:  [
-              Icon(Icons.message_outlined, color: GBColor.messageTextColor),
-              Text(
-                "Any Message For Driver",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
+            children: [
+              const Icon(Icons.message_outlined, color: GBColor.messageTextColor),
+              const SizedBox(width: GBSizes.sm),
+
+              const Expanded(
+                child: Text(
+                  "Any Message For Driver",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: GBSizes.fontSizeLg,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
+
               InkWell(
-                onTap: (){
+                onTap: () {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DriverRatingScreen(
+                      builder: (_) => const DriverRatingScreen(
                         driverName: 'ABC',
                         driverImage: 'null',
                       ),
                     ),
-                  );                },
-                child: Icon(
+                  );
+                },
+                child: const Icon(
                   Icons.arrow_forward_ios_rounded,
                   color: GBColor.messageTextColor,
-                  size: 18,
+                  size: GBSizes.iconSm,
                 ),
               ),
             ],
@@ -175,58 +201,67 @@ class CommonItemWidget extends StatelessWidget {
           titleText: 'PKR60',
           hintText: 'PKR60',
           hintTextColor: Colors.black,
-          prefixIcon: Image(image: AssetImage(GBImagePath.card), width: 28),
-        ),
-
-        const SizedBox(height: 10),
-
-        Padding(
-          padding: const EdgeInsets.only(left: 4.0),
-          child: const Text(
-            "Your current trip",
-            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
-            textAlign: TextAlign.start,
+          prefixIcon: Image.asset(
+            GBImagePath.card,
+            width: GBSizes.iconMd,
           ),
         ),
-        const SizedBox(height: 5),
+
+        const SizedBox(height: GBSizes.sm),
+
+        const Padding(
+          padding: EdgeInsets.only(left: GBSizes.xs),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Your current trip",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: GBSizes.fontSizeEaSm,
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: GBSizes.xs),
 
         /// Location
         const LocationContainer(),
-        const SizedBox(height: 14),
+
+        const SizedBox(height: GBSizes.spaceBtwItems),
 
         /// Emergency Row
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: GBSizes.sm),
           child: Row(
             children: [
-              Image(
-                image: AssetImage(GBImagePath.emergency),
+              Image.asset(
+                GBImagePath.emergency,
                 width: 21,
                 height: 16,
               ),
-              const SizedBox(width: 12),
-              Text(
-                "Call Emergency",
-                style: TextStyle(
-                  color: GBColor.error,
-                  fontSize: 13,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
+              const SizedBox(width: GBSizes.sm),
+              const Expanded(
+                child: Text(
+                  "Call Emergency",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: GBColor.error,
+                    fontSize: GBSizes.fontSizeEaSm,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-              const Spacer(),
-              Icon(
+              const Icon(
                 Icons.arrow_forward_ios_rounded,
                 color: GBColor.error,
-                size: 20,
+                size: GBSizes.iconMd,
               ),
             ],
           ),
         ),
-
-        const SizedBox(height: 16),
-
-
       ],
     );
   }
