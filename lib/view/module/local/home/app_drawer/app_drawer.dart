@@ -3,7 +3,7 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
 
 class ProfileDrawer extends StatelessWidget {
-  const ProfileDrawer({Key? key}) : super(key: key);
+  const ProfileDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +126,7 @@ class DrawerMenuItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const DrawerMenuItem({
-    Key? key,
+    super.key,
     this.icon,
     this.image,
     required this.label,
@@ -134,7 +134,7 @@ class DrawerMenuItem extends StatelessWidget {
     required this.onTap,
     this.imageColor,
     this.selectedImageColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
