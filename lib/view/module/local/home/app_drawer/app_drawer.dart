@@ -102,7 +102,7 @@ class ProfileDrawer extends StatelessWidget {
                     icon: Icons.history_outlined,
                     label: 'History',
                     onTap: () {
-                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/history');
                       // Navigate to history
                     },
                   ),

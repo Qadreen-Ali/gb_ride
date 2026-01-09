@@ -10,6 +10,9 @@ import 'package:gb_ride/view/auth/login_screen.dart';
 import 'package:gb_ride/view/auth/otp_verification_screen.dart';
 import 'package:gb_ride/view/splash/splash_screen.dart';
 import 'package:gb_ride/view/auth/form_screen.dart';
+import 'package:gb_ride/view/module/local/setting/payment_method/payment_methods_screen.dart';
+import 'package:gb_ride/view/module/local/history/history_screen.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
@@ -46,6 +49,9 @@ class MyApp extends StatelessWidget {
         '/notification': (context) => const NotificationScreen(),
         '/help': (context) => const HelpScreen(),
         '/safety': (context) => const SafetyScreen(),
+        '/paymentmethod': (context) => const PaymentMethodsScreen(),
+        '/history': (context) => const HistoryScreen(),
+
       },
     );
   }
