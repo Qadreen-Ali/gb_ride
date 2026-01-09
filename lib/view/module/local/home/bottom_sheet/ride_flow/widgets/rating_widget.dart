@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../utils/constants/color_string.dart';
+import '../../../../../../../utils/constants/color_string.dart';
 class RatingWidget extends StatelessWidget {
   final IconData icon;
 
