@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'notification_tile.dart';
 
 class MessageNotificationsScreen extends StatelessWidget {

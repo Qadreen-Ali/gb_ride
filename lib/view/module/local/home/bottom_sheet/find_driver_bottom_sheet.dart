@@ -37,14 +37,12 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
 
-
         onTap: () {
           FocusScope.of(context).unfocus();
           Navigator.pop(context);
         },
 
         child: GestureDetector(
-
           onTap: () {},
 
           child: SlidingUpPanel(
@@ -67,7 +65,7 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: GBSizes.lg, // 24
-                    vertical: GBSizes.sm,  // 8
+                    vertical: GBSizes.sm, // 8
                   ),
                   child: Column(
                     children: [
@@ -78,18 +76,23 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
                           height: 2,
                           decoration: BoxDecoration(
                             color: GBColor.black,
-                            borderRadius:
-                            BorderRadius.circular(GBSizes.borderRadiusLg), // ✅
+                            borderRadius: BorderRadius.circular(
+                              GBSizes.borderRadiusLg,
+                            ), // ✅
                           ),
                         ),
                       ),
-                      const SizedBox(height: GBSizes.spaceBtwItems - 4), // ✅ (12)
+                      const SizedBox(
+                        height: GBSizes.spaceBtwItems - 4,
+                      ), // ✅ (12)
 
                       BottomSheetTopTitle(
                         tiltetext: GBText.waitingForOffersFromDrivers,
                         image: Image.asset(GBImagePath.loading),
                       ),
-                      const SizedBox(height: GBSizes.spaceBtwItems - 4), // ✅ (12)
+                      const SizedBox(
+                        height: GBSizes.spaceBtwItems - 4,
+                      ), // ✅ (12)
 
                       Expanded(
                         child: SingleChildScrollView(
@@ -111,7 +114,9 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: GBSizes.spaceBtwItems - 4), // ✅ (12)
+                              const SizedBox(
+                                height: GBSizes.spaceBtwItems - 4,
+                              ), // ✅ (12)
 
                               PrimaryButton(
                                 width: double.infinity,
@@ -119,11 +124,14 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
                                 title: GBText.raiseFare,
                                 backgroundColor: Colors.green,
                                 textColor: GBColor.secondary,
-                                borderRadius:
-                                BorderRadius.circular(GBSizes.buttonRadius + 3), // ✅ (15)
+                                borderRadius: BorderRadius.circular(
+                                  GBSizes.buttonRadius + 3,
+                                ), // ✅ (15)
                                 onPressed: () => setState(() => fare += 5),
                               ),
-                              const SizedBox(height: GBSizes.spaceBtwItems - 4), // ✅ (12)
+                              const SizedBox(
+                                height: GBSizes.spaceBtwItems - 4,
+                              ), // ✅ (12)
 
                               AutoAcceptTile(
                                 value: isAutoAccept,
@@ -137,7 +145,9 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
                                 hintTextColor: Colors.black,
                                 suffixIcon: Padding(
                                   // ✅
-                                  padding: const EdgeInsets.only(top: GBSizes.md), // 16
+                                  padding: const EdgeInsets.only(
+                                    top: GBSizes.md,
+                                  ), // 16
                                   child: Text(
                                     GBText.cash,
                                     style: const TextStyle(
@@ -147,13 +157,19 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
                                     ),
                                   ),
                                 ),
-                                prefixIcon:
-                                Image.asset(GBImagePath.card, width: 28),
+                                prefixIcon: Image.asset(
+                                  GBImagePath.card,
+                                  width: 28,
+                                ),
                               ),
-                              const SizedBox(height: GBSizes.spaceBtwInputFields - 2), // ✅ (14)
+                              const SizedBox(
+                                height: GBSizes.spaceBtwInputFields - 2,
+                              ), // ✅ (14)
 
                               const LocationContainer(),
-                              const SizedBox(height: GBSizes.spaceBtwItems), // ✅ 16
+                              const SizedBox(
+                                height: GBSizes.spaceBtwItems,
+                              ), // ✅ 16
 
                               PrimaryButton(
                                 title: GBText.cancelRequest,
@@ -166,7 +182,12 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
                                       backgroundColor: GBColor.secondary,
 
                                       // ✅ Reduce space around content
-                                      contentPadding: const EdgeInsets.fromLTRB(24, 12, 24, 4),
+                                      contentPadding: const EdgeInsets.fromLTRB(
+                                        24,
+                                        12,
+                                        24,
+                                        4,
+                                      ),
 
                                       // ✅ Reduce space above buttons
                                       actionsPadding: const EdgeInsets.only(
@@ -178,7 +199,10 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
 
                                       title: const Text(
                                         'Cancel Request',
-                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
 
                                       content: const Text(
@@ -192,7 +216,8 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
 
                                       actions: [
                                         TextButton(
-                                          onPressed: () => Navigator.pop(context),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
                                           child: const Text(
                                             'No',
                                             style: TextStyle(
@@ -222,17 +247,19 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
                                 },
                               ),
 
-
-                              SizedBox(height: 10,),
-                              PrimaryButton(title: "Drive Arrive",
-                                  borderColor:GBColor.borderColor,onPressed: (){
-                                    showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      backgroundColor: Colors.transparent,
-                                      builder: (_) => const RideFlowBottomSheet(),
-                                    );
-                              }),
+                              SizedBox(height: 10),
+                              PrimaryButton(
+                                title: "Drive Arrive",
+                                borderColor: GBColor.borderColor,
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (_) => const RideFlowBottomSheet(),
+                                  );
+                                },
+                              ),
 
                               const SizedBox(height: GBSizes.defaultSpace),
                             ],

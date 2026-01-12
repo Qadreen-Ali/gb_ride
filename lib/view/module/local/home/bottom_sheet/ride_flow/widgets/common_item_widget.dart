@@ -67,69 +67,65 @@ class CommonItemWidget extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     const SizedBox(width: GBSizes.sm),
                     Expanded(
-                      child:  Padding(
+                      child: Padding(
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            radius: GBSizes.iconLg,
-                            backgroundImage: AssetImage(GBImagePath.profile),
-                          ),
-
-                          const SizedBox(height: GBSizes.xs),
-
-                          const Text(
-                            "Hassan",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: 'Poppins',
-                              fontSize: GBSizes.fontSizeSm,
-                              fontWeight: FontWeight.w600,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: GBSizes.iconLg,
+                              backgroundImage: AssetImage(GBImagePath.profile),
                             ),
-                          ),
 
-                          const SizedBox(height: GBSizes.xs),
+                            const SizedBox(height: GBSizes.xs),
 
-                          // ✅ FIX OVERFLOW: make it flexible
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                RatingWidget(icon: Icons.star),
-                                RatingWidget(icon: Icons.star),
-                                RatingWidget(icon: Icons.star),
-                                RatingWidget(icon: Icons.star_half),
-                                SizedBox(width: GBSizes.xs),
-                                Text(
-                                  "(5)",
-                                  style: TextStyle(
-                                    color: GBColor.messageTextColor,
-                                    fontSize: GBSizes.fontSizeESm,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w500,
+                            const Text(
+                              "Hassan",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Poppins',
+                                fontSize: GBSizes.fontSizeSm,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+
+                            const SizedBox(height: GBSizes.xs),
+
+                            // ✅ FIX OVERFLOW: make it flexible
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  RatingWidget(icon: Icons.star),
+                                  RatingWidget(icon: Icons.star),
+                                  RatingWidget(icon: Icons.star),
+                                  RatingWidget(icon: Icons.star_half),
+                                  SizedBox(width: GBSizes.xs),
+                                  Text(
+                                    "(5)",
+                                    style: TextStyle(
+                                      color: GBColor.messageTextColor,
+                                      fontSize: GBSizes.fontSizeESm,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                                            ),
+                          ],
+                        ),
                       ),
-
-              ),
+                    ),
                   ],
                 ),
               ),
-
-
 
               /// Right: actions (kept same UI, but safe)
               ActionCircle(
@@ -138,10 +134,7 @@ class CommonItemWidget extends StatelessWidget {
                 onTap: () {},
               ),
               const SizedBox(width: GBSizes.sm),
-              const ActionCircle(
-                icon: Icons.verified,
-                label: "Verified",
-              ),
+              ActionCircle(icon: Icons.verified, label: "Verified"),
             ],
           ),
         ),
@@ -157,7 +150,10 @@ class CommonItemWidget extends StatelessWidget {
           ),
           child: Row(
             children: [
-              const Icon(Icons.message_outlined, color: GBColor.messageTextColor),
+              const Icon(
+                Icons.message_outlined,
+                color: GBColor.messageTextColor,
+              ),
               const SizedBox(width: GBSizes.sm),
 
               const Expanded(
@@ -201,10 +197,7 @@ class CommonItemWidget extends StatelessWidget {
           titleText: 'PKR60',
           hintText: 'PKR60',
           hintTextColor: Colors.black,
-          prefixIcon: Image.asset(
-            GBImagePath.card,
-            width: GBSizes.iconMd,
-          ),
+          prefixIcon: Image.asset(GBImagePath.card, width: GBSizes.iconMd),
         ),
 
         const SizedBox(height: GBSizes.sm),
@@ -235,11 +228,7 @@ class CommonItemWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: GBSizes.sm),
           child: Row(
             children: [
-              Image.asset(
-                GBImagePath.emergency,
-                width: 21,
-                height: 16,
-              ),
+              Image.asset(GBImagePath.emergency, width: 21, height: 16),
               const SizedBox(width: GBSizes.sm),
               const Expanded(
                 child: Text(

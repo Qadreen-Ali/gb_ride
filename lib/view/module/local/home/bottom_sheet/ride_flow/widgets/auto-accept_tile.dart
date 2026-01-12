@@ -36,10 +36,10 @@ class AutoAcceptTile extends StatelessWidget {
             ),
             Switch(
               value: value,
-              activeColor: GBColor.primary,
+              activeThumbColor: GBColor.primary,
               inactiveTrackColor: GBColor.borderColor,
               inactiveThumbColor: GBColor.secondary,
-              trackOutlineColor: MaterialStateProperty.all(Colors.transparent),
+              trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
               onChanged: onChanged,
             ),
           ],

@@ -42,20 +42,24 @@ class GlobalAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? GestureDetector(
               onTap: () {
                 if (onProfileTap != null) {
-                  onProfileTap!(); // use custom behavior if provided
+                  onProfileTap!();
                 } else {
-                  _defaultProfileTap(context); // otherwise use default
+                  _defaultProfileTap(context);
                 }
               },
               child: Padding(
                 padding: const EdgeInsets.only(left: 12.0),
                 child: CircleAvatar(
-                  radius: 8,
-                  backgroundImage: AssetImage(profileImage ?? ''),
+                  radius: 18,
+                  backgroundImage: profileImage != null
+                      ? AssetImage(profileImage!)
+                      : null,
+                  child: profileImage == null ? const Icon(Icons.person) : null,
                 ),
               ),
             )
-          : null,
+          : const SizedBox.shrink(), // 👈 THIS IS THE KEY
+
       title: Text(
         title,
         style: const TextStyle(
