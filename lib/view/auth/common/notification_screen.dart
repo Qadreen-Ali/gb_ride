@@ -1,23 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/global_appbar.dart';
-import 'package:gb_ride/view/module/local/setting/help_and_support/contact_us.dart';
-import 'package:gb_ride/view/module/local/setting/help_and_support/faqs.dart';
+// import 'package:gb_ride/utils/logger.dart';
+import 'package:gb_ride/utils/constants/color_string.dart';
 
-class HelpScreen extends StatelessWidget {
-  const HelpScreen({super.key});
+class NotificationScreen extends StatefulWidget {
+  const NotificationScreen({super.key});
 
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+Widget _allNotifications() {
+  return const Center(child: Text('All Notifications'));
+}
+
+Widget _messagesNotifications() {
+  return const Center(child: Text('Messages Notifications'));
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
+      // indicatorColor:Colors.grey,
       child: Scaffold(
         backgroundColor: GBColor.secondary,
         appBar: GlobalAppBar(
-          title: 'Help Center / FAQs',
+          profileImage: 'assets/icons/profile.jpg',
+          title: 'Notications',
+          showProfile: true,
           onCloseTap: () => Navigator.pop(context),
-          showProfile: false,
+          onProfileTap: () {},
         ),
+
         body: Column(
           children: [
             Padding(
@@ -38,18 +54,15 @@ class HelpScreen extends StatelessWidget {
                   insets: const EdgeInsets.only(bottom: 8),
                 ),
                 tabs: const [
-                  Tab(text: 'Contact US'),
-                  Tab(text: 'FAQs'),
+                  Tab(text: 'All'),
+                  Tab(text: 'Messages'),
                 ],
               ),
             ),
 
             Expanded(
               child: TabBarView(
-                children: [
-                  ContactUsScreen(),
-                  FAQScreen(), // placeholder for Messages
-                ],
+                children: [_allNotifications(), _messagesNotifications()],
               ),
             ),
           ],

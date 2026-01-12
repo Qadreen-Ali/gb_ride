@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/view/module/local/setting/widget/settings_widget.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
@@ -32,11 +33,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: 'Manage Payment Methods',
         onTap: () {},
       ),
-      SettingsItem(
-        icons: SolarLinearIcons.lock,
-        title: 'Change Password',
-        onTap: () {},
-      ),
     ];
 
     final preferences = [
@@ -48,25 +44,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.shieldKeyhole,
         title: 'Privacy & Security',
-        onTap: () {},
-      ),
-      SettingsItem(
-        icons: SolarLinearIcons.global,
-        title: 'Language',
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, '/safety');
+        },
       ),
     ];
 
     final support = [
       SettingsItem(
         icons: SolarLinearIcons.help,
-        title: 'Help Center',
-        onTap: () {},
-      ),
-      SettingsItem(
-        icons: SolarLinearIcons.document,
-        title: 'Terms of Service',
-        onTap: () {},
+        title: 'Help Center/FAQs',
+        onTap: () {
+          Navigator.pushNamed(context, '/help');
+        },
       ),
     ];
 
@@ -86,12 +76,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
 
     return Scaffold(
+      backgroundColor: GBColor.secondary,
       appBar: GlobalAppBar(
         title: 'Settings',
         profileImage: 'assets/icons/profile.jpg',
         onCloseTap: () => Navigator.pop(context),
       ),
-      backgroundColor: const Color(0xFFF5F5F7),
       body: ScrollConfiguration(
         behavior: ScrollBehavior().copyWith(
           overscroll: false, // removes glow
@@ -111,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ...account.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item),
+                  child: SettingsSingleContainer(item: item, isExpanded: false),
                 ),
               ),
 
@@ -124,7 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ...preferences.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item),
+                  child: SettingsSingleContainer(item: item, isExpanded: false),
                 ),
               ),
 
@@ -137,14 +127,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ...support.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item),
+                  child: SettingsSingleContainer(item: item, isExpanded: false),
                 ),
               ),
 
-              const SizedBox(height: 24),
-              SettingsSingleContainer(item: logout),
               const SizedBox(height: 12),
-              SettingsSingleContainer(item: delete),
+              SettingsSingleContainer(item: logout, isExpanded: false),
+              const SizedBox(height: 12),
+              SettingsSingleContainer(item: delete, isExpanded: false),
             ],
           ),
         ),

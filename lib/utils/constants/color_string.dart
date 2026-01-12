@@ -11,7 +11,7 @@ class GBColor {
   static const Color gray = Color(0xFF625A5A);
   static const Color black = Color(0xFF000000);
   static const Color borderColor = Color(0xFFCDC8C8);
-
+ 
   static const Color lightBlue = Color(0xFFB9D6F0);
   static const Color textOrange = Color(0xFFEB8E00);
   static const Color containerTextColor = Color(0xFF655B5B);
@@ -27,4 +27,6 @@ class GBColor {
   static const Color messageTextColor = Color(0xFF424242);
   static const Color driverContainerColor = Color(0xFF979797);
   static const Color lightGrey = Color.fromARGB(255, 217, 217, 217);
+  static const Color linegrey = Color.fromARGB(71, 71, 71, 1); 
+  
 }

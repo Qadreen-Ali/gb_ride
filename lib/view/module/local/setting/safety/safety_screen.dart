@@ -19,7 +19,6 @@ class SafetyScreen extends StatelessWidget {
     required VoidCallback onTap,
     required backGroundcolor,
     Color iconColor = GBColor.black,
-    
   }) {
     return InkWell(
       onTap: onTap,
@@ -140,7 +139,7 @@ class SafetyScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Divider(
-                      color: GBColor.borderColor,
+                      color: GBColor.driverContainerColor,
                       thickness: 1,
                       height: 1,
                     ),
@@ -175,7 +174,7 @@ class SafetyScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Divider(
-                      color: GBColor.borderColor,
+                      color: GBColor.driverContainerColor,
                       thickness: 1,
                       height: 1,
                     ),
@@ -189,7 +188,7 @@ class SafetyScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Divider(
-                      color: GBColor.borderColor,
+                      color: GBColor.driverContainerColor,
                       thickness: 1,
                       height: 1,
                     ),

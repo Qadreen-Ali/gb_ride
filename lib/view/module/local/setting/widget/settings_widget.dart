@@ -1,35 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 
-/// Model for each item
+/// ----------------- SETTINGS ITEM MODEL -----------------
 class SettingsItem {
-  final IconData icons;
+  final IconData? icons;
+  final String? iconPath;
   final String title;
+  final String? subtitle;
+  final String? answer; // for FAQ items
+  final bool isFaq; // true for FAQ
   final VoidCallback onTap;
-  final Color? iconColor; // optional icon color
+  final Color? iconColor;
   final Color? textColor;
   final Color? arrowColor;
-  final Color? headerColor;
+  final IconData? arrowIcon;
+  final double iconVerticalOffset;
 
   const SettingsItem({
-    required this.icons,
+    this.icons,
+    this.iconPath,
     required this.title,
+    this.subtitle,
+    this.answer,
+    this.isFaq = false,
     required this.onTap,
-    this.iconColor, // optional
+    this.iconColor,
     this.textColor,
     this.arrowColor,
-    this.headerColor,
+    this.arrowIcon,
+    this.iconVerticalOffset = 0.0,
   });
 }
 
-/// Single tile with circular icon background (custom row for proper centering)
+/// ----------------- SETTINGS TILE -----------------
 class SettingsTile extends StatelessWidget {
   final SettingsItem item;
+  final bool isExpanded; // ✅ FAQ expansion handled from screen
   final Color iconBackgroundColor;
 
   const SettingsTile({
     super.key,
     required this.item,
+    required this.isExpanded,
     this.iconBackgroundColor = GBColor.gray,
   });
 
@@ -37,35 +49,122 @@ class SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: item.onTap,
+      splashColor: Colors.transparent, // removes blue flash
+      highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(12),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
-              radius: 12,
-              backgroundColor: iconBackgroundColor,
-              child: Icon(
-                item.icons,
-                color: item.iconColor ?? GBColor.secondary,
-                size: 16,
+            /// ---------- FAQ ITEM (ONLY TEXT) -------------
+            if (item.isFaq)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      item.title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: item.textColor ?? GBColor.gray,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    size: 16,
+                    color: item.arrowColor ?? GBColor.gray,
+                  ),
+                ],
+              )
+            /// ---------- NORMAL SETTINGS (UNCHANGED) -------------
+            else
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Transform.translate(
+                    offset: Offset(0, item.iconVerticalOffset),
+                    child: CircleAvatar(
+                      radius: 12,
+                      backgroundColor: iconBackgroundColor,
+                      child: item.iconPath != null
+                          ? Image.asset(
+                              item.iconPath!,
+                              width: 24,
+                              height: 24,
+                              color: item.iconColor,
+                            )
+                          : item.icons != null
+                          ? Icon(
+                              item.icons,
+                              color: item.iconColor ?? GBColor.secondary,
+                              size: 16,
+                            )
+                          : const SizedBox(),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          item.title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: item.textColor ?? GBColor.gray,
+                          ),
+                        ),
+                        if (item.subtitle != null) ...[
+                          const SizedBox(height: 2),
+                          Row(
+                            children: [
+                              Container(
+                                width: 4,
+                                height: 4,
+                                decoration: const BoxDecoration(
+                                  color: GBColor.primary,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              Expanded(
+                                child: Text(
+                                  item.subtitle!,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: GBColor.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                  Icon(
+                    item.arrowIcon ?? Icons.arrow_forward_ios,
+                    size: 16,
+                    color: item.arrowColor ?? GBColor.gray,
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                item.title,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: item.textColor ?? GBColor.gray,
-                ),
+
+            /// ---------- FAQ ANSWER -------------
+            if (item.isFaq && isExpanded && item.answer != null) ...[
+              const SizedBox(height: 8),
+              Text(
+                item.answer!,
+                style: const TextStyle(fontSize: 14, color: GBColor.black),
               ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: item.arrowColor ?? GBColor.gray,
-            ),
+            ],
           ],
         ),
       ),
@@ -73,9 +172,10 @@ class SettingsTile extends StatelessWidget {
   }
 }
 
-/// Single container for one settings item
+/// ----------------- SETTINGS SINGLE CONTAINER -----------------
 class SettingsSingleContainer extends StatelessWidget {
   final SettingsItem item;
+  final bool isExpanded; // ✅ only used for FAQ
   final Color iconBackgroundColor;
   final double width;
   final double height;
@@ -83,8 +183,9 @@ class SettingsSingleContainer extends StatelessWidget {
   const SettingsSingleContainer({
     super.key,
     required this.item,
-    this.iconBackgroundColor = GBColor.lineColor,
-    this.width = 392,
+    required this.isExpanded,
+    this.iconBackgroundColor = GBColor.gray,
+    this.width = double.infinity,
     this.height = 56,
   });
 
@@ -92,7 +193,7 @@ class SettingsSingleContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: height,
+      padding: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -100,86 +201,11 @@ class SettingsSingleContainer extends StatelessWidget {
           BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3)),
         ],
       ),
-      child: SettingsTile(item: item, iconBackgroundColor: iconBackgroundColor),
-    );
-  }
-}
-
-/// Reusable container for any number of items
-class SettingsContainer extends StatelessWidget {
-  final String title;
-  final List<SettingsItem> items;
-  final Color iconBackgroundColor;
-  final double width;
-  final double? height; // optional height
-
-  const SettingsContainer({
-    super.key,
-    required this.title,
-    required this.items,
-    this.iconBackgroundColor = GBColor.lineColor,
-    this.width = 399,
-    this.height,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Title text
-        if (title.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: GBColor.gray,
-              ),
-            ),
-          ),
-        const SizedBox(height: 5),
-
-        // Main container
-        Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 6,
-                offset: Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Column(
-            children: List.generate(items.length, (index) {
-              return Column(
-                children: [
-                  SettingsTile(
-                    item: items[index],
-                    iconBackgroundColor: iconBackgroundColor,
-                  ),
-                  if (index != items.length - 1) ...[
-                    const SizedBox(height: 15),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 33),
-                      height: 1,
-                      color: Colors.black.withValues(alpha: .2),
-                    ),
-                    const SizedBox(height: 15),
-                  ],
-                ],
-              );
-            }),
-          ),
-        ),
-      ],
+      child: SettingsTile(
+        item: item,
+        isExpanded: isExpanded,
+        iconBackgroundColor: iconBackgroundColor,
+      ),
     );
   }
 }
