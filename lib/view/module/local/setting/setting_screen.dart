@@ -3,6 +3,8 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/view/module/local/setting/widget/settings_widget.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
+import 'package:gb_ride/view/module/local/setting/logout/logout_screen.dart';
+import 'package:gb_ride/view/module/local/setting/delete/delete_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -31,7 +33,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.card,
         title: 'Manage Payment Methods',
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, '/paymentmethod');
+        },
       ),
     ];
 
@@ -63,7 +67,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final logout = SettingsItem(
       icons: SolarLinearIcons.logout,
       title: 'Logout',
-      onTap: () => _onTap(context, 'Logout'),
+      onTap: () => showLogoutConfirmation(context),
     );
 
     final delete = SettingsItem(
@@ -72,7 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       iconColor: Colors.red,
       textColor: Colors.red,
       arrowColor: Colors.red,
-      onTap: () => _onTap(context, 'Delete Account'),
+      onTap: () => showDeleteConfirmation(context),
     );
 
     return Scaffold(
