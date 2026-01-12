@@ -9,6 +9,7 @@ class ConfirmationDialogue extends StatelessWidget {
   final String confirmButtonText;
   final VoidCallback onConfirm;
   final Color confirmButtonColor;
+  final FontWeight fontweight;
 
   const ConfirmationDialogue({
     super.key,
@@ -17,6 +18,7 @@ class ConfirmationDialogue extends StatelessWidget {
     required this.confirmButtonText,
     required this.onConfirm,
     this.confirmButtonColor = Colors.orange,
+    this.fontweight = FontWeight.w500,
   });
 
   @override
@@ -35,7 +37,8 @@ class ConfirmationDialogue extends StatelessWidget {
             title,
             style: const TextStyle(
               fontSize: 20,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
+              fontFamily: 'Poppins',
               color: Colors.black,
             ),
           ),
@@ -44,7 +47,11 @@ class ConfirmationDialogue extends StatelessWidget {
           // Message
           Text(
             message,
-            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w400,
+            ),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
