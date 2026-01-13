@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/view/module/local/home/bottom_sheet/ride_flow/ride_flow_bottom_sheet.dart';
-import 'package:gb_ride/view/module/local/home/bottom_sheet/ride_flow/widgets/auto-accept_tile.dart';
+import 'package:gb_ride/view/module/local/home/bottom_sheet/ride_flow/widgets/auto_accept_tile.dart';
 import 'package:gb_ride/view/module/local/home/bottom_sheet/ride_flow/widgets/booking_button.dart';
 import 'package:gb_ride/view/module/local/home/bottom_sheet/ride_flow/widgets/bottom_sheet_title.dart';
 import 'package:gb_ride/view/module/local/home/bottom_sheet/ride_flow/widgets/location_container.dart';
@@ -29,6 +29,7 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
 
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context); // close bottom sheet

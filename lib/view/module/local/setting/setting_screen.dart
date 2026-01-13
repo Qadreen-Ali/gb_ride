@@ -26,6 +26,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.user,
         title: 'Profile Information',
+        
         onTap: () {
           Navigator.pushNamed(context, '/profile');
         },
@@ -99,7 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               const Text(
                 'Account',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               ...account.map(
@@ -112,7 +113,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(height: 20),
               const Text(
                 'Preferences',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               ...preferences.map(
@@ -125,7 +126,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(height: 20),
               const Text(
                 'Support & Legal',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               ...support.map(

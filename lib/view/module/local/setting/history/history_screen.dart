@@ -22,7 +22,7 @@ class HistoryScreen extends StatelessWidget {
       body: ListView.separated(
         padding: const EdgeInsets.only( bottom: 12),
         itemCount: 8,
-        separatorBuilder: (_, __) => Divider(
+        separatorBuilder: (_, _) => Divider(
           height: 1,
           thickness: 1,
           color: GBColor.linegrey, 
@@ -84,7 +84,7 @@ class _HistoryTile extends StatelessWidget {
           borderRadius: BorderRadius.zero, // ✅ removed radius
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha:0.03),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),

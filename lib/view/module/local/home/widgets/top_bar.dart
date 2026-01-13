@@ -28,8 +28,8 @@ class TopBar extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.black.withOpacity(0.6),
-              Colors.black.withOpacity(0.4),
+              Colors.black.withValues(alpha:0.6),
+              Colors.black.withValues(alpha:0.4),
               Colors.transparent,
             ],
           ),
@@ -43,7 +43,7 @@ class TopBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withValues(alpha:0.2),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -61,7 +61,7 @@ class TopBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
+                    color: Colors.black.withValues(alpha:0.2),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),

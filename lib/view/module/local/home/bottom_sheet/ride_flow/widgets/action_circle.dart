@@ -6,7 +6,7 @@ class ActionCircle extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;
 
-  const ActionCircle({required this.icon, required this.label, this.onTap});
+  const ActionCircle({super.key, required this.icon, required this.label, this.onTap});
 
   @override
   Widget build(BuildContext context) {

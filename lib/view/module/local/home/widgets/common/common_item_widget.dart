@@ -109,7 +109,7 @@ class CommonItemWidget extends StatelessWidget {
                 icon: Icons.call,
                 label: "Contact Driver",
                 onTap: () {
-                  // TODO: call driver logic
+                  // call driver logic
                 },
               ),
               ActionCircle(icon: Icons.verified, label: "Verified"),

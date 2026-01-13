@@ -8,9 +8,9 @@ class SafetyScreen extends StatelessWidget {
   const SafetyScreen({super.key});
 
   void _onTap(BuildContext context, String title) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Tapped $title')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Tapped $title')));
   }
 
   @override
@@ -52,7 +52,7 @@ class SafetyScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F7),
+      backgroundColor: GBColor.secondary,
       appBar: GlobalAppBar(
         title: 'Safety',
         profileImage: 'assets/icons/profile.jpg',
@@ -101,14 +101,14 @@ class SafetyScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    
+
                     // Divider
                     Container(
                       width: 1,
                       height: 30,
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha:0.3),
                     ),
-                    
+
                     // Center Emergency
                     Expanded(
                       flex: 2,
@@ -123,14 +123,14 @@ class SafetyScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    
+
                     // Divider
                     Container(
                       width: 1,
                       height: 30,
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha:0.3),
                     ),
-                    
+
                     // Right SOS
                     Expanded(
                       child: Center(
@@ -159,7 +159,7 @@ class SafetyScreen extends StatelessWidget {
               ...shareAndContacts.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item, isExpanded: true,),
+                  child: SettingsSingleContainer(item: item, isExpanded: true),
                 ),
               ),
 
@@ -174,7 +174,7 @@ class SafetyScreen extends StatelessWidget {
               ...safetyTools.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item, isExpanded: true,),
+                  child: SettingsSingleContainer(item: item, isExpanded: true),
                 ),
               ),
             ],

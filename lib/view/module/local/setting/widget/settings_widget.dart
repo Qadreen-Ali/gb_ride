@@ -42,7 +42,7 @@ class SettingsTile extends StatelessWidget {
     super.key,
     required this.item,
     required this.isExpanded,
-    this.iconBackgroundColor = GBColor.gray,
+    this.iconBackgroundColor = GBColor.lightGray,
   });
 
   @override
@@ -67,7 +67,7 @@ class SettingsTile extends StatelessWidget {
                       item.title,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                         color: item.textColor ?? GBColor.gray,
                       ),
                     ),
@@ -117,7 +117,7 @@ class SettingsTile extends StatelessWidget {
                           item.title,
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                             color: item.textColor ?? GBColor.gray,
                           ),
                         ),
@@ -184,7 +184,7 @@ class SettingsSingleContainer extends StatelessWidget {
     super.key,
     required this.item,
     required this.isExpanded,
-    this.iconBackgroundColor = GBColor.gray,
+    this.iconBackgroundColor = GBColor.lightGray,
     this.width = double.infinity,
     this.height = 56,
   });
