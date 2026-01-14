@@ -2,12 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
 
-class ProfileDrawer extends StatelessWidget {
-  const ProfileDrawer({super.key});
+class ProfileDrawer extends StatefulWidget {
+  const ProfileDrawer({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileDrawer> createState() => _ProfileDrawerState();
+}
+
+class _ProfileDrawerState extends State<ProfileDrawer> {
+  int _selectedIndex = -1; // -1 means nothing selected by default
+
+  void _onSelect(int index, VoidCallback action) {
+    setState(() => _selectedIndex = index);
+    action();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: GBColor.secondary,
+      width: 255,
       child: Container(
         color: Colors.white,
         child: Column(
@@ -15,10 +29,10 @@ class ProfileDrawer extends StatelessWidget {
             // Header with profile info
             Container(
               padding: const EdgeInsets.only(
-                top: 50,
+                top: 55,
                 left: 16,
                 right: 16,
-                bottom: 20,
+                bottom: 10,
               ),
               child: Row(
                 children: [
@@ -39,7 +53,6 @@ class ProfileDrawer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  // Profile text
                   const Expanded(
                     child: Text(
                       'Profile',
@@ -50,61 +63,111 @@ class ProfileDrawer extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Close button
-                  IconButton(
-                    icon: const Icon(Icons.close, color: Colors.black54),
-                    onPressed: () => Navigator.pop(context),
-                  ),
+
                 ],
               ),
             ),
 
+
             // Menu items
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+
                 children: [
                   DrawerMenuItem(
                     icon: Icons.home_outlined,
                     label: 'Home',
-                    isSelected: true,
-                    onTap: () {
+                    isSelected: _selectedIndex == 0,
+                    onTap: () => _onSelect(0, () {
                       Navigator.pop(context);
                       // Navigate to home
-                    },
+                    }),
                   ),
 
                   DrawerMenuItem(
                     image: Image.asset(GBImagePath.safety, fit: BoxFit.contain),
                     label: 'Safety',
                     imageColor: Colors.black,
-
-                    onTap: () {
+                    isSelected: _selectedIndex == 1,
+                    onTap: () => _onSelect(1, () {
                       Navigator.pushNamed(context, '/safety');
-                    },
+                    }),
                   ),
+
                   DrawerMenuItem(
                     icon: Icons.settings_sharp,
                     label: 'Setting',
-                    onTap: () {
+                    isSelected: _selectedIndex == 2,
+                    onTap: () => _onSelect(2, () {
                       Navigator.pushNamed(context, '/settings');
-                      // Navigate to safety
-                    },
-                  ),
-                  DrawerMenuItem(
-                    image: Image.asset(GBImagePath.help, fit: BoxFit.contain),
-                    label: 'Help',
-                    imageColor: Colors.black,
-                    onTap: () {},
+                    }),
                   ),
 
                   DrawerMenuItem(
-                    icon: Icons.history_outlined,
-                    label: 'History',
-                    onTap: () {
-                      Navigator.pushNamed(context, '/history');
-                      // Navigate to history
-                    },
+                    icon: Icons.help_outline,
+                    label: 'Help',
+                    imageColor: Colors.black,
+                    isSelected: _selectedIndex == 3,
+                    onTap: () => _onSelect(3, () {
+                      Navigator.pushNamed(context, '/help');
+                    }),
+                  ),
+                ],
+              ),
+            ),
+
+            // History
+            InkWell(
+              onTap: (){
+               // Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen(),));
+              },
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.pushNamed(context, '/history');
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  child: Container(
+                    width: double.infinity,
+                    height: 54,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: GBColor.borderColor),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Icon(Icons.history),
+                          SizedBox(width: 12),
+                          Text(
+                            "History",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // Social Icons
+            Padding(
+              padding: const EdgeInsets.only(bottom: 40.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.facebook, color: Colors.blue, size: 30),
+                  const SizedBox(width: 15),
+                  Image(
+                    image: AssetImage(GBImagePath.google),
+                    width: 25,
+                    height: 25,
                   ),
                 ],
               ),
@@ -126,7 +189,7 @@ class DrawerMenuItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const DrawerMenuItem({
-    super.key,
+    Key? key,
     this.icon,
     this.image,
     required this.label,
@@ -134,14 +197,14 @@ class DrawerMenuItem extends StatelessWidget {
     required this.onTap,
     this.imageColor,
     this.selectedImageColor,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: isSelected ? GBColor.primary : GBColor.secondary,
-        borderRadius: BorderRadius.circular(8),
+
       ),
       child: ListTile(
         leading: _buildIcon(),
@@ -149,7 +212,7 @@ class DrawerMenuItem extends StatelessWidget {
           label,
           style: TextStyle(
             fontSize: 18,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
             color: isSelected ? GBColor.secondary : Colors.black,
           ),
         ),

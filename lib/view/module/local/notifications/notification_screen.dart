@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-
+import '../../../../utils/constants/custom_app-bar.dart';
+import '../../../../utils/constants/image_string.dart';
 import 'all_notifications_screen.dart';
 import 'message_notifiactions_screen.dart';
 
@@ -15,12 +15,33 @@ class NotificationScreen extends StatelessWidget {
       // indicatorColor:Colors.grey,
       child: Scaffold(
         backgroundColor: GBColor.secondary,
-        appBar: GlobalAppBar(
-          profileImage: 'assets/icons/profile.jpg',
-          title: 'Notications',
-          showProfile: true,
-          onCloseTap: () => Navigator.pop(context),
-          onProfileTap: () {},
+        appBar: CustomAppBar(
+          leading: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: GBColor.primary,
+                  shape: BoxShape.circle,
+                  image: DecorationImage(image:  AssetImage(GBImagePath.profile))
+              ),
+            ),
+          ),
+          title: 'Notifications',
+          actions: [Padding(
+            padding: const EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color:GBColor.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.close, color:GBColor.secondary),
+              ),
+            ),
+          ),],
         ),
 
         body: Column(

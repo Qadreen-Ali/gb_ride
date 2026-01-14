@@ -109,7 +109,7 @@ class CommonItemWidget extends StatelessWidget {
                 icon: Icons.call,
                 label: "Contact Driver",
                 onTap: () {
-                  // TODO: call driver logic
+                  // call driver logic
                 },
               ),
               ActionCircle(icon: Icons.verified, label: "Verified"),
@@ -152,10 +152,12 @@ class CommonItemWidget extends StatelessWidget {
             ],
           ),
         ),
+        const SizedBox(height: 8  ),
+
 
         /// Payment
         TTextField(
-          titleText: 'PKR60',
+          titleText: 'Payment',
           hintText: 'PKR60',
           hintTextColor: Colors.black,
           prefixIcon: Image(image: AssetImage(GBImagePath.card), width: 28),

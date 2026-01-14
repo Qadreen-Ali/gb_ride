@@ -1,10 +1,10 @@
-// FILE: lib/screens/ride_history_detail_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
+
+import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/image_string.dart';
 
 class RideHistoryDetailScreen extends StatelessWidget {
   final String date;
@@ -30,11 +30,33 @@ class RideHistoryDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
-      appBar: GlobalAppBar(
-        title: 'Ride Details',
-        showProfile: true,
-        profileImage: 'assets/icons/profile.jpg',
-        onCloseTap: () => Navigator.pop(context),
+      appBar: CustomAppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+                color: GBColor.primary,
+                shape: BoxShape.circle,
+                image: DecorationImage(image:  AssetImage(GBImagePath.profile))
+            ),
+          ),
+        ),
+        title: 'Ride details',
+        actions: [Padding(
+          padding: const EdgeInsets.all(8),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color:GBColor.primary,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.close, color:GBColor.secondary),
+            ),
+          ),
+        ),],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -70,8 +92,18 @@ class RideHistoryDetailScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+                       const SizedBox(width: 6),
+                       const Spacer(),
+                        const Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 20,
+                          color: Colors.black,
+                        ),
+
                     ],
+                    
                   ),
+                 
                 ],
               ),
             ),
@@ -102,7 +134,7 @@ class RideHistoryDetailScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha:0.1),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -125,6 +157,7 @@ class RideHistoryDetailScreen extends StatelessWidget {
       ),
     );
   }
+
 
   /// ================= FARE =================
   Widget _fareCard() {
@@ -262,7 +295,7 @@ class RideHistoryDetailScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

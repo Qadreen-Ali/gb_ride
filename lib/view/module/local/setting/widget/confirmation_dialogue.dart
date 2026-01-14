@@ -9,6 +9,7 @@ class ConfirmationDialogue extends StatelessWidget {
   final String confirmButtonText;
   final VoidCallback onConfirm;
   final Color confirmButtonColor;
+  // final FontWeight fontweight;
 
   const ConfirmationDialogue({
     super.key,
@@ -17,6 +18,7 @@ class ConfirmationDialogue extends StatelessWidget {
     required this.confirmButtonText,
     required this.onConfirm,
     this.confirmButtonColor = Colors.orange,
+    // this.fontweight = FontWeight.w500,
   });
 
   @override
@@ -35,8 +37,10 @@ class ConfirmationDialogue extends StatelessWidget {
             title,
             style: const TextStyle(
               fontSize: 20,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w500,
+              //fontFamily: 'Poppins',
               color: Colors.black,
+              decoration: TextDecoration.none,
             ),
           ),
           const SizedBox(height: 12),
@@ -44,8 +48,14 @@ class ConfirmationDialogue extends StatelessWidget {
           // Message
           Text(
             message,
-            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
-            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w400,
+            //  fontFamily: 'Poppins',
+              decoration: TextDecoration.none,
+            ),
+            // textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
 
@@ -124,7 +134,7 @@ void showConfirmationDialogue(
     builder: (context) => BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
       child: Container(
-        color: Colors.black.withOpacity(0.3),
+        color: Colors.black.withValues(alpha: 0.3),
         child: Align(
           alignment: Alignment.bottomCenter,
           child: ConfirmationDialogue(

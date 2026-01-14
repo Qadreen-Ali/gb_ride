@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
+
+import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/image_string.dart';
 
 class PaymentMethodsScreen extends StatefulWidget {
   const PaymentMethodsScreen({super.key});
@@ -16,11 +18,24 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F7),
-      appBar: GlobalAppBar(
-        title: 'Payment Methods',
-        showProfile: false,
-        onCloseTap: () => Navigator.pop(context),
+      backgroundColor: GBColor.secondary,
+      appBar: CustomAppBar(showLeading: false,
+        title: 'Payment Method',
+        actions: [Padding(
+          padding: const EdgeInsets.all(8),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color:GBColor.primary,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.close, color:GBColor.secondary),
+            ),
+          ),
+        ),],
       ),
       body: Column(
         children: [
@@ -44,8 +59,15 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                   // Add a card option
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: GBColor.secondary,
                       borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 6,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
                     ),
                     child: ListTile(
                       contentPadding: const EdgeInsets.symmetric(
@@ -56,8 +78,15 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(8),
+                          color: GBColor.secondary,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
                         ),
                         child: const Icon(
                           Icons.credit_card,
@@ -104,6 +133,13 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 6,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
                     ),
                     child: Column(
                       children: [
@@ -149,7 +185,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
               color: Colors.white,
               // boxShadow: [
               //   BoxShadow(
-              //     color: Colors.black.withOpacity(0.05),
+              //     color: Colors.black.withValues(alpha:0.05),
               //     blurRadius: 10,
               //     offset: const Offset(0, -5),
               //   ),
@@ -185,7 +221,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
     );
   }
 
-    Widget _buildPaymentOption({
+  Widget _buildPaymentOption({
     required String icon,
     required String label,
     required String value,
@@ -204,7 +240,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             color: isSelected
-                ? GBColor.primary.withOpacity(0.08)
+                ? GBColor.primary.withValues(alpha:0.08)
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
           ),
@@ -219,10 +255,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 padding: const EdgeInsets.all(6),
-                child: Image.asset(
-                  icon,
-                  fit: BoxFit.contain,
-                ),
+                child: Image.asset(icon, fit: BoxFit.contain),
               ),
 
               const SizedBox(width: 12),
@@ -234,8 +267,7 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
-                    color:
-                        isSelected ? GBColor.primary : Colors.black87,
+                    color: isSelected ? GBColor.primary : Colors.black87,
                   ),
                 ),
               ),
@@ -245,5 +277,4 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
       ),
     );
   }
-
 }

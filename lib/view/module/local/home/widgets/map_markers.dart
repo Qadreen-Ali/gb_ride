@@ -30,7 +30,7 @@ class MapMarkers extends StatelessWidget {
               border: Border.all(color: Colors.white, width: 3),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blue.withOpacity(0.5),
+                  color: Colors.blue.withValues(alpha:0.5),
                   blurRadius: 10,
                   spreadRadius: 2,
                 ),
@@ -60,7 +60,7 @@ class MapMarkers extends StatelessWidget {
                     border: Border.all(color: Colors.white, width: 3),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.green.withOpacity(0.5),
+                        color: Colors.green.withValues(alpha:0.5),
                         blurRadius: 10,
                         spreadRadius: 2,
                       ),
@@ -97,7 +97,7 @@ class MapMarkers extends StatelessWidget {
                     border: Border.all(color: Colors.white, width: 3),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.red.withOpacity(0.5),
+                        color: Colors.red.withValues(alpha:0.5),
                         blurRadius: 10,
                         spreadRadius: 2,
                       ),
