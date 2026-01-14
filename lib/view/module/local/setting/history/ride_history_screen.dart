@@ -158,6 +158,7 @@ class RideHistoryDetailScreen extends StatelessWidget {
     );
   }
 
+
   /// ================= FARE =================
   Widget _fareCard() {
     return Container(

@@ -67,6 +67,7 @@ class HistoryScreen extends StatelessWidget {
   }
 }
 
+
 class _HistoryTile extends StatelessWidget {
   final String date;
   final String pickupLocation;
