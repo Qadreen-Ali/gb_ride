@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import 'package:gb_ride/view/module/local/history/ride_history_screen.dart';
+import 'package:gb_ride/view/module/local/setting/history/ride_history_screen.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
@@ -20,12 +20,12 @@ class HistoryScreen extends StatelessWidget {
         },
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.only( bottom: 12),
+        padding: const EdgeInsets.only(bottom: 12),
         itemCount: 8,
         separatorBuilder: (_, __) => Divider(
           height: 1,
           thickness: 1,
-          color: GBColor.linegrey, 
+          color: GBColor.linegrey,
           indent: 16,
           endIndent: 16,
         ),
@@ -100,10 +100,7 @@ class _HistoryTile extends StatelessWidget {
                   /// DATE
                   Text(
                     date,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.black,
-                    ),
+                    style: const TextStyle(fontSize: 12, color: Colors.black),
                   ),
                   const SizedBox(height: 10),
 
@@ -156,10 +153,7 @@ class _HistoryTile extends StatelessWidget {
             /// FARE
             Text(
               fare,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -173,10 +167,7 @@ class _LocationIndicator extends StatelessWidget {
   final Color color;
   final bool showLine;
 
-  const _LocationIndicator({
-    required this.color,
-    required this.showLine,
-  });
+  const _LocationIndicator({required this.color, required this.showLine});
 
   @override
   Widget build(BuildContext context) {
@@ -193,10 +184,7 @@ class _LocationIndicator extends StatelessWidget {
             child: Container(
               width: 8,
               height: 8,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
             ),
           ),
         ),
@@ -204,9 +192,7 @@ class _LocationIndicator extends StatelessWidget {
           Container(
             height: 18,
             margin: const EdgeInsets.only(top: 2),
-            child: CustomPaint(
-              painter: _DottedLinePainter(),
-            ),
+            child: CustomPaint(painter: _DottedLinePainter()),
           ),
       ],
     );
