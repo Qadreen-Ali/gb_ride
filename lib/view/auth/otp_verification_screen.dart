@@ -60,124 +60,127 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
     return Scaffold(
       backgroundColor: GBColor.secondary,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 60),
-            Text(
-              GBText.verificationCode,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 24,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              GBText.codeSent,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 12,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                color: GBColor.gray,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              ' ${widget.phoneNumber}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                color: GBColor.primary,
-              ),
-            ),
-            const SizedBox(height: 60),
-            OTPField(
-              length: 6,
-              fieldWidth: 45,
-              fieldHeight: 50,
-              spacing: 10,
-              onChanged: (value) {
-                setState(() {
-                  _otp = value;
-                });
-                logger.i('OTP Changed: $value');
-              },
-              onCompleted: (value) {
-                setState(() {
-                  _otp = value;
-                });
-                logger.i('OTP Completed: $value');
-              },
-            ),
-            const SizedBox(height: 20),
-            SecondaryButton(title: GBText.continueBtn, onPressed: _verifyOtp),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                InkWell(
-                  onTap: _resendOtp,
-                  child: Text(
-                    GBText.resendcode,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w500,
-                      color: GBColor.primary,
-                    ),
-                  ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 60),
+              Text(
+                GBText.verificationCode,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
                 ),
-                const Spacer(),
-                Text(
-                  GBText.sendBySMS,
-                  style: const TextStyle(
-                    color: GBColor.textFieldText,
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            const Spacer(),
-            RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
+              ),
+              const SizedBox(height: 12),
+              Text(
+                GBText.codeSent,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 12,
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   color: GBColor.gray,
                 ),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                ' ${widget.phoneNumber}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                  color: GBColor.primary,
+                ),
+              ),
+              const SizedBox(height: 60),
+              OTPField(
+                length: 6,
+                fieldWidth: 45,
+                fieldHeight: 50,
+                spacing: 10,
+                onChanged: (value) {
+                  setState(() {
+                    _otp = value;
+                  });
+                  logger.i('OTP Changed: $value');
+                },
+                onCompleted: (value) {
+                  setState(() {
+                    _otp = value;
+                  });
+                  logger.i('OTP Completed: $value');
+                },
+              ),
+              const SizedBox(height: 20),
+              SecondaryButton(title: GBText.continueBtn, onPressed: _verifyOtp),
+              const SizedBox(height: 10),
+              Row(
                 children: [
-                  const TextSpan(text: "By Continuing you agree to our "),
-                  TextSpan(
-                    text: GBText.termsofServices,
-                    style: const TextStyle(color: GBColor.primary),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        logger.i('Terms of Services Tapped');
-                      },
+                  InkWell(
+                    onTap: _resendOtp,
+                    child: Text(
+                      GBText.resendcode,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        color: GBColor.primary,
+                      ),
+                    ),
                   ),
-                  const TextSpan(text: " and "),
-                  TextSpan(
-                    text: GBText.privacyPolicy,
-                    style: const TextStyle(color: GBColor.primary),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        logger.i('Privacy Policy Tapped');
-                      },
+                  const Spacer(),
+                  Text(
+                    GBText.sendBySMS,
+                    style: const TextStyle(
+                      color: GBColor.textFieldText,
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                  const TextSpan(text: "."),
                 ],
               ),
-            ),
-            const SizedBox(height: 30),
-          ],
+              const SizedBox(height: 30),
+              const Spacer(),
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                    color: GBColor.gray,
+                  ),
+                  children: [
+                    const TextSpan(text: "By Continuing you agree to our "),
+                    TextSpan(
+                      text: GBText.termsofServices,
+                      style: const TextStyle(color: GBColor.primary),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          logger.i('Terms of Services Tapped');
+                        },
+                    ),
+                    const TextSpan(text: " and "),
+                    TextSpan(
+                      text: GBText.privacyPolicy,
+                      style: const TextStyle(color: GBColor.primary),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          logger.i('Privacy Policy Tapped');
+                        },
+                    ),
+                    const TextSpan(text: "."),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
       ),
     );

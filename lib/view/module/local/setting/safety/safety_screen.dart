@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/view/module/local/setting/widget/settings_widget.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
+
+import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/image_string.dart';
 
 class SafetyScreen extends StatelessWidget {
   const SafetyScreen({super.key});
 
   void _onTap(BuildContext context, String title) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Tapped $title')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Tapped $title')));
   }
 
   @override
@@ -52,13 +54,36 @@ class SafetyScreen extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F7),
-      appBar: GlobalAppBar(
+      backgroundColor: GBColor.secondary,
+      appBar: CustomAppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: GBColor.primary,
+              shape: BoxShape.circle,
+              image: DecorationImage(image: AssetImage(GBImagePath.profile)),
+            ),
+          ),
+        ),
         title: 'Safety',
-        profileImage: 'assets/icons/profile.jpg',
-        showProfile: true,
-        onCloseTap: () => Navigator.pop(context),
-        onProfileTap: () {},
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: GBColor.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.close, color: GBColor.secondary),
+              ),
+            ),
+          ),
+        ],
       ),
       body: ScrollConfiguration(
         behavior: ScrollBehavior().copyWith(
@@ -71,13 +96,22 @@ class SafetyScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 12,),
               /// Subtitle
-              const Text(
-                'Your safety is our priority. Access tools and resources to help you feel secure',
-                style: TextStyle(color: GBColor.black, fontSize: 13),
+              Center(
+                child: const Text(
+                  'Your safety is our priority. Access tools and\nresources to help you feel secure',
+                  style: TextStyle(
+                    color: GBColor.black,
+                    fontSize: 15,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
 
               /// SOS Button
               Container(
@@ -101,14 +135,14 @@ class SafetyScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    
+
                     // Divider
                     Container(
                       width: 1,
                       height: 30,
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                     ),
-                    
+
                     // Center Emergency
                     Expanded(
                       flex: 2,
@@ -123,14 +157,14 @@ class SafetyScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    
+
                     // Divider
                     Container(
                       width: 1,
                       height: 30,
-                      color: Colors.white.withOpacity(0.3),
+                      color: Colors.white.withValues(alpha: 0.3),
                     ),
-                    
+
                     // Right SOS
                     Expanded(
                       child: Center(
@@ -159,7 +193,7 @@ class SafetyScreen extends StatelessWidget {
               ...shareAndContacts.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item, isExpanded: true,),
+                  child: SettingsSingleContainer(item: item, isExpanded: true),
                 ),
               ),
 
@@ -174,7 +208,7 @@ class SafetyScreen extends StatelessWidget {
               ...safetyTools.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item, isExpanded: true,),
+                  child: SettingsSingleContainer(item: item, isExpanded: true),
                 ),
               ),
             ],

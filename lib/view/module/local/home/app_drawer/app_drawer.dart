@@ -21,7 +21,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: GBColor.secondary,
-      width: 250,
+      width: 255,
       child: Container(
         color: Colors.white,
         child: Column(
@@ -90,7 +90,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     imageColor: Colors.black,
                     isSelected: _selectedIndex == 1,
                     onTap: () => _onSelect(1, () {
-                      // your safety logic
+                      Navigator.pushNamed(context, '/safety');
                     }),
                   ),
 
@@ -109,7 +109,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     imageColor: Colors.black,
                     isSelected: _selectedIndex == 3,
                     onTap: () => _onSelect(3, () {
-                      // your help logic
+                      Navigator.pushNamed(context, '/help');
                     }),
                   ),
                 ],
@@ -121,30 +121,35 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               onTap: (){
                // Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen(),));
               },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                child: Container(
-                  width: double.infinity,
-                  height: 54,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: GBColor.borderColor),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Icon(Icons.history),
-                        SizedBox(width: 12),
-                        Text(
-                          "History",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.pushNamed(context, '/history');
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  child: Container(
+                    width: double.infinity,
+                    height: 54,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: GBColor.borderColor),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Icon(Icons.history),
+                          SizedBox(width: 12),
+                          Text(
+                            "History",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

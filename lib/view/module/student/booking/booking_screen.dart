@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// TODO: Add these imports based on your data source:
+// Add these imports based on your data source:
 // import 'package:http/http.dart' as http;  // For API calls
 // For JSON parsing
 
@@ -28,7 +28,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
 
   /// Fetch ongoing bookings from your backend
   Future<List<Map<String, dynamic>>> _fetchOngoingBookings() async {
-    // TODO: Replace with your actual API call
+    // Replace with your actual API call
     await Future.delayed(const Duration(seconds: 1)); // Simulate network delay
     
     return [
@@ -50,7 +50,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
 
   /// Fetch completed bookings from your backend
   Future<List<Map<String, dynamic>>> _fetchCompletedBookings() async {
-    // TODO: Replace with your actual API call
+    // Replace with your actual API call
     await Future.delayed(const Duration(seconds: 1));
     
     return [
@@ -72,7 +72,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
 
   /// Fetch cancelled bookings from your backend
   Future<List<Map<String, dynamic>>> _fetchCancelledBookings() async {
-    // TODO: Replace with your actual API call
+    // Replace with your actual API call
     await Future.delayed(const Duration(seconds: 1));
     
     return [
@@ -155,7 +155,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     if (isSelected) {
       switch (title) {
         case 'Ongoing':
-          backgroundColor = const Color(0xFF00C853).withOpacity(0.1);
+          backgroundColor = const Color(0xFF00C853).withValues(alpha:0.1);
           textColor = const Color(0xFF00C853);
           break;
         case 'Completed':
@@ -163,7 +163,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
           textColor = Colors.black87;
           break;
         case 'Cancelled':
-          backgroundColor = const Color(0xFFE53935).withOpacity(0.1);
+          backgroundColor = const Color(0xFFE53935).withValues(alpha:0.1);
           textColor = const Color(0xFFE53935);
           break;
         default:
@@ -188,7 +188,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
           borderRadius: BorderRadius.circular(20),
           border: isSelected
               ? Border.all(
-                  color: textColor.withOpacity(0.3),
+                  color: textColor.withValues(alpha:0.3),
                   width: 1,
                 )
               : null,
@@ -263,6 +263,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     final status = booking['status'] as String;
     final isOngoing = status == 'Ongoing';
     final isCompleted = status == 'Completed';
+    // ignore: unused_local_variable
     final isCancelled = status == 'Cancelled';
     final hasDriver = (booking['driver'] as String).isNotEmpty;
     
@@ -282,7 +283,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha:0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -377,7 +378,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
                 borderRadius: BorderRadius.circular(6),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withValues(alpha:0.1),
                     blurRadius: 4,
                   ),
                 ],
@@ -401,7 +402,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
@@ -433,9 +434,9 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.orange.withOpacity(0.1),
+        color: Colors.orange.withValues(alpha:0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.orange.withOpacity(0.3)),
+        border: Border.all(color: Colors.orange.withValues(alpha:0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -638,7 +639,7 @@ class _BookingScreenState extends State<BookingScreen> with SingleTickerProvider
   }
 
   void _viewBookingDetails(Map<String, dynamic> booking) {
-    // TODO: Navigate to booking details screen
+    // Navigate to booking details screen
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

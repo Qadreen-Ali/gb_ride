@@ -1,9 +1,8 @@
-// FILE: lib/screens/history_screen.dart
-
 import 'package:flutter/material.dart';
-import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import 'package:gb_ride/view/module/local/history/ride_history_screen.dart';
+import 'package:gb_ride/view/module/local/setting/history/ride_history_screen.dart';
+
+import '../../../../../utils/constants/custom_app-bar.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
@@ -12,17 +11,29 @@ class HistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
-      appBar: GlobalAppBar(
+      appBar: CustomAppBar(
+       showLeading: false,
         title: 'History',
-        showProfile: false,
-        onCloseTap: () {
-          Navigator.pop(context);
-        },
+        actions: [Padding(
+          padding: const EdgeInsets.all(8),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color:GBColor.primary,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.close, color:GBColor.secondary),
+            ),
+          ),
+        ),],
       ),
       body: ListView.separated(
         padding: const EdgeInsets.only( bottom: 12),
         itemCount: 8,
-        separatorBuilder: (_, __) => Divider(
+        separatorBuilder: (_, _) => Divider(
           height: 1,
           thickness: 1,
           color: GBColor.linegrey, 
@@ -84,7 +95,7 @@ class _HistoryTile extends StatelessWidget {
           borderRadius: BorderRadius.zero, // ✅ removed radius
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.03),
+              color: Colors.black.withValues(alpha:0.03),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),

@@ -4,7 +4,7 @@ import 'package:gb_ride/view/module/local/setting/widget/settings_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactUsScreen extends StatelessWidget {
-  ContactUsScreen({super.key});
+  const ContactUsScreen({super.key});
 
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
@@ -61,7 +61,7 @@ class ContactUsScreen extends StatelessWidget {
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: contactItems.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
+        separatorBuilder: (_, _) => const SizedBox(height: 12),
         itemBuilder: (context, index) {
           // WhatsApp tile taller
           final isWhatsApp = index == 0;

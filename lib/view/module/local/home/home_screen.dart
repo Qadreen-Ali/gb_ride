@@ -104,6 +104,7 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
       if (permission == LocationPermission.whileInUse ||
           permission == LocationPermission.always) {
         Position position = await Geolocator.getCurrentPosition(
+          // ignore: deprecated_member_use
           desiredAccuracy: LocationAccuracy.high,
         );
 
