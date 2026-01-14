@@ -9,8 +9,9 @@ import 'package:gb_ride/view/module/local/home/bottom_sheet/find_driver_bottom_s
 import 'package:gb_ride/view/module/local/home/widgets/location_input_field.dart';
 import 'package:gb_ride/view/module/local/home/widgets/vehicle_option.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class HomeBottomSheet extends StatelessWidget {
+class HomeBottomSheet extends StatefulWidget {
   // final ScrollController scrollController;
 
   final TextEditingController pickupController;
@@ -33,6 +34,7 @@ class HomeBottomSheet extends StatelessWidget {
   final void Function(LatLng position, String displayName)
   onDestinationSelected;
 
+
   const HomeBottomSheet({
     super.key,
     // required this.scrollController,
@@ -51,6 +53,33 @@ class HomeBottomSheet extends StatelessWidget {
     required this.onPickupTap,
     required this.onDestinationTap,
   });
+
+  @override
+  State<HomeBottomSheet> createState() => _HomeBottomSheetState();
+}
+
+class _HomeBottomSheetState extends State<HomeBottomSheet> {
+  Future<void> openWhatsAppChat({
+    required String phoneNumber,
+    String message = '',
+  }) async {
+    final Uri uri = Uri.parse(
+      'whatsapp://send?phone=$phoneNumber&text=${Uri.encodeComponent(message)}',
+    );
+
+    try {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      debugPrint('WhatsApp not installed');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('WhatsApp not installed')),
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +113,13 @@ class HomeBottomSheet extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: LocationInputField(
-                  controller: pickupController,
+                  controller: widget.pickupController,
                   hintText: 'From',
                   // themeColor: GBColor.secondary,
                   iconColor: GBColor.black,
                   iconData: Icons.radio_button_checked,
-                  onMapIconPressed: onStartPickupSelection,
-                  onTap: onPickupTap,
+                  onMapIconPressed: widget.onStartPickupSelection,
+                  onTap: widget.onPickupTap,
                 ),
               ),
               const SizedBox(height: 12),
@@ -99,12 +128,12 @@ class HomeBottomSheet extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: LocationInputField(
-                  controller: destinationController,
+                  controller: widget.destinationController,
                   hintText: 'To',
                   iconData: Icons.location_on,
                   iconColor: GBColor.primary,
-                  onTap: onDestinationTap,
-                  onMapIconPressed: onStartDestinationSelection,
+                  onTap: widget.onDestinationTap,
+                  onMapIconPressed: widget.onStartDestinationSelection,
                 ),
               ),
 
@@ -124,8 +153,8 @@ class HomeBottomSheet extends StatelessWidget {
                         label: 'Car',
                         iconPath: 'assets/icons/car.png',
                         capacity: 4,
-                        isSelected: selectedVehicle == 'car',
-                        onTap: () => onVehicleSelect('car'),
+                        isSelected: widget.selectedVehicle == 'car',
+                        onTap: () => widget.onVehicleSelect('car'),
                       ),
                       const SizedBox(width: 15),
                       VehicleOptionCard(
@@ -133,8 +162,8 @@ class HomeBottomSheet extends StatelessWidget {
                         label: 'City',
                         iconPath: 'assets/icons/road-trip.png',
                         capacity: 4,
-                        isSelected: selectedVehicle == 'city',
-                        onTap: () => onVehicleSelect('city'),
+                        isSelected: widget.selectedVehicle == 'city',
+                        onTap: () => widget.onVehicleSelect('city'),
                       ),
                       const SizedBox(width: 15),
                       VehicleOptionCard(
@@ -142,8 +171,8 @@ class HomeBottomSheet extends StatelessWidget {
                         label: 'Bike',
                         iconPath: 'assets/icons/motorbike.png',
                         capacity: 1,
-                        isSelected: selectedVehicle == 'bike',
-                        onTap: () => onVehicleSelect('bike'),
+                        isSelected: widget.selectedVehicle == 'bike',
+                        onTap: () => widget.onVehicleSelect('bike'),
                       ),
                     ],
                   ),
@@ -211,11 +240,9 @@ class HomeBottomSheet extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FareBottomSheet(),
-                          ),
+                        openWhatsAppChat(
+                          phoneNumber: '923554445863',
+                          message: 'Hello! I need help with my ride.',
                         );
                       },
                       child: Image.asset(GBImagePath.chat, width: 44),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
+
+import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/image_string.dart';
 
 class PaymentMethodsScreen extends StatefulWidget {
   const PaymentMethodsScreen({super.key});
@@ -17,10 +19,23 @@ class _PaymentMethodsScreenState extends State<PaymentMethodsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: GBColor.secondary,
-      appBar: GlobalAppBar(
-        title: 'Payment Methods',
-        showProfile: false,
-        onCloseTap: () => Navigator.pop(context),
+      appBar: CustomAppBar(showLeading: false,
+        title: 'Payment Method',
+        actions: [Padding(
+          padding: const EdgeInsets.all(8),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color:GBColor.primary,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.close, color:GBColor.secondary),
+            ),
+          ),
+        ),],
       ),
       body: Column(
         children: [

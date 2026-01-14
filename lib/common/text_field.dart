@@ -55,7 +55,20 @@ class _TTextFieldState extends State<TTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 15),
+
+
+        if (widget.titleText != null && widget.titleText!.isNotEmpty)
+          Text(
+            widget.titleText!,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: GBColor.gray,
+            ),
+          ),
+
+
+        const SizedBox(height: 10),
         SizedBox(
           width: 378,
           height: 48,

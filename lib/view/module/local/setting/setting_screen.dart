@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import 'package:gb_ride/utils/constants/global_appbar.dart';
+import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/view/module/local/setting/widget/settings_widget.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 import 'package:gb_ride/view/module/local/setting/logout/logout_screen.dart';
 import 'package:gb_ride/view/module/local/setting/delete/delete_screen.dart';
+
+import '../../../../utils/constants/custom_app-bar.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -82,12 +84,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Scaffold(
       backgroundColor: GBColor.secondary,
-      appBar: GlobalAppBar(
+      appBar: CustomAppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: GBColor.primary,
+              shape: BoxShape.circle,
+              image: DecorationImage(image:  AssetImage(GBImagePath.profile))
+            ),
+          ),
+        ),
         title: 'Settings',
-        profileImage: 'assets/icons/profile.jpg',
-        onCloseTap: () => Navigator.pop(context),
+        actions: [Padding(
+          padding: const EdgeInsets.all(8),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color:GBColor.primary,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.close, color:GBColor.secondary),
+            ),
+          ),
+        ),],
       ),
-      body: ScrollConfiguration(
+
+        body: ScrollConfiguration(
         behavior: ScrollBehavior().copyWith(
           overscroll: false, // removes glow
           scrollbars: false, // removes scroll bar

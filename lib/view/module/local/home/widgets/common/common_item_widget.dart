@@ -152,10 +152,12 @@ class CommonItemWidget extends StatelessWidget {
             ],
           ),
         ),
+        const SizedBox(height: 8  ),
+
 
         /// Payment
         TTextField(
-          titleText: 'PKR60',
+          titleText: 'Payment',
           hintText: 'PKR60',
           hintTextColor: Colors.black,
           prefixIcon: Image(image: AssetImage(GBImagePath.card), width: 28),

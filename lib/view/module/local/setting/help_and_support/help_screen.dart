@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/view/module/local/setting/help_and_support/contact_us.dart';
 import 'package:gb_ride/view/module/local/setting/help_and_support/faqs.dart';
+
+import '../../../../../utils/constants/custom_app-bar.dart';
 
 class HelpScreen extends StatelessWidget {
   const HelpScreen({super.key});
@@ -13,18 +14,31 @@ class HelpScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         backgroundColor: GBColor.secondary,
-        appBar: GlobalAppBar(
+        appBar:CustomAppBar(
           title: 'Help Center / FAQs',
-          onCloseTap: () => Navigator.pop(context),
-          showProfile: false,
+          leading: Padding(
+            padding: const EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color:GBColor.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.close, color: GBColor.secondary),
+              ),
+            ),
+          ),
         ),
-        body: Column(
+          body: Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: TabBar(
                 indicatorColor: Colors.grey.shade400,
-                indicatorWeight: 4,
+                indicatorWeight: 3,
                 indicatorSize: TabBarIndicatorSize.tab,
                 labelColor: GBColor.primary,
                 unselectedLabelColor: GBColor.textFieldText,

@@ -4,6 +4,9 @@ import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:logger/logger.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 
+import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/image_string.dart';
+
 class DriverRatingScreen extends StatefulWidget {
   final String driverName;
   final String driverImage;
@@ -45,33 +48,33 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        surfaceTintColor: GBColor.secondary,
-        leading: IconButton(
-          icon: Container(
-            padding: const EdgeInsets.all(8),
+      appBar: CustomAppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
             decoration: BoxDecoration(
-              color: GBColor.primary,
-              shape: BoxShape.circle,
+                color: GBColor.primary,
+                shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.close, color: Colors.white, size: 20),
+            child: Icon(Icons.notifications_none, color: GBColor.secondary,),
           ),
-          onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: CircleAvatar(
-              backgroundColor: GBColor.primary,
-              child: const Icon(
-                Icons.notifications_none_outlined,
-                color: Colors.white,
+        title: 'Rating',
+        actions: [Padding(
+          padding: const EdgeInsets.all(8),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color:GBColor.primary,
+                shape: BoxShape.circle,
               ),
+              child: const Icon(Icons.close, color:GBColor.secondary),
             ),
           ),
-        ],
+        ),],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),

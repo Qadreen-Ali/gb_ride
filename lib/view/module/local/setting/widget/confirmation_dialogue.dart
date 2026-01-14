@@ -38,7 +38,7 @@ class ConfirmationDialogue extends StatelessWidget {
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
-              fontFamily: 'Poppins',
+              //fontFamily: 'Poppins',
               color: Colors.black,
               decoration: TextDecoration.none,
             ),
@@ -52,7 +52,7 @@ class ConfirmationDialogue extends StatelessWidget {
               fontSize: 14,
               color: Colors.grey.shade600,
               fontWeight: FontWeight.w400,
-              fontFamily: 'Poppins',
+            //  fontFamily: 'Poppins',
               decoration: TextDecoration.none,
             ),
             // textAlign: TextAlign.center,

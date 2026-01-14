@@ -1,9 +1,8 @@
-// FILE: lib/screens/history_screen.dart
-
 import 'package:flutter/material.dart';
-import 'package:gb_ride/utils/constants/global_appbar.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/view/module/local/setting/history/ride_history_screen.dart';
+
+import '../../../../../utils/constants/custom_app-bar.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});
@@ -12,22 +11,32 @@ class HistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
-      appBar: GlobalAppBar(
+      appBar: CustomAppBar(
+       showLeading: false,
         title: 'History',
-        showProfile: false,
-        onCloseTap: () {
-          Navigator.pop(context);
-        },
+        actions: [Padding(
+          padding: const EdgeInsets.all(8),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color:GBColor.primary,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.close, color:GBColor.secondary),
+            ),
+          ),
+        ),],
       ),
       body: ListView.separated(
         padding: const EdgeInsets.only( bottom: 12),
         itemCount: 8,
         separatorBuilder: (_, _) => Divider(
           height: 1,
-          thickness: 1,
+          thickness: 1, 
           color: GBColor.linegrey, 
-          indent: 16,
-          endIndent: 16,
         ),
         itemBuilder: (context, index) {
           return _HistoryTile(
@@ -81,7 +90,7 @@ class _HistoryTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.zero, // ✅ removed radius
+          borderRadius: BorderRadius.zero, 
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha:0.03),
@@ -101,8 +110,9 @@ class _HistoryTile extends StatelessWidget {
                   Text(
                     date,
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 16,
                       color: Colors.black,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -133,7 +143,7 @@ class _HistoryTile extends StatelessWidget {
                               pickupLocation,
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                             const SizedBox(height: 26),
@@ -141,7 +151,7 @@ class _HistoryTile extends StatelessWidget {
                               destinationLocation,
                               style: const TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w400,
                               ),
                             ),
                           ],
@@ -157,8 +167,8 @@ class _HistoryTile extends StatelessWidget {
             Text(
               fare,
               style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
@@ -191,8 +201,8 @@ class _LocationIndicator extends StatelessWidget {
           ),
           child: Center(
             child: Container(
-              width: 8,
-              height: 8,
+              width: 12,
+              height: 12,
               decoration: BoxDecoration(
                 color: color,
                 shape: BoxShape.circle,
@@ -202,7 +212,7 @@ class _LocationIndicator extends StatelessWidget {
         ),
         if (showLine)
           Container(
-            height: 18,
+            height: 20,
             margin: const EdgeInsets.only(top: 2),
             child: CustomPaint(
               painter: _DottedLinePainter(),

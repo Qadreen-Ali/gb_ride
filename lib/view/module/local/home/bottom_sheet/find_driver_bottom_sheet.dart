@@ -141,7 +141,7 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
                               ),
 
                               TTextField(
-                                titleText: 'PKR $fare',
+                                titleText: '',
                                 hintText: 'PKR $fare',
                                 hintTextColor: Colors.black,
                                 suffixIcon: Padding(
