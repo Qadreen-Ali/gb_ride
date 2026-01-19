@@ -29,16 +29,16 @@ class VehicleOptionCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: 90,
-        height: 90,
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: borderColor, width: 1.2),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+        child: Container(
+          width: 80,
+          height: 60,
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: borderColor, width: 1.2),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -49,15 +49,15 @@ class VehicleOptionCard extends StatelessWidget {
                 color: isSelected ? Colors.orange : null,
               ),
               const SizedBox(height: 2),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  color: Colors.black,
-                ),
-              ),
-              const SizedBox(height: 1),
+              // Text(
+              //   label,
+              //   style: TextStyle(
+              //     fontSize: 11,
+              //     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+              //     color: Colors.black,
+              //   ),
+              // ),
+              // const SizedBox(height: 1),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
