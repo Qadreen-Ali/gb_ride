@@ -16,6 +16,8 @@ class HomeBottomSheet extends StatefulWidget {
 
   final TextEditingController pickupController;
   final TextEditingController destinationController;
+  final double? distanceKm;
+  final int? etaMinutes;
 
   final VoidCallback onStartPickupSelection;
   final VoidCallback onStartDestinationSelection;
@@ -34,7 +36,6 @@ class HomeBottomSheet extends StatefulWidget {
   final void Function(LatLng position, String displayName)
   onDestinationSelected;
 
-
   const HomeBottomSheet({
     super.key,
     // required this.scrollController,
@@ -52,6 +53,8 @@ class HomeBottomSheet extends StatefulWidget {
     required this.onDestinationSelected,
     required this.onPickupTap,
     required this.onDestinationTap,
+    this.distanceKm,
+    this.etaMinutes,
   });
 
   @override
@@ -68,18 +71,14 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
     );
 
     try {
-      await launchUrl(
-        uri,
-        mode: LaunchMode.externalApplication,
-      );
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (e) {
       debugPrint('WhatsApp not installed');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('WhatsApp not installed')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('WhatsApp not installed')));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +107,55 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                 ),
               ),
               const SizedBox(height: 10),
+
+              //routing code
+              if (widget.distanceKm != null && widget.etaMinutes != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 6,
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: GBColor.secondary,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: GBColor.borderColor),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.route, size: 18),
+                            const SizedBox(width: 6),
+                            Text(
+                              '${widget.distanceKm!.toStringAsFixed(1)} km',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Icon(Icons.timer, size: 18),
+                            const SizedBox(width: 6),
+                            Text(
+                              '${widget.etaMinutes} mins',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
 
               /// Pickup
               Padding(
@@ -143,7 +191,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: SizedBox(
-                  height: 90, // 👈 controls height
+                  height: 70, // 👈 controls height
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),

@@ -14,110 +14,94 @@ class MapMarkers extends StatelessWidget {
     this.destinationLocation,
   });
 
+  /// Logic to check if points are virtually identical (within ~1 meter)
+  bool _isOverlap(LatLng p1, LatLng? p2) {
+    if (p2 == null) return false;
+    return p1.latitude.toStringAsFixed(5) == p2.latitude.toStringAsFixed(5) &&
+        p1.longitude.toStringAsFixed(5) == p2.longitude.toStringAsFixed(5);
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Determine visibility based on overlaps
+    final bool hideUserDot =
+        _isOverlap(currentLocation, pickupLocation) ||
+        _isOverlap(currentLocation, destinationLocation);
+
+    final bool hideDestination =
+        destinationLocation != null &&
+        _isOverlap(destinationLocation!, pickupLocation);
+
     return MarkerLayer(
       markers: [
-        // Current location marker
-        Marker(
-          point: currentLocation,
-          width: 40,
-          height: 40,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              shape: BoxShape.circle,
-              border: Border.all(color: Colors.white, width: 3),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.blue.withValues(alpha:0.5),
-                  blurRadius: 10,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-            child: const Icon(
-              Icons.my_location,
-              color: Colors.white,
-              size: 18,
+        /// 🟡 Live User Location (Yellow)
+        if (!hideUserDot)
+          Marker(
+            point: currentLocation,
+            width: 22,
+            height: 22,
+            alignment: Alignment.center,
+            child: const _SimpleCircleMarker(
+              color: Colors.yellow,
+              isUser: true,
             ),
           ),
-        ),
 
-        // Pickup location marker
+        /// 🔵 Pickup Location (Blue)
         if (pickupLocation != null)
           Marker(
             point: pickupLocation!,
-            width: 50,
-            height: 60,
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.green,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.green.withValues(alpha:0.5),
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.person_pin_circle,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-                Container(
-                  width: 2,
-                  height: 10,
-                  color: Colors.green,
-                ),
-              ],
-            ),
+            width: 26,
+            height: 26,
+            alignment: Alignment.center,
+            child: const _SimpleCircleMarker(color: Colors.blue),
           ),
 
-        // Destination location marker
-        if (destinationLocation != null)
+        /// 🔴 Destination Location (Red)
+        if (destinationLocation != null && !hideDestination)
           Marker(
             point: destinationLocation!,
-            width: 50,
-            height: 60,
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.red.withValues(alpha:0.5),
-                        blurRadius: 10,
-                        spreadRadius: 2,
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.location_on,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-                Container(
-                  width: 2,
-                  height: 10,
-                  color: Colors.red,
-                ),
-              ],
-            ),
+            width: 26,
+            height: 26,
+            alignment: Alignment.center,
+            child: const _SimpleCircleMarker(color: Colors.red),
           ),
       ],
+    );
+  }
+}
+
+class _SimpleCircleMarker extends StatelessWidget {
+  final Color color;
+  final bool isUser;
+
+  const _SimpleCircleMarker({required this.color, this.isUser = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.white, width: 3),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(isUser ? 40 : 80),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Center(
+        child: Container(
+          width: 6,
+          height: 6,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -26,28 +26,32 @@ class LocationSuggestion {
 }
 
 class LocationSearchService {
-  static const String _baseUrl = 'https://nominatim.openstreetmap.org';
+  static const String _baseUrl = 'https://api.locationiq.com/v1';
+  static const String _apiKey = 'pk.25e1a7ca81d6256515a0311e26fb2ec3'; //
 
-  /// 🔍 Search locations (ENGLISH ONLY)
+  /// 🔍 Search locations
   static Future<List<LocationSuggestion>> searchLocations(String query) async {
-    if (query.isEmpty || query.length < 2) {
-      return [];
-    }
+    if (query.trim().length < 2) return [];
 
     try {
       final Uri url = Uri.parse(
         '$_baseUrl/search'
-        '?q=$query'
+        '?key=$_apiKey'
+        '&q=${Uri.encodeComponent(query)}'
         '&format=json'
-        '&limit=10'
-        '&countrycodes=pk'
+        '&limit=20'
         '&addressdetails=1'
-        '&accept-language=en',
+        '&namedetails=1'
+        '&extratags=1'
+        '&dedupe=0'
+        // 🔥 GILGIT-BALTISTAN BIAS
+        '&viewbox=72.5,37.0,76.0,34.0'
+        '&bounded=1',
       );
 
       final response = await http.get(
         url,
-        headers: {'User-Agent': 'GBRideApp/1.0', 'Accept': 'application/json'},
+        headers: {'Accept': 'application/json'},
       );
 
       if (response.statusCode == 200) {
@@ -63,7 +67,7 @@ class LocationSearchService {
     }
   }
 
-  /// 📍 Reverse geocoding (ENGLISH ONLY)
+  /// 📍 Reverse geocoding
   static Future<String?> getAddressFromCoordinates(
     double lat,
     double lon,
@@ -71,15 +75,15 @@ class LocationSearchService {
     try {
       final Uri url = Uri.parse(
         '$_baseUrl/reverse'
-        '?lat=$lat'
+        '?key=$_apiKey'
+        '&lat=$lat'
         '&lon=$lon'
-        '&format=json'
-        '&accept-language=en',
+        '&format=json',
       );
 
       final response = await http.get(
         url,
-        headers: {'User-Agent': 'GBRideApp/1.0', 'Accept': 'application/json'},
+        headers: {'Accept': 'application/json'},
       );
 
       if (response.statusCode == 200) {
