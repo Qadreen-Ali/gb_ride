@@ -1,111 +1,72 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import 'package:gb_ride/utils/constants/global_appbar.dart';
-import 'package:gb_ride/view/module/local/setting/widget/settings_widget.dart';
-import 'package:solar_icon_pack/solar_linear_icons.dart';
+import 'package:gb_ride/view/module/local/setting/help_and_support/contact_us.dart';
+import 'package:gb_ride/view/module/local/setting/help_and_support/faqs.dart';
 
-class HelpScreen extends StatefulWidget {
+import '../../../../../utils/constants/custom_app-bar.dart';
+
+class HelpScreen extends StatelessWidget {
   const HelpScreen({super.key});
 
   @override
-  State<HelpScreen> createState() => _HelpScreenState();
-}
-
-class _HelpScreenState extends State<HelpScreen> {
-  final faqs = [
-    SettingsItem(
-      icons: SolarLinearIcons.user,
-      title: 'Rider FAQs',
-      onTap: () {},
-    ),
-    SettingsItem(
-      icons: SolarLinearIcons.questionCircle,
-      title: 'Driver FAQs',
-      onTap: () {},
-    ),
-  ];
-
-  final tutorialsandguides = [
-    SettingsItem(
-      icons: SolarLinearIcons.mapPoint,
-      title: 'How to book a ride',
-      onTap: () {},
-    ),
-    SettingsItem(
-      icons: SolarLinearIcons.handMoney,
-      title: 'How to accept a fare',
-      onTap: () {},
-    ),
-  ];
-
-  final contactsupport = [
-    SettingsItem(
-      icons: SolarLinearIcons.headphonesRound,
-      title: 'Contact support',
-      onTap: () {},
-    ),
-    SettingsItem(icons: SolarLinearIcons.letter, title: 'Email', onTap: () {}),
-    SettingsItem(
-      icons: SolarLinearIcons.shieldCheck,
-      title: 'Privacy Policy',
-      onTap: () {},
-    ),
-    SettingsItem(
-      icons: SolarLinearIcons.documentText,
-      title: 'Terms of Services',
-      onTap: () {},
-    ),
-  ];
-
-  Widget buildSection(String title, List<SettingsItem> items) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        ...items.map(
-          (item) => Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: SettingsSingleContainer(item: item),
-          ),
-        ),
-        const SizedBox(height: 20),
-      ],
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: GBColor.secondary,
-      appBar: GlobalAppBar(
-        title: 'Help & Support',
-        showProfile: true,
-        profileImage: 'assets/icons/profile.jpg',
-        onCloseTap: () => Navigator.pop(context),
-      ),
-      body: ScrollConfiguration(
-        behavior: ScrollBehavior().copyWith(
-          overscroll: false, // removes glow
-          scrollbars: false, // removes scroll bar
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: GBColor.secondary,
+        appBar:CustomAppBar(
+          title: 'Help Center / FAQs',
+          leading: Padding(
+            padding: const EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color:GBColor.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.close, color: GBColor.secondary),
+              ),
+            ),
+          ),
         ),
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(
-            parent: BouncingScrollPhysics(),
-          ),
-          // allows natural swipe
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildSection('FAQs', faqs),
-              buildSection('Tutorials & Guides', tutorialsandguides),
-              buildSection('Contact and Support', contactsupport),
-            ],
-          ),
+          body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: TabBar(
+                indicatorColor: Colors.grey.shade400,
+                indicatorWeight: 3,
+                indicatorSize: TabBarIndicatorSize.tab,
+                labelColor: GBColor.primary,
+                unselectedLabelColor: GBColor.textFieldText,
+                labelStyle: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+                indicator: UnderlineTabIndicator(
+                  borderSide: BorderSide(width: 6, color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(4),
+                  insets: const EdgeInsets.only(bottom: 8),
+                ),
+                tabs: const [
+                  Tab(text: 'Contact US'),
+                  Tab(text: 'FAQs'),
+                ],
+              ),
+            ),
+
+            Expanded(
+              child: TabBarView(
+                children: [
+                  ContactUsScreen(),
+                  FAQScreen(), // placeholder for Messages
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

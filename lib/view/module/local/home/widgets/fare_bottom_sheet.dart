@@ -21,9 +21,7 @@ class _FareBottomSheetState extends State<FareBottomSheet> {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (_) => PaymentMethodBottomSheet(
-        selectedMethod: selectedPayment,
-      ),
+      builder: (_) => PaymentMethodBottomSheet(selectedMethod: selectedPayment),
     );
 
     if (result != null) {
@@ -43,7 +41,7 @@ class _FareBottomSheetState extends State<FareBottomSheet> {
         ),
         child: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -53,7 +51,7 @@ class _FareBottomSheetState extends State<FareBottomSheet> {
               children: [
                 /// DRAG HANDLE
                 Container(
-                  width: 40,
+                  width: 60,
                   height: 4,
                   decoration: BoxDecoration(
                     color: GBColor.borderColor,
@@ -68,7 +66,10 @@ class _FareBottomSheetState extends State<FareBottomSheet> {
                     const Spacer(),
                     const Text(
                       GBText.offerYourFare,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const Spacer(),
                     GestureDetector(
@@ -90,22 +91,25 @@ class _FareBottomSheetState extends State<FareBottomSheet> {
 
                 /// FARE FIELD
                 TTextField(
-                  titleText: GBText.pkr,
+                  titleText: "",
                   hintText: GBText.pkr,
                   hintTextColor: Colors.black,
                   keyboardType: TextInputType.number,
                 ),
-
 
                 /// PAYMENT TYPE (CLICKABLE)
                 GestureDetector(
                   onTap: _openPaymentSheet,
                   child: AbsorbPointer(
                     child: TTextField(
-                      titleText: selectedPayment,
+                      titleText: "",
                       hintText: selectedPayment,
                       hintTextColor: Colors.black,
-                      prefixIcon: Image(image: AssetImage(GBImagePath.card),width: 24,height: 24,),
+                      prefixIcon: Image(
+                        image: AssetImage(GBImagePath.card),
+                        width: 24,
+                        height: 24,
+                      ),
                       suffixIcon: const Icon(
                         Icons.arrow_forward_ios,
                         color: Colors.black,
@@ -135,4 +139,3 @@ class _FareBottomSheetState extends State<FareBottomSheet> {
     );
   }
 }
-

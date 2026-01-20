@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'package:gb_ride/utils/logger.dart';
 import 'package:http/http.dart' as http;
-// import 'package:latlong2/latlong.dart';
-
+import 'package:gb_ride/utils/logger.dart';
 
 class LocationSuggestion {
   final String displayName;
@@ -28,47 +26,64 @@ class LocationSuggestion {
 }
 
 class LocationSearchService {
-  static const String _baseUrl = 'https://nominatim.openstreetmap.org';
+  static const String _baseUrl = 'https://api.locationiq.com/v1';
+  static const String _apiKey = 'pk.25e1a7ca81d6256515a0311e26fb2ec3'; //
 
-  // Search for locations with autocomplete
+  /// 🔍 Search locations
   static Future<List<LocationSuggestion>> searchLocations(String query) async {
-    if (query.isEmpty || query.length < 2) {
-      return [];
-    }
+    if (query.trim().length < 2) return [];
 
     try {
-      final url = Uri.parse(
-        '$_baseUrl/search?q=$query&format=json&limit=10&countrycodes=pk&addressdetails=1',
+      final Uri url = Uri.parse(
+        '$_baseUrl/search'
+        '?key=$_apiKey'
+        '&q=${Uri.encodeComponent(query)}'
+        '&format=json'
+        '&limit=20'
+        '&addressdetails=1'
+        '&namedetails=1'
+        '&extratags=1'
+        '&dedupe=0'
+        // 🔥 GILGIT-BALTISTAN BIAS
+        '&viewbox=72.5,37.0,76.0,34.0'
+        '&bounded=1',
       );
 
       final response = await http.get(
         url,
-        headers: {'User-Agent': 'GBRideApp/1.0', 'Accept': 'application/json'},
+        headers: {'Accept': 'application/json'},
       );
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        return data.map((json) => LocationSuggestion.fromJson(json)).toList();
+        final List data = json.decode(response.body);
+        return data.map((e) => LocationSuggestion.fromJson(e)).toList();
       } else {
-        logger.i('Search failed with status: ${response.statusCode}');
+        logger.i('Search failed: ${response.statusCode}');
         return [];
       }
     } catch (e) {
-      logger.i('Error searching locations: $e');
+      logger.i('Search error: $e');
       return [];
     }
   }
-  // Get location from coordinates (reverse geocoding)
+
+  /// 📍 Reverse geocoding
   static Future<String?> getAddressFromCoordinates(
     double lat,
     double lon,
   ) async {
     try {
-      final url = Uri.parse('$_baseUrl/reverse?lat=$lat&lon=$lon&format=json');
+      final Uri url = Uri.parse(
+        '$_baseUrl/reverse'
+        '?key=$_apiKey'
+        '&lat=$lat'
+        '&lon=$lon'
+        '&format=json',
+      );
 
       final response = await http.get(
         url,
-        headers: {'User-Agent': 'GBRideApp/1.0', 'Accept': 'application/json'},
+        headers: {'Accept': 'application/json'},
       );
 
       if (response.statusCode == 200) {
@@ -77,7 +92,7 @@ class LocationSearchService {
       }
       return null;
     } catch (e) {
-      logger.i('Error getting address: $e');
+      logger.i('Reverse geocode error: $e');
       return null;
     }
   }

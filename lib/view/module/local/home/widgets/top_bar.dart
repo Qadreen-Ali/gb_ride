@@ -28,8 +28,8 @@ class TopBar extends StatelessWidget {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Colors.black.withOpacity(0.6),
-              Colors.black.withOpacity(0.4),
+              Colors.black.withValues(alpha:0.6),
+              Colors.black.withValues(alpha:0.4),
               Colors.transparent,
             ],
           ),
@@ -40,65 +40,25 @@ class TopBar extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 color: Colors.orange,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+               shape: BoxShape.circle,
               ),
               child: IconButton(
                 icon: const Icon(Icons.menu, color: Colors.white),
                 onPressed: onMenuPressed,
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 6,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.3),
-                ),
-              ),
-              child: Row(
-                children: const [
-                  Icon(Icons.school, color: Colors.white, size: 18),
-                  SizedBox(width: 6),
-                  Text(
-                    'Student Profile',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+
             Container(
               decoration: BoxDecoration(
                 color: Colors.orange,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                shape: BoxShape.circle,
               ),
               child: IconButton(
                 icon: const Icon(
                   Icons.notifications_outlined,
                   color: Colors.white,
                 ),
-                onPressed: onNotificationPressed,
+                onPressed: () => Navigator.pushNamed(context, '/notification'),
               ),
             ),
           ],

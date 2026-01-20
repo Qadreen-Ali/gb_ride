@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gb_ride/utils/constants/global_appbar.dart';
+import 'package:gb_ride/utils/constants/color_string.dart';
+import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/view/module/local/setting/widget/settings_widget.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
+import 'package:gb_ride/view/module/local/setting/logout/logout_screen.dart';
+import 'package:gb_ride/view/module/local/setting/delete/delete_screen.dart';
+
+import '../../../../utils/constants/custom_app-bar.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -23,17 +28,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.user,
         title: 'Profile Information',
-        onTap: () {},
+        
+        onTap: () {
+          Navigator.pushNamed(context, '/profile');
+        },
       ),
       SettingsItem(
         icons: SolarLinearIcons.card,
         title: 'Manage Payment Methods',
-        onTap: () {},
-      ),
-      SettingsItem(
-        icons: SolarLinearIcons.lock,
-        title: 'Change Password',
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, '/paymentmethod');
+        },
       ),
     ];
 
@@ -46,32 +51,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.shieldKeyhole,
         title: 'Privacy & Security',
-        onTap: () {},
-      ),
-      SettingsItem(
-        icons: SolarLinearIcons.global,
-        title: 'Language',
-        onTap: () {},
+        onTap: () {
+          Navigator.pushNamed(context, '/safety');
+        },
       ),
     ];
 
     final support = [
       SettingsItem(
         icons: SolarLinearIcons.help,
-        title: 'Help Center',
-        onTap: () {},
-      ),
-      SettingsItem(
-        icons: SolarLinearIcons.document,
-        title: 'Terms of Service',
-        onTap: () {},
+        title: 'Help Center/FAQs',
+        onTap: () {
+          Navigator.pushNamed(context, '/help');
+        },
       ),
     ];
 
     final logout = SettingsItem(
       icons: SolarLinearIcons.logout,
       title: 'Logout',
-      onTap: () => _onTap(context, 'Logout'),
+      onTap: () => showLogoutConfirmation(context),
     );
 
     final delete = SettingsItem(
@@ -80,17 +79,41 @@ class _SettingsScreenState extends State<SettingsScreen> {
       iconColor: Colors.red,
       textColor: Colors.red,
       arrowColor: Colors.red,
-      onTap: () => _onTap(context, 'Delete Account'),
+      onTap: () => showDeleteConfirmation(context),
     );
 
     return Scaffold(
-      appBar: GlobalAppBar(
+      backgroundColor: GBColor.secondary,
+      appBar: CustomAppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: GBColor.primary,
+              shape: BoxShape.circle,
+              image: DecorationImage(image:  AssetImage(GBImagePath.profile))
+            ),
+          ),
+        ),
         title: 'Settings',
-        profileImage: 'assets/icons/profile.jpg',
-        onCloseTap: () => Navigator.pop(context),
+        actions: [Padding(
+          padding: const EdgeInsets.all(8),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color:GBColor.primary,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.close, color:GBColor.secondary),
+            ),
+          ),
+        ),],
       ),
-      backgroundColor: const Color(0xFFF5F5F7),
-      body: ScrollConfiguration(
+
+        body: ScrollConfiguration(
         behavior: ScrollBehavior().copyWith(
           overscroll: false, // removes glow
           scrollbars: false, // removes scroll bar
@@ -103,46 +126,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               const Text(
                 'Account',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               ...account.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item),
+                  child: SettingsSingleContainer(item: item, isExpanded: false),
                 ),
               ),
 
               const SizedBox(height: 20),
               const Text(
                 'Preferences',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               ...preferences.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item),
+                  child: SettingsSingleContainer(item: item, isExpanded: false),
                 ),
               ),
 
               const SizedBox(height: 20),
               const Text(
                 'Support & Legal',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               ...support.map(
                 (item) => Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                  child: SettingsSingleContainer(item: item),
+                  child: SettingsSingleContainer(item: item, isExpanded: false),
                 ),
               ),
 
-              const SizedBox(height: 24),
-              SettingsSingleContainer(item: logout),
               const SizedBox(height: 12),
-              SettingsSingleContainer(item: delete),
+              SettingsSingleContainer(item: logout, isExpanded: false),
+              const SizedBox(height: 12),
+              SettingsSingleContainer(item: delete, isExpanded: false),
             ],
           ),
         ),
