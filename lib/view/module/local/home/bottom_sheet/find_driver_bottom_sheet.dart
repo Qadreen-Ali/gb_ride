@@ -141,7 +141,7 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
                               ),
 
                               TTextField(
-                                titleText: '',
+                                titleText: "",
                                 hintText: 'PKR $fare',
                                 hintTextColor: Colors.black,
                                 suffixIcon: Padding(
@@ -182,7 +182,7 @@ class _FindDriverBottomSheetState extends State<FindDriverBottomSheet> {
                                     builder: (context) => AlertDialog(
                                       backgroundColor: GBColor.secondary,
 
-                                      // ✅ Reduce space around content
+
                                       contentPadding: const EdgeInsets.fromLTRB(
                                         24,
                                         12,

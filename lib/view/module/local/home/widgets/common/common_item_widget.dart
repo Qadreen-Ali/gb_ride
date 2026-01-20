@@ -50,7 +50,7 @@ class CommonItemWidget extends StatelessWidget {
         ),
         const SizedBox(height: 14),
 
-        /// Driver Row
+        /// Driver Message Row
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
@@ -152,12 +152,11 @@ class CommonItemWidget extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 8  ),
-
+        const SizedBox(height: 8),
 
         /// Payment
         TTextField(
-          titleText: 'Payment',
+          titleText: " ",
           hintText: 'PKR60',
           hintTextColor: Colors.black,
           prefixIcon: Image(image: AssetImage(GBImagePath.card), width: 28),
