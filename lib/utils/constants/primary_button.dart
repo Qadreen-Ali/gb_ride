@@ -24,7 +24,7 @@ class PrimaryButton extends StatelessWidget {
     this.backgroundColor,
     this.textColor,
     this.borderRadius,
-    this.borderColor, 
+    this.borderColor,
   });
 
   @override
@@ -59,6 +59,7 @@ class PrimaryButton extends StatelessWidget {
           title,
           style: TextStyle(
             fontSize: fontsize ?? 16,
+            fontFamily: 'Poppins',
             fontWeight: weight ?? FontWeight.w600,
             color: isDisabled
                 ? Colors.black.withValues(alpha: 0.5)

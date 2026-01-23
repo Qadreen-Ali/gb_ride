@@ -11,6 +11,7 @@ import '../../common/text_field.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 
 import '../../utils/constants/app_sizes.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -47,7 +48,9 @@ class _LoginScreenState extends State<LoginScreen> {
         Navigator.pushNamed(context, '/otp', arguments: phone);
       },
       onError: (error) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(error)));
       },
     );
   }
@@ -93,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 //Input Fields
                 TTextField(
                   controller: _phoneController,
-                  titleText: GBText.phoneNumber,
+                  titleText: '',
                   hintText: '000 0000000',
                   keyboardType: TextInputType.number,
                   inputFormatters: [PakPhoneFormatter()],
@@ -101,10 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SizedBox(width: (GBSizes.md - GBSizes.xs) * s), // was 12
-                      Icon(
-                        SolarLinearIcons.phone,
-                        size: GBSizes.iconMd * s,
-                      ),
+                      Icon(SolarLinearIcons.phone, size: GBSizes.iconMd * s),
                       SizedBox(width: GBSizes.sm * s), // was 8
                       Text(
                         '+92',
@@ -119,15 +119,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
 
                 SizedBox(height: (GBSizes.md + GBSizes.xs) * s), // was 20
-
                 //Primary Button (keep your button widget, just spacing responsive)
-                PrimaryButton(
-                  title: GBText.signIn,
-                  onPressed: _onSignIn,
-                ),
+                PrimaryButton(title: GBText.signIn, onPressed: _onSignIn),
 
                 SizedBox(height: (GBSizes.lg + GBSizes.sm) * s), // was 30
-
                 //Divider with text "Or continue with"
                 Row(
                   children: [
@@ -138,7 +133,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: (GBSizes.sm + GBSizes.xs) * s), // was 12
+                      padding: EdgeInsets.symmetric(
+                        horizontal: (GBSizes.sm + GBSizes.xs) * s,
+                      ), // was 12
                       child: Text(
                         GBText.orContinuewith,
                         style: TextStyle(
@@ -158,7 +155,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
 
                 SizedBox(height: (GBSizes.lg + GBSizes.sm) * s), // was 30
-
                 //Social Media Buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -201,8 +197,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
 
-                SizedBox(height: (GBSizes.spaceBtwSections + GBSizes.md) * s), // was 50
-
+                SizedBox(
+                  height: (GBSizes.spaceBtwSections + GBSizes.md) * s,
+                ), // was 50
                 //Terms of Service Text
                 RichText(
                   textAlign: TextAlign.center,

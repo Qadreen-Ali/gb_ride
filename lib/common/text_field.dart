@@ -57,7 +57,7 @@ class _TTextFieldState extends State<TTextField> {
       children: [
 
 
-        if (widget.titleText != null && widget.titleText!.isNotEmpty)
+        if (widget.titleText != null && widget.titleText.isNotEmpty)
           Text(
             widget.titleText!,
             style: const TextStyle(
