@@ -8,14 +8,14 @@ import 'package:gb_ride/view/module/local/setting/delete/delete_screen.dart';
 
 import '../../../../utils/constants/custom_app-bar.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+class DriverSettings extends StatefulWidget {
+  const DriverSettings({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  State<DriverSettings> createState() => _DriverSettingsState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _DriverSettingsState extends State<DriverSettings> {
   void _onTap(BuildContext context, String name) {
     ScaffoldMessenger.of(
       context,
@@ -28,7 +28,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.user,
         title: 'Profile Information',
-
         onTap: () {
           Navigator.pushNamed(context, '/profile');
         },
@@ -62,7 +61,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final support = [
       SettingsItem(
         icons: SolarLinearIcons.help,
-        title: 'Help Center/FAQs',
+        title: 'Help Center / FAQs',
         onTap: () {
           Navigator.pushNamed(context, '/help');
         },
@@ -106,7 +105,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: Container(
                 width: 40,
                 height: 40,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: GBColor.primary,
                   shape: BoxShape.circle,
                 ),
@@ -116,14 +115,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ],
       ),
-
       body: ScrollConfiguration(
         behavior: ScrollBehavior().copyWith(
-          overscroll: false, // removes glow
-          scrollbars: false, // removes scroll bar
+          overscroll: false,
+          scrollbars: false,
         ),
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(), // allows natural swipe
+          physics: const BouncingScrollPhysics(),
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

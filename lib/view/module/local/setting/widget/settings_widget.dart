@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/utils/constants/app_sizes.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 
 /// ----------------- SETTINGS ITEM MODEL -----------------
@@ -6,6 +7,7 @@ class SettingsItem {
   final IconData? icons;
   final String? iconPath;
   final String title;
+  final String? extraText; // text in front of title
   final String? subtitle;
   final String? answer; // for FAQ items
   final bool isFaq; // true for FAQ
@@ -15,11 +17,14 @@ class SettingsItem {
   final Color? arrowColor;
   final IconData? arrowIcon;
   final double iconVerticalOffset;
+  final Color? iconBgColor;
+  final bool showArrow;
 
   const SettingsItem({
     this.icons,
     this.iconPath,
     required this.title,
+    this.extraText,
     this.subtitle,
     this.answer,
     this.isFaq = false,
@@ -29,13 +34,15 @@ class SettingsItem {
     this.arrowColor,
     this.arrowIcon,
     this.iconVerticalOffset = 0.0,
+    this.iconBgColor,
+    this.showArrow = true,
   });
 }
 
 /// ----------------- SETTINGS TILE -----------------
 class SettingsTile extends StatelessWidget {
   final SettingsItem item;
-  final bool isExpanded; // ✅ FAQ expansion handled from screen
+  final bool isExpanded; // FAQ expansion handled from screen
   final Color iconBackgroundColor;
 
   const SettingsTile({
@@ -49,7 +56,7 @@ class SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: item.onTap,
-      splashColor: Colors.transparent, // removes blue flash
+      splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(12),
       child: Padding(
@@ -57,7 +64,7 @@ class SettingsTile extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// ---------- FAQ ITEM (ONLY TEXT) -------------
+            // ---------- FAQ ITEM (ONLY TEXT) ----------
             if (item.isFaq)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,16 +88,16 @@ class SettingsTile extends StatelessWidget {
                   ),
                 ],
               )
-            /// ---------- NORMAL SETTINGS (UNCHANGED) -------------
             else
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Icon
                   Transform.translate(
                     offset: Offset(0, item.iconVerticalOffset),
                     child: CircleAvatar(
                       radius: 12,
-                      backgroundColor: iconBackgroundColor,
+                      backgroundColor: item.iconBgColor ?? iconBackgroundColor,
                       child: item.iconPath != null
                           ? Image.asset(
                               item.iconPath!,
@@ -107,57 +114,87 @@ class SettingsTile extends StatelessWidget {
                           : const SizedBox(),
                     ),
                   ),
+
                   const SizedBox(width: 12),
+
+                  // Two independent Columns: left = title+subtitle, right = extraText+dot
                   Expanded(
-                    child: Column(
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          item.title,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: item.textColor ?? GBColor.gray,
-                          ),
-                        ),
-                        if (item.subtitle != null) ...[
-                          const SizedBox(height: 2),
-                          Row(
+                        // Column 1: Title + Subtitle
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                width: 4,
-                                height: 4,
-                                decoration: const BoxDecoration(
-                                  color: GBColor.primary,
-                                  shape: BoxShape.circle,
+                              Text(
+                                item.title,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: item.textColor ?? GBColor.gray,
                                 ),
                               ),
-                              const SizedBox(width: 6),
-                              Expanded(
-                                child: Text(
+                              const SizedBox(height: 4),
+                              if (item.subtitle != null)
+                                Text(
                                   item.subtitle!,
+                                  maxLines: 2,
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: GBColor.black,
                                   ),
                                 ),
-                              ),
                             ],
                           ),
-                        ],
+                        ),
+
+                        const SizedBox(width: 12),
+
+                        // Column 2: Extra Text + Dot
+                        if (item.extraText != null)
+                          SizedBox(
+                            width: 60, // 🔒 FIXED WIDTH (adjust if needed)
+                            child: Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.end, // ⬅️ align to end
+                              children: [
+                                Text(
+                                  item.extraText!,
+                                  textAlign: TextAlign.right,
+                                  style: const TextStyle(
+                                    // fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: GBColor.gray,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Container(
+                                  width: 8,
+                                  height: 8,
+                                  decoration: const BoxDecoration(
+                                    color: GBColor.primary,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                       ],
                     ),
                   ),
-                  Icon(
-                    item.arrowIcon ?? Icons.arrow_forward_ios,
-                    size: 16,
-                    color: item.arrowColor ?? GBColor.gray,
-                  ),
+
+                  // Arrow Icon
+                  if (item.showArrow)
+                    Icon(
+                      item.arrowIcon ?? Icons.arrow_forward_ios,
+                      size: 16,
+                      color: item.arrowColor ?? GBColor.gray,
+                    ),
                 ],
               ),
 
-            /// ---------- FAQ ANSWER -------------
+            // ---------- FAQ ANSWER ----------
             if (item.isFaq && isExpanded && item.answer != null) ...[
               const SizedBox(height: 8),
               Text(
@@ -175,7 +212,7 @@ class SettingsTile extends StatelessWidget {
 /// ----------------- SETTINGS SINGLE CONTAINER -----------------
 class SettingsSingleContainer extends StatelessWidget {
   final SettingsItem item;
-  final bool isExpanded; // ✅ only used for FAQ
+  final bool isExpanded; // only used for FAQ
   final Color iconBackgroundColor;
   final double width;
   final double height;

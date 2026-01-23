@@ -1,5 +1,7 @@
 // 03465407068
 import 'package:flutter/material.dart';
+import 'package:gb_ride/view/module/driver/notifications/notification(driver).dart';
+import 'package:gb_ride/view/module/driver/settings/settings_driver.dart';
 import 'package:gb_ride/view/module/local/home/home_screen.dart';
 import 'package:gb_ride/view/module/local/notifications/notification_screen.dart';
 import 'package:gb_ride/view/module/local/setting/help_and_support/help_screen.dart';
@@ -12,13 +14,12 @@ import 'package:gb_ride/view/splash/splash_screen.dart';
 import 'package:gb_ride/view/auth/form_screen.dart';
 import 'package:gb_ride/view/module/local/setting/payment_method/payment_methods_screen.dart';
 import 'package:gb_ride/view/module/local/setting/history/history_screen.dart';
-
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:gb_ride/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashScreen(), //initial Screen
         '/login': (context) => const LoginScreen(),
-    
+
         '/otp': (context) {
           final args = ModalRoute.of(context)?.settings.arguments as String?;
           return OTPVerificationScreen(phoneNumber: args ?? '');
@@ -52,6 +53,8 @@ class MyApp extends StatelessWidget {
         '/safety': (context) => const SafetyScreen(),
         '/paymentmethod': (context) => const PaymentMethodsScreen(),
         '/history': (context) => const HistoryScreen(),
+        '/notification_driver': (context) => const NotificationDriverScreen(),
+        '/Settings_driver': (context) => const DriverSettings(),
       },
     );
   }
