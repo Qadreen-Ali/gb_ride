@@ -6,80 +6,67 @@ class AuthController {
 
   final supabase = Supabase.instance.client;
   String? _phone;
-  String? _debugOtp; // Store debug OTP for testing
+  String? _debugOtp;
 
-  // 1. Validation Logic
   bool isValidPakNumber(String input) {
     final cleaned = input.replaceAll(RegExp(r'\D'), '');
-    return RegExp(r'^3\d{9}$').hasMatch(cleaned);
+    return RegExp(r'^(0?3\d{9}|92\d{10})$').hasMatch(cleaned);
   }
 
   String normalizePhone(String input) {
     final cleaned = input.replaceAll(RegExp(r'\D'), '');
-    return '+92$cleaned';
+    return cleaned.startsWith('92') ? '+$cleaned' : '+92$cleaned';
   }
 
-  // 2. Request OTP (Call Edge Function instead of Supabase Auth)
   Future<void> requestOtp({
     required String phone,
     required void Function() onSuccess,
     required void Function(String error) onError,
   }) async {
     try {
-      _phone = phone;
+      _phone = normalizePhone(phone);
 
-      // Call your Edge Function instead
       final response = await supabase.functions.invoke(
         'send-otp',
         body: {'phone': _phone},
       );
 
-      print('Edge Function Response: ${response.data}');
-
       if (response.data['success'] == true) {
-        // Store debug OTP for testing (remove in production)
-        _debugOtp = response.data['debug_otp'];
-        print('DEBUG OTP: $_debugOtp'); // You'll see this in console
-
+        _debugOtp = response.data['debug_otp']; // DEV only
         onSuccess();
       } else {
-        onError(
-          'Failed to send OTP: ${response.data['error'] ?? 'Unknown error'}',
-        );
+        onError(response.data['error'] ?? 'Failed to send OTP');
       }
     } catch (e) {
-      onError('Error sending SMS: $e');
+      onError('Error sending OTP: $e');
     }
   }
 
-  // 3. Verify OTP (Call your verify Edge Function)
   Future<void> verifyOtp({
     required String otp,
     required void Function() onSuccess,
     required void Function(String error) onError,
   }) async {
     try {
+      if (_phone == null) {
+        onError('Phone number missing. Please retry.');
+        return;
+      }
+
       final response = await supabase.functions.invoke(
         'verify-otp',
-        body: {'phone': _phone!, 'otp': otp},
+        body: {'phone': _phone, 'otp': otp},
       );
 
-      print('Verify Response: ${response.data}');
-
       if (response.data['success'] == true) {
-        // OTP verified successfully
-        // Now you can create a user session or navigate to home
         onSuccess();
       } else {
         onError('Invalid verification code');
       }
     } catch (e) {
-      onError('Verification Error: $e');
+      onError('Verification error: $e');
     }
   }
 
-  // Helper: Get debug OTP (for testing only)
-  String? getDebugOtp() {
-    return _debugOtp;
-  }
+  String? getDebugOtp() => _debugOtp;
 }
