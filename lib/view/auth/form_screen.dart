@@ -20,14 +20,18 @@ class FormScreen extends StatefulWidget {
 class _FormScreenState extends State<FormScreen> {
   UserRole _selectedRole = UserRole.student;
 
+  final GlobalKey<FormState> _studentKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _localKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _driverKey = GlobalKey<FormState>();
+
   Widget _buildForm() {
     switch (_selectedRole) {
       case UserRole.student:
-        return StudentForm();
+        return StudentForm(formKey: _studentKey);
       case UserRole.local:
-        return LocalForm();
+        return LocalForm(formKey: _localKey);
       case UserRole.driver:
-        return DriverForm();
+        return DriverForm(formKey: _driverKey);
     }
   }
 
@@ -137,8 +141,30 @@ class _FormScreenState extends State<FormScreen> {
               SecondaryButton(
                 title: GBText.continueBtn,
                 onPressed: () {
-                  Navigator.pushNamed(context, '/home');
-                  logger.i('form button pressed');
+                  bool isValid = false;
+
+                  switch (_selectedRole) {
+                    case UserRole.student:
+                      isValid = _studentKey.currentState?.validate() ?? false;
+                      if (isValid) {
+                        // Navigator.pushNamed(context, '/');
+                      }
+                      break;
+
+                    case UserRole.local:
+                      isValid = _localKey.currentState?.validate() ?? false;
+                      if (isValid) {
+                        Navigator.pushNamed(context, '/localhome');
+                      }
+                      break;
+
+                    case UserRole.driver:
+                      isValid = _driverKey.currentState?.validate() ?? false;
+                      if (isValid) {
+                        Navigator.pushNamed(context, '/driverhome');
+                      }
+                      break;
+                  }
                 },
               ),
             ],

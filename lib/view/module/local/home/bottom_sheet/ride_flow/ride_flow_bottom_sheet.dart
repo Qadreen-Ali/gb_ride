@@ -34,7 +34,6 @@ class _RideFlowBottomSheetState extends State<RideFlowBottomSheet> {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
 
-    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         _closeSheet();

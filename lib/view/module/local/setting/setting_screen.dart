@@ -28,7 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.user,
         title: 'Profile Information',
-
+        
         onTap: () {
           Navigator.pushNamed(context, '/profile');
         },
@@ -46,9 +46,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       SettingsItem(
         icons: SolarLinearIcons.bell,
         title: 'Notifications',
-        onTap: () {
-          Navigator.pushNamed(context, '/notification_driver');
-        },
+        onTap: () {},
       ),
       SettingsItem(
         icons: SolarLinearIcons.shieldKeyhole,
@@ -93,31 +91,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
             decoration: BoxDecoration(
               color: GBColor.primary,
               shape: BoxShape.circle,
-              image: DecorationImage(image: AssetImage(GBImagePath.profile)),
+              image: DecorationImage(image:  AssetImage(GBImagePath.profile))
             ),
           ),
         ),
         title: 'Settings',
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: GBColor.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.close, color: GBColor.secondary),
+        actions: [Padding(
+          padding: const EdgeInsets.all(8),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color:GBColor.primary,
+                shape: BoxShape.circle,
               ),
+              child: const Icon(Icons.close, color:GBColor.secondary),
             ),
           ),
-        ],
+        ),],
       ),
 
-      body: ScrollConfiguration(
+        body: ScrollConfiguration(
         behavior: ScrollBehavior().copyWith(
           overscroll: false, // removes glow
           scrollbars: false, // removes scroll bar

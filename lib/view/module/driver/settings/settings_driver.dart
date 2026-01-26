@@ -46,7 +46,7 @@ class _DriverSettingsState extends State<DriverSettings> {
         icons: SolarLinearIcons.bell,
         title: 'Notifications',
         onTap: () {
-          Navigator.pushNamed(context, '/notification_driver');
+          Navigator.pushNamed(context, '/notification(driver)');
         },
       ),
       SettingsItem(

@@ -139,7 +139,7 @@ class SettingsTile extends StatelessWidget {
                               if (item.subtitle != null)
                                 Text(
                                   item.subtitle!,
-                                  maxLines: 2,
+                                  maxLines: 3,
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: GBColor.black,
@@ -154,7 +154,7 @@ class SettingsTile extends StatelessWidget {
                         // Column 2: Extra Text + Dot
                         if (item.extraText != null)
                           SizedBox(
-                            width: 60, // 🔒 FIXED WIDTH (adjust if needed)
+                            width: 85, // 🔒 FIXED WIDTH (adjust if needed)
                             child: Column(
                               crossAxisAlignment:
                                   CrossAxisAlignment.end, // ⬅️ align to end

@@ -6,7 +6,7 @@ import 'package:gb_ride/view/auth/common/bottom_sheet_selector.dart';
 import 'package:gb_ride/view/module/local/setting/profile/widget/profile_picker.dart';
 
 import '../../../../../utils/constants/custom_app-bar.dart';
-import '../../../../../utils/constants/image_string.dart';
+// import '../../../../../utils/constants/image_string.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -46,32 +46,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: GBColor.secondary,
       resizeToAvoidBottomInset: true,
       appBar: CustomAppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-                color: GBColor.primary,
-                shape: BoxShape.circle,
-                image: DecorationImage(image:  AssetImage(GBImagePath.profile))
-            ),
-          ),
-        ),
+        showLeading: false,
         title: 'Profile',
-        actions: [Padding(
-          padding: const EdgeInsets.all(8),
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color:GBColor.primary,
-                shape: BoxShape.circle,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: GBColor.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.close, color: GBColor.secondary),
               ),
-              child: const Icon(Icons.close, color:GBColor.secondary),
             ),
           ),
-        ),],
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

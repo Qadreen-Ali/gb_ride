@@ -54,7 +54,9 @@ class _TTextFieldState extends State<TTextField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (widget.titleText != null && widget.titleText!.isNotEmpty)
+
+
+        if (widget.titleText != null && widget.titleText.isNotEmpty)
           Text(
             widget.titleText!,
             style: const TextStyle(

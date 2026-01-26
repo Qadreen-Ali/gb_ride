@@ -63,7 +63,7 @@ class _NotificationAllScreenState extends State<NotificationAllScreen> {
         iconBgColor: GBColor.primary,
         showArrow: false,
         title: 'New 5 star Rating',
-        extraText: 'Yesterday',
+        extraText: 'A Month Ago',
         subtitle:
             'Great driver, very polite and car was clean. keep up the good work.',
         onTap: () {},

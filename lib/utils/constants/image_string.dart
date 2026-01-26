@@ -8,9 +8,9 @@ class GBImagePath {
   static final String menu = "assets/icons/menu.png";
 
   //homescreen Images
-  static final String car = "assets/images/car.png";
-  static final String motorcycle = "assets/images/motocycle.png";
-  static final String schoolbus = "assets/images/road-trip.png";
+  static final String car = "assets/images/car1.png";
+  static final String motorcycle = "assets/images/bike1.png";
+  static final String schoolbus = "assets/images/.png";
   static final String search = "assets/icons/Search.png";
   static final String home = "assets/icons/home.png";
   static final String ride = "assets/icons/ride.png";

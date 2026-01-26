@@ -58,7 +58,9 @@ class TopBar extends StatelessWidget {
                   Icons.notifications_outlined,
                   color: Colors.white,
                 ),
-                onPressed: () => Navigator.pushNamed(context, '/notification'),
+                onPressed: () {
+                  onNotificationPressed();
+                },
               ),
             ),
           ],

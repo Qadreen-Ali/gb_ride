@@ -1,7 +1,8 @@
 // 03465407068
 import 'package:flutter/material.dart';
+import 'package:gb_ride/view/module/driver/bottom_sheet/offer_fare_screen.dart';
+import 'package:gb_ride/view/module/driver/home/driver_home_screen.dart';
 import 'package:gb_ride/view/module/driver/notifications/notification(driver).dart';
-import 'package:gb_ride/view/module/driver/settings/settings_driver.dart';
 import 'package:gb_ride/view/module/local/home/home_screen.dart';
 import 'package:gb_ride/view/module/local/notifications/notification_screen.dart';
 import 'package:gb_ride/view/module/local/setting/help_and_support/help_screen.dart';
@@ -44,8 +45,8 @@ class MyApp extends StatelessWidget {
           final args = ModalRoute.of(context)?.settings.arguments as String?;
           return OTPVerificationScreen(phoneNumber: args ?? '');
         },
-        '/form': (context) => const FormScreen(),
-        '/home': (context) => const LocalHomeScreen(),
+        '/form': (context) => FormScreen(),
+        '/localhome': (context) => const LocalHomeScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/profile': (context) => const ProfileScreen(),
         '/notification': (context) => const NotificationScreen(),
@@ -53,8 +54,9 @@ class MyApp extends StatelessWidget {
         '/safety': (context) => const SafetyScreen(),
         '/paymentmethod': (context) => const PaymentMethodsScreen(),
         '/history': (context) => const HistoryScreen(),
-        '/notification_driver': (context) => const NotificationDriverScreen(),
-        '/Settings_driver': (context) => const DriverSettings(),
+        '/driverhome': (context) => const DriverHomeScreen(),
+        '/fare': (context) => const OfferFareScreen(),
+        '/notification(driver)': (context) => const NotificationDriverScreen(),
       },
     );
   }
