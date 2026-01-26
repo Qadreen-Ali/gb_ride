@@ -1,28 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
-import 'package:gb_ride/utils/constants/secondary_button.dart';
+import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/widget/on_way_widget.dart';
+import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/widget/waiting_widget.dart';
+import 'package:gb_ride/view/module/driver/home/common/common_item_widget.dart';
+import 'package:gb_ride/view/module/driver/models/ride_model.dart';
+import 'package:gb_ride/view/module/driver/models/ride_status.dart';
 
 class RideFlowScreen extends StatefulWidget {
-  final String? pickupLocation;
-  final String? destinationLocation;
-  final String? distanceKm;
-  final String? etaMinutes;
+  final RideModel rideModel;
 
-  const RideFlowScreen({
-    super.key,
-    this.pickupLocation,
-    this.destinationLocation,
-    this.distanceKm,
-    this.etaMinutes,
-  });
+  const RideFlowScreen({super.key, required this.rideModel});
 
   @override
   State<RideFlowScreen> createState() => _RideFlowScreenState();
 }
 
-class _RideFlowScreenState extends State<RideFlowScreen> {
+class _RideFlowScreenState extends State<RideFlowScreen>
+    with SingleTickerProviderStateMixin {
+  /// ✅ Ride status MUST live inside State
+  RideStatus _status = RideStatus.onTheWay;
+
+  void _onArrivedPressed() {
+    setState(() {
+      _status = RideStatus.waiting;
+    });
+  }
+
+  //animations
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat(reverse: true);
+
+    _pulseAnimation = Tween<double>(begin: 0.95, end: 1.0).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pulseController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,225 +81,42 @@ class _RideFlowScreenState extends State<RideFlowScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Title
-              const Text(
-                'On the way to Pickup',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: GBColor.black,
-                ),
-              ),
-              const SizedBox(height: 8),
+              /// 🔹 ON THE WAY / WAITING HEADER (DYNAMIC)
+              if (_status == RideStatus.onTheWay) const OnTheWayWidget(),
 
-              // Time Info
-              Row(
-                children: [
-                  const Text(
-                    '12min',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: GBColor.black,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(width: 1, height: 14, color: Colors.grey.shade300),
-                  const SizedBox(width: 8),
-                  Text(
-                    '5 min estimate',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.grey.shade600,
-                    ),
-                  ),
-                ],
-              ),
+              if (_status == RideStatus.waiting)
+                WaitingWidget(
+                  waitingTime: const Duration(minutes: 3, seconds: 0),
+                  estimatedFare: widget.rideModel.fare.toInt(),
+                ),
+
               const SizedBox(height: 20),
 
-              // Driver Profile Card
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: GBColor.borderColor, width: 1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    // Profile Picture
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey.shade300,
-                      ),
-                      child: ClipOval(
-                        child: Image.asset(
-                          GBImagePath.profile, // Replace with actual image
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
+              /// DRIVER PROFILE CARD
+              DriverCommonItemWidget(rideModel: widget.rideModel),
 
-                    // Driver Info
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Hassan',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: GBColor.black,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Verified Rider',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                            color: GBColor.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 80),
-                    ContactWidget(
-                      icon: Icons.message,
-                      color: GBColor.black,
-                      bgColor: GBColor.secondary,
-                    ),
-                    const SizedBox(width: 12),
-                    ContactWidget(
-                      icon: Icons.phone,
-                      color: GBColor.secondary,
-                      bgColor: GBColor.primary,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 10),
 
-              // Location Card
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: GBColor.primary, width: 1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: GBColor.secondary.withValues(alpha: 0.2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.location_on,
-                        color: GBColor.primary,
-                        size: 20,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.pickupLocation ?? 'Pickup',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: GBColor.black,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            widget.destinationLocation ?? 'Destination',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey.shade600,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Center(
-                      child: Text(
-                        '${double.tryParse(widget.distanceKm ?? '0')?.toStringAsFixed(1) ?? '0'} km',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Message Buttons
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: SecondaryButton(
-                        title: 'Message',
-                        leadingIcon: const Icon(
-                          Icons.message,
-                          size: 18,
-                          color: GBColor.black,
-                        ),
-                        onPressed: () {},
-                        backgroundColor: Colors.transparent,
-                        textColor: GBColor.black,
-                        borderColor: GBColor.primary,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: SecondaryButton(
-                        title: 'Call',
-                        leadingIcon: const Icon(
-                          Icons.phone,
-                          size: 18,
-                          color: GBColor.black,
-                        ),
-                        onPressed: () {},
-                        backgroundColor: Colors.transparent,
-                        textColor: GBColor.black,
-                        borderColor: GBColor.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Arrived Button
+              ///  ARRIVED / WAITING BUTTON
               SizedBox(
                 width: double.infinity,
-                child: PrimaryButton(
-                  title: 'Arrived',
-                  onPressed: () {},
-                  backgroundColor: GBColor.primary,
-                  textColor: GBColor.secondary,
-                  fontsize: 16,
+                child: ScaleTransition(
+                  scale: _status == RideStatus.waiting
+                      ? _pulseAnimation
+                      : const AlwaysStoppedAnimation(1),
+                  child: PrimaryButton(
+                    title: _status == RideStatus.waiting
+                        ? 'Waiting'
+                        : 'Arrived',
+                    onPressed: () {
+                      if (_status == RideStatus.onTheWay) {
+                        _onArrivedPressed();
+                      }
+                    },
+                    backgroundColor: GBColor.primary,
+                    textColor: GBColor.secondary,
+                    fontsize: 16,
+                  ),
                 ),
               ),
             ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/view/module/driver/home/widgets/offer_fare_card.dart';
+import 'package:gb_ride/view/module/driver/models/ride_model.dart';
 
 class DriverBottomSheet extends StatefulWidget {
   final VoidCallback? onOfferTap;
@@ -12,9 +13,33 @@ class DriverBottomSheet extends StatefulWidget {
 }
 
 class _DriverBottomSheetState extends State<DriverBottomSheet> {
+  final List<RideModel> mockRides = [
+    RideModel(
+      rideId: 'r1',
+      pickupLocation: 'Noor Plaza, Gilgit',
+      destinationLocation: 'Jutial, Gilgit',
+      distanceKm: 3.4,
+      etaMinutes: 8,
+      fare: 200,
+      driverName: 'Hassan',
+      driverImagePath: 'assets/images/profile.png',
+    ),
+    RideModel(
+      rideId: 'r2',
+      pickupLocation: 'KIU Road',
+      destinationLocation: 'Baseen',
+      distanceKm: 5.1,
+      etaMinutes: 12,
+      fare: 350,
+      driverName: 'Hassan',
+      driverImagePath: 'assets/images/profile.png',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: MediaQuery.of(context).size.height * 0.6,
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -22,61 +47,35 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
           topRight: Radius.circular(20),
         ),
       ),
-      child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.6,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Drag handle
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade400,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
+      child: Column(
+        children: [
+          /// Drag handle
+          const SizedBox(height: 12),
+          Container(
+            width: 36,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade400,
+              borderRadius: BorderRadius.circular(2),
             ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                children: [
-                  OfferFareCard(
-                    onOfferTap: widget.onOfferTap,
-                    onOfferClose: widget.onOfferClose,
-                  ),
-                  OfferFareCard(
-                    onOfferTap: widget.onOfferTap,
-                    onOfferClose: widget.onOfferClose,
-                  ),
-                  OfferFareCard(
-                    onOfferTap: widget.onOfferTap,
-                    onOfferClose: widget.onOfferClose,
-                  ),
-                  OfferFareCard(
-                    onOfferTap: widget.onOfferTap,
-                    onOfferClose: widget.onOfferClose,
-                  ),
-                  OfferFareCard(
-                    onOfferTap: widget.onOfferTap,
-                    onOfferClose: widget.onOfferClose,
-                  ),
-                  OfferFareCard(
-                    onOfferTap: widget.onOfferTap,
-                    onOfferClose: widget.onOfferClose,
-                  ),
-                  OfferFareCard(
-                    onOfferTap: widget.onOfferTap,
-                    onOfferClose: widget.onOfferClose,
-                  ),
-                  const SizedBox(height: 16),
-                ],
-              ),
+          ),
+          const SizedBox(height: 12),
+
+          /// LIST (NO EXPANDED ❌)
+          Flexible(
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              itemCount: mockRides.length,
+              itemBuilder: (context, index) {
+                return OfferFareCard(
+                  rideModel: mockRides[index],
+                  onOfferTap: widget.onOfferTap,
+                  onOfferClose: widget.onOfferClose,
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
