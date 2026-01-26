@@ -16,7 +16,7 @@ class GBText {
   static const String gbRide = "GB RIDE";
   static const String loginToYourAccount = "Log In to manage your finances.";
   // static const String emailAddress = "Email Address";
-  static const String phoneNumber = "00 00000000";
+  static const String phoneNumber = "Phone Number";
   static const String verificationCode = "Verification Code";
   static const String codeSent = "We have sent the code verification to";
   // static const String emailOrPhone =
@@ -36,11 +36,12 @@ class GBText {
   static const String continueAs = "Continue as";
 
   // home
-  static const String offerYourFare =  "Offer Your Fare";
-  static const String pkr =  'PKR';
+  static const String offerYourFare = "Offer Your Fare";
+  static const String pkr = 'PKR';
   static const String cash = "Cash";
   static const String done = "Done";
-  static const String locationServicesAre = "Location services are disabled. Please enable them.";
+  static const String locationServicesAre =
+      "Location services are disabled. Please enable them.";
   static const String gilgitPakistan = "Gilgit, Pakistan (Default)";
   static const String setting = "Settings";
   static const String chooseOnMap = "Choose on map";
@@ -56,14 +57,15 @@ class GBText {
   static const String raiseFare = "Raise fare";
   static const String sonikotGilgit = "Sonikot Gilgit";
   static const String siliconGlobalTech = "Silicon Global Tech";
-  static const String waitingForOffersFromDrivers = "Waiting for offers from drivers";
-  static const String automaticallyAcceptTheNearestDriver =  "Automatically accept the \n nearest driver for PK 60";
-  static const String driverArriveIn2Min =  "Driver is arriving in \n 2 min";
-  static const String startRide =  "Start Ride";
-  static const String driverArrived =  "Driver Arrived";
-  static const String startJourney =  "Start Journey . . .";
-  static const String accepeted =  "Accepeted";
-  static const String yourDestination=  "Your Destination is \n Arrived";
-  static const String endRide=  "End Ride";
-
+  static const String waitingForOffersFromDrivers =
+      "Waiting for offers from drivers";
+  static const String automaticallyAcceptTheNearestDriver =
+      "Automatically accept the \n nearest driver for PK 60";
+  static const String driverArriveIn2Min = "Driver is arriving in \n 2 min";
+  static const String startRide = "Start Ride";
+  static const String driverArrived = "Driver Arrived";
+  static const String startJourney = "Start Journey . . .";
+  static const String accepeted = "Accepeted";
+  static const String yourDestination = "Your Destination is \n Arrived";
+  static const String endRide = "End Ride";
 }

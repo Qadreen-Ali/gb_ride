@@ -199,7 +199,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                       VehicleOptionCard(
                         type: 'car',
                         label: 'Car',
-                        iconPath: 'assets/icons/car.png',
+                        iconPath: 'assets/icons/car1.png',
                         capacity: 4,
                         isSelected: widget.selectedVehicle == 'car',
                         onTap: () => widget.onVehicleSelect('car'),
@@ -208,7 +208,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                       VehicleOptionCard(
                         type: 'city',
                         label: 'City',
-                        iconPath: 'assets/icons/road-trip.png',
+                        iconPath: 'assets/icons/hiace.png',
                         capacity: 4,
                         isSelected: widget.selectedVehicle == 'city',
                         onTap: () => widget.onVehicleSelect('city'),
@@ -217,7 +217,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                       VehicleOptionCard(
                         type: 'bike',
                         label: 'Bike',
-                        iconPath: 'assets/icons/motorbike.png',
+                        iconPath: 'assets/icons/bike1.png',
                         capacity: 1,
                         isSelected: widget.selectedVehicle == 'bike',
                         onTap: () => widget.onVehicleSelect('bike'),

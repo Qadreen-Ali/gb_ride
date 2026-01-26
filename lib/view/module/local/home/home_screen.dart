@@ -37,58 +37,7 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
   //live location functions
   LatLng? _liveLocation;
   StreamSubscription<Position>? _liveLocationStream;
-  //route polyline functions
-  // List<LatLng> _createCurvedRoute(List<LatLng> points) {
-  //   if (points.length < 4) return points;
-
-  //   final List<LatLng> curved = [];
-
-  //   for (int i = 0; i < points.length - 1; i++) {
-  //     final p0 = i > 0 ? points[i - 1] : points[i];
-  //     final p1 = points[i];
-  //     final p2 = points[i + 1];
-  //     final p3 = i + 2 < points.length ? points[i + 2] : p2;
-
-  //     for (double t = 0; t <= 1; t += 0.03) {
-  //       final t2 = t * t;
-  //       final t3 = t2 * t;
-
-  //       final lat =
-  //           0.5 *
-  //           ((2 * p1.latitude) +
-  //               (-p0.latitude + p2.latitude) * t +
-  //               (2 * p0.latitude -
-  //                       5 * p1.latitude +
-  //                       4 * p2.latitude -
-  //                       p3.latitude) *
-  //                   t2 +
-  //               (-p0.latitude +
-  //                       3 * p1.latitude -
-  //                       3 * p2.latitude +
-  //                       p3.latitude) *
-  //                   t3);
-
-  //       final lng =
-  //           0.5 *
-  //           ((2 * p1.longitude) +
-  //               (-p0.longitude + p2.longitude) * t +
-  //               (2 * p0.longitude -
-  //                       5 * p1.longitude +
-  //                       4 * p2.longitude -
-  //                       p3.longitude) *
-  //                   t2 +
-  //               (-p0.longitude +
-  //                       3 * p1.longitude -
-  //                       3 * p2.longitude +
-  //                       p3.longitude) *
-  //                   t3);
-
-  //       curved.add(LatLng(lat, lng));
-  //     }
-  //   }
-
-  //   return curved;
-  // }
+  //smooth turns functions
   List<LatLng> _smoothChaikin(List<LatLng> points, {int iterations = 3}) {
     if (points.length < 3) return points;
 
@@ -506,21 +455,7 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
       }
     });
   }
-  // void _collapseSheet() {
-  //   _sheetController.animateTo(
-  //     0.15,
-  //     duration: const Duration(milliseconds: 300),
-  //     curve: Curves.easeInOut,
-  //   );
-  // }
 
-  // void _expandSheet() {
-  //   _sheetController.animateTo(
-  //     0.7,
-  //     duration: const Duration(milliseconds: 300),
-  //     curve: Curves.easeInOut,
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {

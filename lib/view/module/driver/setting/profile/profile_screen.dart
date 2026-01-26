@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/secondary_button.dart';
 import 'package:gb_ride/view/module/driver/common/widget/heading_text.dart';
-
+import 'package:gb_ride/view/module/driver/setting/profile/widget/trip_widget.dart';
 import '../../../../../utils/constants/color_string.dart';
 import '../../../../../utils/constants/custom_app-bar.dart';
 import '../../../../../utils/constants/image_string.dart';
 import '../../../local/setting/profile/widget/profile_picker.dart';
 import '../../wallet/widget/transaction_detail_widget.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class DriverProfileScreen extends StatelessWidget {
+  const DriverProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -232,45 +232,4 @@ class AccountItems extends StatelessWidget {
   }
 }
 
-class Tripwidget extends StatelessWidget {
-  final String text1;
-  final String text2;
 
-  const Tripwidget({super.key, required this.text1, required this.text2});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 140,
-      height: 90,
-      decoration: BoxDecoration(
-        border: Border.all(color: GBColor.borderColor),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            text1,
-            style: TextStyle(
-              color: GBColor.black,
-              fontSize: 24,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'Poppins',
-            ),
-          ),
-          Text(
-            text2,
-            style: TextStyle(
-              color: GBColor.gray,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'Poppins',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
