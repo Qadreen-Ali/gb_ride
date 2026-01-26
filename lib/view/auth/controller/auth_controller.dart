@@ -1,70 +1,85 @@
-import 'dart:ui';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthController {
   AuthController._internal();
   static final AuthController instance = AuthController._internal();
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  String? _verificationId;
+  final supabase = Supabase.instance.client;
+  String? _phone;
+  String? _debugOtp; // Store debug OTP for testing
 
-  /// Validates Pakistani phone number (03XXXXXXXXX)
+  // 1. Validation Logic
   bool isValidPakNumber(String input) {
     final cleaned = input.replaceAll(RegExp(r'\D'), '');
     return RegExp(r'^3\d{9}$').hasMatch(cleaned);
   }
 
-  /// Converts 03XXXXXXXXX → +923XXXXXXXXX
-  String toFirebasePhone(String input) {
+  String normalizePhone(String input) {
     final cleaned = input.replaceAll(RegExp(r'\D'), '');
     return '+92$cleaned';
   }
 
-  void requestOtp({
+  // 2. Request OTP (Call Edge Function instead of Supabase Auth)
+  Future<void> requestOtp({
     required String phone,
-    required VoidCallback onSuccess,
-    required void Function(String error) onError,
-  }) {
-    _auth.verifyPhoneNumber(
-      phoneNumber: phone,
-      timeout: const Duration(seconds: 60),
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        // OPTIONAL: auto-login
-        await _auth.signInWithCredential(credential);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        onError(e.message ?? 'Verification failed');
-      },
-      codeSent: (String verificationId, int? resendToken) {
-        _verificationId = verificationId;
-        onSuccess();
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        _verificationId = verificationId;
-      },
-    );
-  }
-
-  void verifyOtp({
-    required String otp,
-    required VoidCallback onSuccess,
+    required void Function() onSuccess,
     required void Function(String error) onError,
   }) async {
     try {
-      if (_verificationId == null) {
-        onError('OTP expired. Please resend.');
-        return;
-      }
+      _phone = phone;
 
-      final credential = PhoneAuthProvider.credential(
-        verificationId: _verificationId!,
-        smsCode: otp,
+      // Call your Edge Function instead
+      final response = await supabase.functions.invoke(
+        'send-otp',
+        body: {'phone': _phone},
       );
 
-      await _auth.signInWithCredential(credential);
-      onSuccess();
+      print('Edge Function Response: ${response.data}');
+
+      if (response.data['success'] == true) {
+        // Store debug OTP for testing (remove in production)
+        _debugOtp = response.data['debug_otp'];
+        print('DEBUG OTP: $_debugOtp'); // You'll see this in console
+
+        onSuccess();
+      } else {
+        onError(
+          'Failed to send OTP: ${response.data['error'] ?? 'Unknown error'}',
+        );
+      }
     } catch (e) {
-      onError('Invalid OTP');
+      onError('Error sending SMS: $e');
     }
+  }
+
+  // 3. Verify OTP (Call your verify Edge Function)
+  Future<void> verifyOtp({
+    required String otp,
+    required void Function() onSuccess,
+    required void Function(String error) onError,
+  }) async {
+    try {
+      final response = await supabase.functions.invoke(
+        'verify-otp',
+        body: {'phone': _phone!, 'otp': otp},
+      );
+
+      print('Verify Response: ${response.data}');
+
+      if (response.data['success'] == true) {
+        // OTP verified successfully
+        // Now you can create a user session or navigate to home
+        onSuccess();
+      } else {
+        onError('Invalid verification code');
+      }
+    } catch (e) {
+      onError('Verification Error: $e');
+    }
+  }
+
+  // Helper: Get debug OTP (for testing only)
+  String? getDebugOtp() {
+    return _debugOtp;
   }
 }

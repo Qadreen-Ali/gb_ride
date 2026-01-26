@@ -14,13 +14,16 @@ import 'package:gb_ride/view/splash/splash_screen.dart';
 import 'package:gb_ride/view/auth/form_screen.dart';
 import 'package:gb_ride/view/module/local/setting/payment_method/payment_methods_screen.dart';
 import 'package:gb_ride/view/module/local/setting/history/history_screen.dart';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  await Supabase.initialize(
+    url: 'https://jfwsaehmwgjcpvcimsuy.supabase.co',
+    anonKey: 'sb_publishable_aORB6QRHAWCP1CXkXPHC1Q_jEhirfeq',
+  );
+
   runApp(const MyApp());
 }
 
@@ -54,7 +57,7 @@ class MyApp extends StatelessWidget {
         '/paymentmethod': (context) => const PaymentMethodsScreen(),
         '/history': (context) => const HistoryScreen(),
         '/driverhome': (context) => const DriverHomeScreen(),
-        '/fare': (context) => const OfferFareScreen(),
+        // '/fare': (context) => const OfferFareScreen(),
       },
     );
   }

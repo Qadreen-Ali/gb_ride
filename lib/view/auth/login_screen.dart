@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    final phone = _authController.toFirebasePhone(input);
+    final phone = _authController.normalizePhone(input);
 
     _authController.requestOtp(
       phone: phone,

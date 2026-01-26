@@ -4,19 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/ride_flow_screen.dart';
+import 'package:gb_ride/view/module/driver/models/ride_model.dart';
 
 class OfferFareScreen extends StatefulWidget {
-  final String? pickupLocation;
-  final String? destinationLocation;
-  final double? distanceKm;
-  final int? etaMinutes;
+  final RideModel rideModel;
 
   const OfferFareScreen({
     super.key,
-    this.pickupLocation,
-    this.destinationLocation,
-    this.distanceKm,
-    this.etaMinutes,
+    required this.rideModel,
   });
 
   @override
@@ -29,12 +24,8 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
   @override
   void initState() {
     super.initState();
-    _fareController = TextEditingController();
-  }
-
-  void _moveCursorToEnd() {
-    _fareController.selection = TextSelection.fromPosition(
-      TextPosition(offset: _fareController.text.length),
+    _fareController = TextEditingController(
+      text: widget.rideModel.fare.toStringAsFixed(0),
     );
   }
 
@@ -45,23 +36,35 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
   }
 
   void _sendOffer() {
-    if (_fareController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a fare amount')),
-      );
-      return;
-    }
-
-    final fare = int.tryParse(_fareController.text);
-    if (fare == null || fare <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid fare amount')),
-      );
-      return;
-    }
-
-    // Close OfferFareScreen
+  if (_fareController.text.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please enter a fare amount')),
+    );
+    return;
   }
+
+  final fare = double.tryParse(_fareController.text);
+  if (fare == null || fare <= 0) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please enter a valid fare amount')),
+    );
+    return;
+  }
+
+  /// ✅ Create UPDATED ride model
+  final updatedRide = widget.rideModel.copyWith(fare: fare);
+
+  Navigator.pop(context);
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (_) => RideFlowScreen(
+      rideModel: updatedRide,
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +88,6 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Drag handle
               Center(
                 child: Container(
                   width: 36,
@@ -97,7 +99,7 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              // Title
+
               const Text(
                 'Customize your fare',
                 style: TextStyle(
@@ -106,102 +108,15 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
                   color: GBColor.black,
                 ),
               ),
+
               const SizedBox(height: 12),
-              // Fare Input Field - Large Display
-              Center(
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 60,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final hasValue = _fareController.text.isNotEmpty;
-                      final displayText = hasValue ? _fareController.text : '0';
 
-                      final painter = TextPainter(
-                        text: TextSpan(
-                          text: 'PKR $displayText',
-                          style: const TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        maxLines: 1,
-                        textDirection: TextDirection.ltr,
-                      )..layout();
-
-                      final leftOffset =
-                          (constraints.maxWidth - painter.width) / 2;
-
-                      return Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          /// Background
-                          Container(
-                            height: 80,
-                            decoration: BoxDecoration(
-                              color: GBColor.secondary.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: GBColor.borderColor.withValues(
-                                  alpha: 0.3,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          /// Real input (logic only)
-                          TextFormField(
-                            controller: _fareController,
-                            keyboardType: TextInputType.number,
-                            showCursor: false,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.transparent,
-                            ),
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: '', // we handle hint visually
-                            ),
-                            onChanged: (_) => setState(() {}),
-                          ),
-
-                          /// Visual centered PKR + value / hint
-                          IgnorePointer(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text(
-                                  'PKR ',
-                                  style: TextStyle(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                Text(
-                                  displayText,
-                                  style: TextStyle(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.w700,
-                                    color: hasValue
-                                        ? GBColor.black
-                                        : Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ),
+              /// FARE INPUT UI (UNCHANGED)
+              _buildFareInput(),
 
               const SizedBox(height: 16),
-              // Destination Card
+
+              /// LOCATION CARD (NOW FROM RideModel)
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -209,13 +124,11 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       width: 36,
                       height: 36,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: GBColor.secondary,
                         shape: BoxShape.circle,
                       ),
@@ -230,36 +143,28 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Pickup
                           Text(
-                            widget.pickupLocation ?? 'Pickup',
+                            widget.rideModel.pickupLocation,
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               color: GBColor.black,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(width: 8),
-
                           const SizedBox(height: 6),
-                          // Destination
                           Text(
-                            widget.destinationLocation ?? 'Destination',
+                            widget.rideModel.destinationLocation,
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: GBColor.gray,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
                     ),
                     Text(
-                      '${widget.distanceKm?.toStringAsFixed(1) ?? '0'} km',
+                      widget.rideModel.formattedDistance,
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -269,37 +174,84 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
                   ],
                 ),
               ),
+
               const SizedBox(height: 20),
-              // Send Offer Button
+
               SizedBox(
                 width: double.infinity,
                 child: PrimaryButton(
                   title: 'Send Offer',
-                  onPressed: () {
-                    _sendOffer();
-                    Navigator.pop(context, {
-                      // 'fare': fare,
-                      'distance': widget.distanceKm,
-                      'eta': widget.etaMinutes,
-                    });
-
-                    // Open RideFlowScreen
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (_) => const RideFlowScreen(),
-                    );
-                  },
+                  onPressed: _sendOffer,
                   backgroundColor: GBColor.primary,
                   textColor: GBColor.secondary,
                   fontsize: 18,
                 ),
               ),
+
               const SizedBox(height: 16),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// ---- helper ----
+  Widget _buildFareInput() {
+    final hasValue = _fareController.text.isNotEmpty;
+    final displayText = hasValue ? _fareController.text : '0';
+
+    return SizedBox(
+      height: 80,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: GBColor.secondary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: GBColor.borderColor.withValues(alpha: 0.3),
+              ),
+            ),
+          ),
+          TextFormField(
+            controller: _fareController,
+            keyboardType: TextInputType.number,
+            showCursor: false,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.w700,
+              color: Colors.transparent,
+            ),
+            decoration: const InputDecoration(border: InputBorder.none),
+            onChanged: (_) => setState(() {}),
+          ),
+          IgnorePointer(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'PKR ',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.grey,
+                  ),
+                ),
+                Text(
+                  displayText,
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    color: hasValue ? GBColor.black : Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
