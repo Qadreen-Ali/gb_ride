@@ -8,7 +8,7 @@ class GBImagePath {
   static final String menu = "assets/icons/menu.png";
 
   //homescreen Images
-  static final String car = "assets/images/car1.png";
+  static final String car = "assets/icons/car1.png";
   static final String motorcycle = "assets/images/bike1.png";
   static final String schoolbus = "assets/images/.png";
   static final String search = "assets/icons/Search.png";
@@ -24,4 +24,12 @@ class GBImagePath {
   static final String loading = "assets/images/loading.png";
   static final String safety = "assets/icons/safety.png";
   static final String help = "assets/icons/help.png";
+  static final String dollar = "assets/images/dollar.png";
+  static final String bank = "assets/images/bank.png";
+  static final String edit = "assets/images/edit.png";
+  static final String file = "assets/images/file.png";
+  static final String setting = "assets/images/setting.png";
+  static final String verify = "assets/images/verify.png";
+  static final String language = "assets/images/language.png";
+  static final String line = "assets/images/Line.png";
 }

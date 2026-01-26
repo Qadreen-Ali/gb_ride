@@ -4,6 +4,9 @@ import 'package:gb_ride/view/auth/login_screen.dart';
 import '../../utils/constants/color_string.dart';
 import '../../utils/constants/image_string.dart';
 import '../../utils/constants/text_string.dart';
+import '../module/driver/payment/payment_summary.dart';
+import '../module/driver/setting/profile/profile_screen.dart';
+import '../module/driver/wallet/driver_wallet.dart';
 import '../module/local/home/home_screen.dart';
 
 // import '../auth/signup_screen.dart';
@@ -25,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         // ignore: use_build_context_synchronously
         context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
+        MaterialPageRoute(builder: (context) => PaymentSummary()),
       );
     });
   }

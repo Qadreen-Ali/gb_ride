@@ -64,6 +64,7 @@ class PrimaryButton extends StatelessWidget {
                 ? Colors.black.withValues(alpha: 0.5)
                 : (textColor ?? GBColor.black),
           ),
+          maxLines: 1,
         ),
       ),
     );
