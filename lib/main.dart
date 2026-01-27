@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/view/module/driver/bottom_sheet/offer_fare_screen.dart';
 import 'package:gb_ride/view/module/driver/home/driver_home_screen.dart';
+import 'package:gb_ride/view/module/driver/home/app_drawer/driver_trips.dart';
 import 'package:gb_ride/view/module/local/home/home_screen.dart';
 import 'package:gb_ride/view/module/local/notifications/notification_screen.dart';
 import 'package:gb_ride/view/module/local/setting/help_and_support/help_screen.dart';
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      //   home: const BottomNavBar(),
+       //  home: const DriverTripsScreen(),
       routes: {
         '/': (context) => SplashScreen(), //initial Screen
         '/login': (context) => const LoginScreen(),
@@ -57,7 +58,8 @@ class MyApp extends StatelessWidget {
         '/paymentmethod': (context) => const PaymentMethodsScreen(),
         '/history': (context) => const HistoryScreen(),
         '/driverhome': (context) => const DriverHomeScreen(),
-        // '/fare': (context) => const OfferFareScreen(),
+        //'/fare': (context) => const OfferFareScreen(),
+        '/trips': (context) => const DriverTripsScreen(),
       },
     );
   }
