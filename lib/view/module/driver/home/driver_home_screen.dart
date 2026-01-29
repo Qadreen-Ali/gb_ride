@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-// import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gb_ride/view/module/driver/home/widgets/top_bar.dart';
 import 'package:gb_ride/view/module/driver/home/app_drawer/app_drawer.dart';
@@ -192,7 +191,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
           TopBar(
             onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
             onNotificationPressed: () {
-              // Navigator.pushNamed(context, '/notification');
+              Navigator.pushNamed(context, '/notification(driver)');
             },
           ),
 

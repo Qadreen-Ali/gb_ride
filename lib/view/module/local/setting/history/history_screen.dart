@@ -31,12 +31,14 @@ class HistoryScreen extends StatelessWidget {
         ),],
       ),
       body: ListView.separated(
-        padding: const EdgeInsets.only( bottom: 12),
+        padding: const EdgeInsets.only(bottom: 12),
         itemCount: 8,
         separatorBuilder: (_, _) => Divider(
           height: 1,
-          thickness: 1, 
-          color: GBColor.linegrey, 
+          thickness: 1,
+          color: GBColor.linegrey,
+          indent: 16,
+          endIndent: 16,
         ),
         itemBuilder: (context, index) {
           return _HistoryTile(
@@ -184,10 +186,7 @@ class _LocationIndicator extends StatelessWidget {
   final Color color;
   final bool showLine;
 
-  const _LocationIndicator({
-    required this.color,
-    required this.showLine,
-  });
+  const _LocationIndicator({required this.color, required this.showLine});
 
   @override
   Widget build(BuildContext context) {
@@ -215,9 +214,7 @@ class _LocationIndicator extends StatelessWidget {
           Container(
             height: 20,
             margin: const EdgeInsets.only(top: 2),
-            child: CustomPaint(
-              painter: _DottedLinePainter(),
-            ),
+            child: CustomPaint(painter: _DottedLinePainter()),
           ),
       ],
     );

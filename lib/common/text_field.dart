@@ -42,7 +42,6 @@ class TTextField extends StatefulWidget {
     this.textColor,
     this.titleTextColor,
     ValueChanged<String>? onChanged,
-
   });
 
   @override
@@ -67,7 +66,6 @@ class _TTextFieldState extends State<TTextField> {
             ),
           ),
 
-
         const SizedBox(height: 10),
         SizedBox(
           width: 378,
@@ -83,7 +81,8 @@ class _TTextFieldState extends State<TTextField> {
             validator: widget.validator,
             inputFormatters: widget.inputFormatters,
             style: TextStyle(
-              color: widget.textColor ??
+              color:
+                  widget.textColor ??
                   GBColor.textFieldText, // ✅ Use custom color if provided
               fontSize: 14,
               fontWeight: FontWeight.w500,
@@ -125,9 +124,9 @@ class _TTextFieldState extends State<TTextField> {
               prefixIcon: widget.prefixIcon == null
                   ? null
                   : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: widget.prefixIcon,
-              ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: widget.prefixIcon,
+                    ),
 
               suffixIcon: widget.suffixIcon,
             ),
