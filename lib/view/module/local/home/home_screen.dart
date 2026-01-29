@@ -485,6 +485,19 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
                     ),
                   ),
                   children: [
+                      // TileLayer(
+                      //   urlTemplate: 'https://api.mapy.cz/v1/maptiles/basic/256/{z}/{x}/{y}?apikey=5ZjznbeW-4eyC2x7Snsc2p0PaU7YTKHgMqKpKuUjVtQ',
+                      //   userAgentPackageName: 'com.example.gb_ride',
+                      // ),
+
+
+                  //   TileLayer(
+                  //   urlTemplate: 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                  //   userAgentPackageName: 'com.example.gb_ride',
+                  //    additionalOptions: {
+                  //     'key': 'AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao',
+                  //   },
+                  // ),
                     TileLayer(
                       urlTemplate:
                           'https://tiles.locationiq.com/v3/streets/r/{z}/{x}/{y}.png?key=pk.25e1a7ca81d6256515a0311e26fb2ec3',

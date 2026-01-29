@@ -62,6 +62,7 @@ class MyApp extends StatelessWidget {
         '/driverhome': (context) => const DriverHomeScreen(),
         '/notification(driver)': (context) => const NotificationDriverScreen(),
         '/settings(driver)': (context) => const DriverSettings(),
+        
       },
     );
   }
