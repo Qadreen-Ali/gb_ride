@@ -49,7 +49,7 @@ class SettingsTile extends StatelessWidget {
     super.key,
     required this.item,
     required this.isExpanded,
-    this.iconBackgroundColor = GBColor.lightGray,
+    this.iconBackgroundColor = GBColor.primary,
   });
 
   @override
@@ -73,7 +73,8 @@ class SettingsTile extends StatelessWidget {
                     child: Text(
                       item.title,
                       style: TextStyle(
-                        fontSize: 16,
+                        // fontSize: 16,
+                        fontSize: GBSizes.fontSizeMd,
                         fontWeight: FontWeight.w500,
                         color: item.textColor ?? GBColor.gray,
                       ),
@@ -83,7 +84,8 @@ class SettingsTile extends StatelessWidget {
                     isExpanded
                         ? Icons.keyboard_arrow_up
                         : Icons.keyboard_arrow_down,
-                    size: 16,
+                    // size: 16,
+                    size: GBSizes.iconSm,
                     color: item.arrowColor ?? GBColor.gray,
                   ),
                 ],
@@ -96,7 +98,7 @@ class SettingsTile extends StatelessWidget {
                   Transform.translate(
                     offset: Offset(0, item.iconVerticalOffset),
                     child: CircleAvatar(
-                      radius: 12,
+                      radius: GBSizes.borderRadiusLg,
                       backgroundColor: item.iconBgColor ?? iconBackgroundColor,
                       child: item.iconPath != null
                           ? Image.asset(
@@ -109,7 +111,8 @@ class SettingsTile extends StatelessWidget {
                           ? Icon(
                               item.icons,
                               color: item.iconColor ?? GBColor.secondary,
-                              size: 16,
+                              // size: 16,
+                              size: GBSizes.iconSm,
                             )
                           : const SizedBox(),
                     ),
@@ -130,7 +133,7 @@ class SettingsTile extends StatelessWidget {
                               Text(
                                 item.title,
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: GBSizes.fontSizeMd,
                                   fontWeight: FontWeight.w500,
                                   color: item.textColor ?? GBColor.gray,
                                 ),
@@ -141,7 +144,7 @@ class SettingsTile extends StatelessWidget {
                                   item.subtitle!,
                                   maxLines: 3,
                                   style: const TextStyle(
-                                    fontSize: 12,
+                                    fontSize: GBSizes.fontSizeESm,
                                     color: GBColor.black,
                                   ),
                                 ),
@@ -188,7 +191,7 @@ class SettingsTile extends StatelessWidget {
                   if (item.showArrow)
                     Icon(
                       item.arrowIcon ?? Icons.arrow_forward_ios,
-                      size: 16,
+                      size: GBSizes.iconSm,
                       color: item.arrowColor ?? GBColor.gray,
                     ),
                 ],
@@ -199,7 +202,10 @@ class SettingsTile extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 item.answer!,
-                style: const TextStyle(fontSize: 14, color: GBColor.black),
+                style: const TextStyle(
+                  fontSize: GBSizes.fontSizeSm,
+                  color: GBColor.black,
+                ),
               ),
             ],
           ],
