@@ -3,7 +3,7 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
 
 class ProfileDrawer extends StatefulWidget {
-  const ProfileDrawer({Key? key}) : super(key: key);
+  const ProfileDrawer({super.key});
 
   @override
   State<ProfileDrawer> createState() => _ProfileDrawerState();
@@ -63,16 +63,13 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
 
-
             // Menu items
             Expanded(
               child: ListView(
-
                 children: [
                   DrawerMenuItem(
                     icon: Icons.home_outlined,
@@ -126,15 +123,18 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
             // History
             InkWell(
-              onTap: (){
-               // Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen(),));
+              onTap: () {
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen(),));
               },
               child: GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.pushNamed(context, '/history');
                 },
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 10,
+                  ),
                   child: Container(
                     width: double.infinity,
                     height: 54,
@@ -212,7 +212,6 @@ class DrawerMenuItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: isSelected ? GBColor.primary : GBColor.secondary,
-
       ),
       child: ListTile(
         leading: _buildIcon(),

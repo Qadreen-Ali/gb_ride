@@ -5,8 +5,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:gb_ride/view/module/driver/home/widgets/top_bar.dart';
 import 'package:gb_ride/view/module/driver/home/app_drawer/app_drawer.dart';
 import 'package:gb_ride/view/module/driver/home/driver_bottom_sheet.dart';
-import 'package:gb_ride/view/module/driver/bottom_sheet/offer_fare_screen.dart';
-import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/ride_flow_screen.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:async';
 

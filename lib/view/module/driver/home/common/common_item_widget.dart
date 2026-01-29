@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import 'package:gb_ride/utils/constants/image_string.dart';
-import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/ride_flow_screen.dart';
+import 'package:gb_ride/view/module/driver/home/common/widgets/driver_card.dart';
 import 'package:gb_ride/view/module/driver/models/ride_model.dart';
 
 class DriverCommonItemWidget extends StatelessWidget {
@@ -14,68 +13,7 @@ class DriverCommonItemWidget extends StatelessWidget {
     return Column(
       children: [
         /// DRIVER CARD
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            border: Border.all(color: GBColor.borderColor, width: 1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              // Profile Picture
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey.shade300,
-                ),
-                child: ClipOval(
-                  child: Image.asset(GBImagePath.profile, fit: BoxFit.cover),
-                ),
-              ),
-              const SizedBox(width: 12),
-
-              // Driver Info
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    rideModel.driverName,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: GBColor.black,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Verified Rider',
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.w500,
-                      color: GBColor.primary,
-                    ),
-                  ),
-                ],
-              ),
-              const Spacer(),
-
-              ContactWidget(
-                icon: Icons.message,
-                color: GBColor.black,
-                bgColor: GBColor.secondary,
-              ),
-              const SizedBox(width: 12),
-              ContactWidget(
-                icon: Icons.phone,
-                color: GBColor.secondary,
-                bgColor: GBColor.primary,
-              ),
-            ],
-          ),
-        ),
-
+        // DriverCard(rideModel: rideModel),
         const SizedBox(height: 16),
 
         /// LOCATION CARD
