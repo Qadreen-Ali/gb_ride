@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/view/module/driver/notifications/all_notification(driver).dart';
+import 'package:gb_ride/view/module/driver/notifications/system_notifications_screen.dart';
 import '../../../../utils/constants/custom_app-bar.dart';
 
 class NotificationDriverScreen extends StatelessWidget {
@@ -61,7 +62,7 @@ class NotificationDriverScreen extends StatelessWidget {
               child: TabBarView(
                 children: [
                   NotificationAllScreen(),
-                  // SystemNotificationScreen(),
+                  NotificationSystemScreen(),
                   // PromosNotificationScreen(),
                 ],
               ),

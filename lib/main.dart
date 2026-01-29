@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/view/module/driver/bottom_sheet/offer_fare_screen.dart';
 import 'package:gb_ride/view/module/driver/home/driver_home_screen.dart';
 import 'package:gb_ride/view/module/driver/notifications/notification(driver).dart';
+import 'package:gb_ride/view/module/driver/settings/settings_driver.dart';
 import 'package:gb_ride/view/module/local/home/home_screen.dart';
 import 'package:gb_ride/view/module/local/notifications/notification_screen.dart';
 import 'package:gb_ride/view/module/local/setting/help_and_support/help_screen.dart';
@@ -59,7 +60,8 @@ class MyApp extends StatelessWidget {
         '/paymentmethod': (context) => const PaymentMethodsScreen(),
         '/history': (context) => const HistoryScreen(),
         '/driverhome': (context) => const DriverHomeScreen(),
-        // '/fare': (context) => const OfferFareScreen(),
+        '/notification(driver)': (context) => const NotificationDriverScreen(),
+        '/settings(driver)': (context) => const DriverSettings(),
       },
     );
   }

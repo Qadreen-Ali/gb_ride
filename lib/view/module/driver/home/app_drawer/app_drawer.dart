@@ -96,7 +96,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     label: 'Setting',
                     isSelected: _selectedIndex == 2,
                     onTap: () => _onSelect(2, () {
-                      Navigator.pushNamed(context, '/settings');
+                      Navigator.pushNamed(context, '/settings(driver)');
                     }),
                   ),
 
