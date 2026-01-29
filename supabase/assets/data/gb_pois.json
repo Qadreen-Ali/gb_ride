@@ -1,0 +1,966 @@
+[
+  {
+    "id": "gb_001",
+    "name": "Gilgit Airport",
+    "city": "Gilgit",
+    "type": "airport",
+    "lat": 35.9188,
+    "lon": 74.3336,
+    "priority": 10
+  },
+  {
+    "id": "gb_002",
+    "name": "DHQ Hospital Gilgit",
+    "city": "Gilgit",
+    "type": "hospital",
+    "lat": 35.9208,
+    "lon": 74.3095,
+    "priority": 9
+  },
+  {
+    "id": "gb_003",
+    "name": "Aga Khan Medical Centre Gilgit",
+    "city": "Gilgit",
+    "type": "hospital",
+    "lat": 35.9215,
+    "lon": 74.3120,
+    "priority": 9
+  },
+  {
+    "id": "gb_004",
+    "name": "City Hospital Gilgit",
+    "city": "Gilgit",
+    "type": "hospital",
+    "lat": 35.9195,
+    "lon": 74.3105,
+    "priority": 8
+  },
+  {
+    "id": "gb_005",
+    "name": "CMH Gilgit",
+    "city": "Gilgit",
+    "type": "hospital",
+    "lat": 35.9180,
+    "lon": 74.3080,
+    "priority": 8
+  },
+  {
+    "id": "gb_006",
+    "name": "Psychiatry Hospital Jutial",
+    "city": "Gilgit",
+    "type": "hospital",
+    "lat": 35.8980,
+    "lon": 74.2950,
+    "priority": 7
+  },
+  {
+    "id": "gb_007",
+    "name": "Sehat Foundation Hospital",
+    "city": "Gilgit",
+    "type": "hospital",
+    "lat": 35.9220,
+    "lon": 74.3130,
+    "priority": 7
+  },
+  {
+    "id": "gb_008",
+    "name": "Gilgit Serena Hotel",
+    "city": "Gilgit",
+    "type": "hotel",
+    "lat": 35.9145,
+    "lon": 74.3025,
+    "priority": 9
+  },
+  {
+    "id": "gb_009",
+    "name": "Avari Xpress Gilgit",
+    "city": "Gilgit",
+    "type": "hotel",
+    "lat": 35.9175,
+    "lon": 74.3085,
+    "priority": 8
+  },
+  {
+    "id": "gb_010",
+    "name": "Ramada Resort Gilgit",
+    "city": "Gilgit",
+    "type": "hotel",
+    "lat": 35.9160,
+    "lon": 74.3055,
+    "priority": 8
+  },
+  {
+    "id": "gb_011",
+    "name": "Park Hotel Gilgit",
+    "city": "Gilgit",
+    "type": "hotel",
+    "lat": 35.9190,
+    "lon": 74.3100,
+    "priority": 7
+  },
+  {
+    "id": "gb_012",
+    "name": "Citi Hotel Gilgit",
+    "city": "Gilgit",
+    "type": "hotel",
+    "lat": 35.9200,
+    "lon": 74.3115,
+    "priority": 7
+  },
+  {
+    "id": "gb_013",
+    "name": "Madina Hotel 2",
+    "city": "Gilgit",
+    "type": "hotel",
+    "lat": 35.9185,
+    "lon": 74.3095,
+    "priority": 7
+  },
+  {
+    "id": "gb_014",
+    "name": "Indus Lodges Gilgit",
+    "city": "Gilgit",
+    "type": "hotel",
+    "lat": 35.9170,
+    "lon": 74.3070,
+    "priority": 7
+  },
+  {
+    "id": "gb_015",
+    "name": "Hasan Market",
+    "city": "Gilgit",
+    "type": "market",
+    "lat": 35.9205,
+    "lon": 74.3125,
+    "priority": 9
+  },
+  {
+    "id": "gb_016",
+    "name": "Gilgit Bazaar",
+    "city": "Gilgit",
+    "type": "market",
+    "lat": 35.9198,
+    "lon": 74.3118,
+    "priority": 9
+  },
+  {
+    "id": "gb_017",
+    "name": "Rajah Bazaar",
+    "city": "Gilgit",
+    "type": "market",
+    "lat": 35.9192,
+    "lon": 74.3108,
+    "priority": 8
+  },
+  {
+    "id": "gb_018",
+    "name": "China Market Gilgit",
+    "city": "Gilgit",
+    "type": "market",
+    "lat": 35.9210,
+    "lon": 74.3135,
+    "priority": 8
+  },
+  {
+    "id": "gb_019",
+    "name": "Seven Brothers Market",
+    "city": "Gilgit",
+    "type": "market",
+    "lat": 35.9188,
+    "lon": 74.3098,
+    "priority": 7
+  },
+  {
+    "id": "gb_020",
+    "name": "Gems and Handicraft Market (Women's Market)",
+    "city": "Gilgit",
+    "type": "market",
+    "lat": 35.9150,
+    "lon": 74.3040,
+    "priority": 7
+  },
+  {
+    "id": "gb_021",
+    "name": "Qasimi Market",
+    "city": "Gilgit",
+    "type": "market",
+    "lat": 35.9202,
+    "lon": 74.3122,
+    "priority": 7
+  },
+  {
+    "id": "gb_022",
+    "name": "Gadi Bagh",
+    "city": "Gilgit",
+    "type": "landmark",
+    "lat": 35.9195,
+    "lon": 74.3110,
+    "priority": 7
+  },
+  {
+    "id": "gb_023",
+    "name": "Aga Khan Shahi Polo Ground",
+    "city": "Gilgit",
+    "type": "sports",
+    "lat": 35.9190,
+    "lon": 74.3105,
+    "priority": 8
+  },
+  {
+    "id": "gb_024",
+    "name": "Old Polo Ground Gilgit",
+    "city": "Gilgit",
+    "type": "sports",
+    "lat": 35.9175,
+    "lon": 74.3090,
+    "priority": 7
+  },
+  {
+    "id": "gb_025",
+    "name": "Lalik Jan Stadium",
+    "city": "Gilgit",
+    "type": "sports",
+    "lat": 35.9165,
+    "lon": 74.3075,
+    "priority": 7
+  },
+  {
+    "id": "gb_026",
+    "name": "Jama Masjid Ahl-e-Sunnah",
+    "city": "Gilgit",
+    "type": "religious",
+    "lat": 35.9193,
+    "lon": 74.3107,
+    "priority": 8
+  },
+  {
+    "id": "gb_027",
+    "name": "Kargah Buddha",
+    "city": "Gilgit",
+    "type": "historical",
+    "lat": 35.9510,
+    "lon": 74.2885,
+    "priority": 8
+  },
+  {
+    "id": "gb_028",
+    "name": "Taj Mughal Minar (Victory Monument)",
+    "city": "Gilgit",
+    "type": "historical",
+    "lat": 35.9050,
+    "lon": 74.3000,
+    "priority": 7
+  },
+  {
+    "id": "gb_029",
+    "name": "British Cemetery Gilgit",
+    "city": "Gilgit",
+    "type": "historical",
+    "lat": 35.9155,
+    "lon": 74.3045,
+    "priority": 6
+  },
+  {
+    "id": "gb_030",
+    "name": "Chinese Memorial Cemetery",
+    "city": "Gilgit",
+    "type": "historical",
+    "lat": 35.9380,
+    "lon": 74.3210,
+    "priority": 6
+  },
+  {
+    "id": "gb_031",
+    "name": "Uprising Memorial",
+    "city": "Gilgit",
+    "type": "monument",
+    "lat": 35.9185,
+    "lon": 74.3095,
+    "priority": 7
+  },
+  {
+    "id": "gb_032",
+    "name": "Gohar Aman's Tower",
+    "city": "Gilgit",
+    "type": "monument",
+    "lat": 35.9178,
+    "lon": 74.3088,
+    "priority": 6
+  },
+  {
+    "id": "gb_033",
+    "name": "Bab-e-Gilgit Monument",
+    "city": "Gilgit",
+    "type": "monument",
+    "lat": 35.9225,
+    "lon": 74.3145,
+    "priority": 7
+  },
+  {
+    "id": "gb_034",
+    "name": "City Park Gilgit",
+    "city": "Gilgit",
+
+    "type": "park",
+    "lat": 35.9155579,
+    "lon": 74.3217765,
+    "priority": 7
+  },
+  {
+    "id": "gb_035",
+    "name": "Dadi Jawari Park",
+    "city": "Gilgit",
+    "type": "park",
+    "lat": 35.9163035,
+    "lon": 74.3144524,
+    "priority": 6
+  },
+  {
+    "id": "gb_036",
+    "name": "Kargah Valley",
+    "city": "Gilgit",
+    "type": "natural",
+    "lat": 35.9550,
+    "lon": 74.2900,
+    "priority": 8
+  },
+  {
+    "id": "gb_037",
+    "name": "Naltar Valley",
+    "city": "Gilgit",
+    "type": "natural",
+    "lat": 36.1450,
+    "lon": 74.1850,
+    "priority": 9
+  },
+  {
+    "id": "gb_038",
+    "name": "Danyore Valley",
+    "city": "Gilgit",
+    "type": "natural",
+    "lat": 35.9700,
+    "lon": 74.3500,
+    "priority": 7
+  },
+  {
+    "id": "gb_039",
+    "name": "Bagrot Valley",
+    "city": "Gilgit",
+    "type": "natural",
+    "lat": 35.9250,
+    "lon": 74.5500,
+    "priority": 7
+  },
+  {
+    "id": "gb_040",
+    "name": "Nomal Village",
+    "city": "Gilgit",
+    "type": "village",
+    "lat": 35.8850,
+    "lon": 74.3150,
+    "priority": 6
+  },
+  {
+    "id": "gb_041",
+    "name": "Jutial Village",
+    "city": "Gilgit",
+    "type": "village",
+    "lat": 35.8980,
+    "lon": 74.2950,
+    "priority": 6
+  },
+  {
+    "id": "gb_042",
+    "name": "Gilgit Baltistan Museum",
+    "city": "Gilgit",
+    "type": "museum",
+    "lat": 35.9195,
+    "lon": 74.3105,
+    "priority": 7
+  },
+  {
+    "id": "gb_043",
+    "name": "Karakoram International University",
+    "city": "Gilgit",
+    "type": "education",
+    "lat": 35.9100,
+    "lon": 74.3250,
+    "priority": 7
+  },
+  {
+    "id": "gb_044",
+    "name": "Government Boys Middle School Old Polo Ground",
+    "city": "Gilgit",
+    "type": "education",
+    "lat": 35.9175,
+    "lon": 74.3088,
+    "priority": 6
+  },
+  {
+    "id": "gb_045",
+    "name": "Gilgit Serena Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9145,
+    "lon": 74.3025,
+    "priority": 7
+  },
+  {
+    "id": "gb_046",
+    "name": "Paradise Hotel & Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9180,
+    "lon": 74.3090,
+    "priority": 6
+  },
+  {
+    "id": "gb_047",
+    "name": "City Restaurant Gilgit",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9195,
+    "lon": 74.3110,
+    "priority": 6
+  },
+  {
+    "id": "gb_048",
+    "name": "Al-Beirut Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9200,
+    "lon": 74.3115,
+    "priority": 6
+  },
+  {
+    "id": "gb_049",
+    "name": "Shandoor Hotel & Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9188,
+    "lon": 74.3098,
+    "priority": 6
+  },
+  {
+    "id": "gb_050",
+    "name": "Sahil Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9150,
+    "lon": 74.3040,
+    "priority": 6
+  },
+  {
+    "id": "gb_051",
+    "name": "Hunza Chowk",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9198,
+    "lon": 74.3118,
+    "priority": 7
+  },
+  {
+    "id": "gb_052",
+    "name": "Gilgit Hunza Arts & Crafts International",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9190,
+    "lon": 74.3105,
+    "priority": 6
+  },
+  {
+    "id": "gb_053",
+    "name": "Diran Garments and Silk Center",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9192,
+    "lon": 74.3108,
+    "priority": 6
+  },
+  {
+    "id": "gb_054",
+    "name": "Arman Collection & Fashion Paradise",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9205,
+    "lon": 74.3125,
+    "priority": 6
+  },
+  {
+    "id": "gb_055",
+    "name": "Zeb Silk Centre",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9202,
+    "lon": 74.3122,
+    "priority": 6
+  },
+  {
+    "id": "gb_056",
+    "name": "Gilgit Store",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9195,
+    "lon": 74.3112,
+    "priority": 6
+  },
+  {
+    "id": "gb_057",
+    "name": "Baba-E-Yasin General Store",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9188,
+    "lon": 74.3100,
+    "priority": 5
+  },
+  {
+    "id": "gb_058",
+    "name": "Akram General Store",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9193,
+    "lon": 74.3107,
+    "priority": 5
+  },
+  {
+    "id": "gb_059",
+    "name": "MINISO Gilgit",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9210,
+    "lon": 74.3130,
+    "priority": 6
+  },
+  {
+    "id": "gb_060",
+    "name": "Helicopter Chowk (Heli Chowk)",
+    "city": "Gilgit",
+    "type": "landmark",
+    "lat": 35.9175,
+    "lon": 74.3085,
+    "priority": 7
+  },
+  {
+    "id": "gb_061",
+    "name": "Barmas Bala Swimming Pool",
+    "city": "Gilgit",
+    "type": "recreation",
+    "lat": 35.9050,
+    "lon": 74.2980,
+    "priority": 6
+  },
+  {
+    "id": "gb_062",
+    "name": "Sakwar Natural Swimming Pool",
+    "city": "Gilgit",
+    "type": "recreation",
+    "lat": 35.9320,
+    "lon": 74.3180,
+    "priority": 6
+  },
+  {
+    "id": "gb_063",
+    "name": "Jutial Water Reservoir",
+    "city": "Gilgit",
+    "type": "natural",
+    "lat": 35.9000,
+    "lon": 74.2970,
+    "priority": 6
+  },
+  {
+    "id": "gb_064",
+    "name": "Chilidaar Gilgit",
+    "city": "Gilgit",
+    "type": "natural",
+    "lat": 35.8950,
+    "lon": 74.2920,
+    "priority": 6
+  },
+  {
+    "id": "gb_065",
+    "name": "Rakaposhi Viewpoint",
+    "city": "Gilgit",
+    "type": "viewpoint",
+    "lat": 35.9100,
+    "lon": 74.3000,
+    "priority": 8
+  },
+  {
+    "id": "gb_066",
+    "name": "Bismillah Trout Farm and Restaurant",
+    "city": "Gilgit",
+    "type": "attraction",
+    "lat": 35.9280,
+    "lon": 74.3160,
+    "priority": 6
+  },
+  {
+    "id": "gb_067",
+    "name": "Gilgit Development Authority Office",
+    "city": "Gilgit",
+    "type": "government",
+    "lat": 35.9200,
+    "lon": 74.3115,
+    "priority": 6
+  },
+  {
+    "id": "gb_068",
+    "name": "Tourism Department Gilgit-Baltistan",
+    "city": "Gilgit",
+    "type": "government",
+    "lat": 35.9205,
+    "lon": 74.3120,
+    "priority": 7
+  },
+  {
+    "id": "gb_069",
+    "name": "Health Department Gilgit-Baltistan",
+    "city": "Gilgit",
+    "type": "government",
+    "lat": 35.9208,
+    "lon": 74.3125,
+    "priority": 6
+  },
+  {
+    "id": "gb_070",
+    "name": "Gilgit-Baltistan Government Secretariat",
+    "city": "Gilgit",
+    "type": "government",
+    "lat": 35.9215,
+    "lon": 74.3135,
+    "priority": 7
+  },
+  {
+    "id": "gb_071",
+    "name": "Jutial Barmus Trail",
+    "city": "Gilgit",
+    "type": "hiking",
+    "lat": 35.9030,
+    "lon": 74.2990,
+    "priority": 7
+  },
+  {
+    "id": "gb_072",
+    "name": "Khalti Lake",
+    "city": "Gilgit",
+    "type": "natural",
+    "lat": 35.9650,
+    "lon": 74.2750,
+    "priority": 7
+  },
+  {
+    "id": "gb_073",
+    "name": "Gilgit Bazar Shop (Near Old Polo Ground)",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9173,
+    "lon": 74.3087,
+    "priority": 6
+  },
+  {
+    "id": "gb_074",
+    "name": "Women Chamber of Commerce and Industry Gilgit",
+    "city": "Gilgit",
+    "type": "business",
+    "lat": 35.9150,
+    "lon": 74.3042,
+    "priority": 6
+  },
+  {
+    "id": "gb_075",
+    "name": "Habib Decoration and Gift Centre",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9197,
+    "lon": 74.3115,
+    "priority": 5
+  },
+  {
+    "id": "gb_076",
+    "name": "One Dollar City",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9188,
+    "lon": 74.3098,
+    "priority": 5
+  },
+  {
+    "id": "gb_077",
+    "name": "Hunza Hand Skills",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9192,
+    "lon": 74.3110,
+    "priority": 5
+  },
+  {
+    "id": "gb_078",
+    "name": "Baig's Collection Family Shop",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9190,
+    "lon": 74.3105,
+    "priority": 5
+  },
+  {
+    "id": "gb_079",
+    "name": "Fashionala Gilgit",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9198,
+    "lon": 74.3118,
+    "priority": 5
+  },
+  {
+    "id": "gb_080",
+    "name": "Murtaza Abad Shop",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9203,
+    "lon": 74.3123,
+    "priority": 5
+  },
+  {
+    "id": "gb_081",
+    "name": "Sufis Collection",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9195,
+    "lon": 74.3112,
+    "priority": 5
+  },
+  {
+    "id": "gb_082",
+    "name": "Ali Handicrafts",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9193,
+    "lon": 74.3108,
+    "priority": 5
+  },
+  {
+    "id": "gb_083",
+    "name": "Hunza Cloth House",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9200,
+    "lon": 74.3120,
+    "priority": 5
+  },
+  {
+    "id": "gb_084",
+    "name": "New Haji Fida Market",
+    "city": "Gilgit",
+    "type": "market",
+    "lat": 35.9207,
+    "lon": 74.3128,
+    "priority": 6
+  },
+  {
+    "id": "gb_085",
+    "name": "China Garments & Shah Boutique Collection",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9210,
+    "lon": 74.3132,
+    "priority": 5
+  },
+  {
+    "id": "gb_086",
+    "name": "Ali General Store",
+    "city": "Gilgit",
+    "type": "shopping",
+    "lat": 35.9185,
+    "lon": 74.3095,
+    "priority": 5
+  },
+  {
+    "id": "gb_087",
+    "name": "Aslam Biryani Centre",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9195,
+    "lon": 74.3110,
+    "priority": 6
+  },
+  {
+    "id": "gb_088",
+    "name": "Leopards Lounge Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9185,
+    "lon": 74.3092,
+    "priority": 6
+  },
+  {
+    "id": "gb_089",
+    "name": "Pakiza Hotel and Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9178,
+    "lon": 74.3088,
+    "priority": 6
+  },
+  {
+    "id": "gb_090",
+    "name": "Grill House Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9202,
+    "lon": 74.3122,
+    "priority": 6
+  },
+  {
+    "id": "gb_091",
+    "name": "Ghulam Rasool Hotel",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9188,
+    "lon": 74.3100,
+    "priority": 5
+  },
+  {
+    "id": "gb_092",
+    "name": "Indus Hotel & Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9175,
+    "lon": 74.3085,
+    "priority": 6
+  },
+  {
+    "id": "gb_093",
+    "name": "Paratha Hotel",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9192,
+    "lon": 74.3108,
+    "priority": 5
+  },
+  {
+    "id": "gb_094",
+    "name": "Hungry Puppets",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9198,
+    "lon": 74.3115,
+    "priority": 5
+  },
+  {
+    "id": "gb_095",
+    "name": "Abdullah Nihari Hotel",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9205,
+    "lon": 74.3125,
+    "priority": 5
+  },
+  {
+    "id": "gb_096",
+    "name": "New Islamabad Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9200,
+    "lon": 74.3118,
+    "priority": 5
+  },
+  {
+    "id": "gb_097",
+    "name": "Lahore Inn Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9183,
+    "lon": 74.3093,
+    "priority": 5
+  },
+  {
+    "id": "gb_098",
+    "name": "Garden Grill Hotel",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9155,
+    "lon": 74.3048,
+    "priority": 5
+  },
+  {
+    "id": "gb_099",
+    "name": "Urban Tarka",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9208,
+    "lon": 74.3128,
+    "priority": 5
+  },
+  {
+    "id": "gb_100",
+    "name": "GB Traditional Foods",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9195,
+    "lon": 74.3112,
+    "priority": 5
+  },
+  {
+    "id": "gb_101",
+    "name": "Al Jawar and Asli Shinwari Restaurant",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9190,
+    "lon": 74.3105,
+    "priority": 5
+  },
+  {
+    "id": "gb_102",
+    "name": "Arirang Restaurant (Korean)",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9178,
+    "lon": 74.3088,
+    "priority": 5
+  },
+  {
+    "id": "gb_103",
+    "name": "Rajput Hotel & Bakers",
+    "city": "Gilgit",
+    "type": "restaurant",
+    "lat": 35.9188,
+    "lon": 74.3098,
+    "priority": 5
+  },
+  {
+    "id": "gb_104",
+    "name": "Heaven Lodge Hotel",
+    "city": "Gilgit",
+    "type": "hotel",
+    "lat": 35.9165,
+    "lon": 74.3072,
+    "priority": 6
+  },
+  {
+    "id": "gb_105",
+    "name": "Gilgit Embassy Lodge",
+    "city": "Gilgit",
+    "type": "hotel",
+    "lat": 35.9170,
+    "lon": 74.3080,
+    "priority": 6
+  },
+    {
+        "id": "gb_106",
+        "name": "Mount View Hotel Gilgit",
+        "city": "Gilgit",
+        "type": "hotel",
+        "lat": 35.9158,
+        "lon": 74.3050,
+        "priority": 6
+    },
+     {
+        "id": "gb_107",
+        "name": "Silicon Global Tech",
+        "city": "Gilgit",
+        "type": "office",
+        "lat": 35.911340,
+        "lon": 74.341177,
+        "priority": 6
+    }
+]
