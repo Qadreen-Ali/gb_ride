@@ -102,13 +102,28 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                       Navigator.pushNamed(context, '/settings');
                     }),
                   ),
+                  DrawerMenuItem(
+                    icon: Icons.route_outlined,
+                    label: 'My Trips',
+                    isSelected: _selectedIndex == 3,
+                    onTap: () => _onSelect(3, () {
+                      Navigator.pushNamed(context, '/trips');
+                    }),
+                  ),  DrawerMenuItem(
+                    icon: Icons.person,
+                    label: 'Profile',
+                    isSelected: _selectedIndex == 4,
+                    onTap: () => _onSelect(3, () {
+                      Navigator.pushNamed(context, '/driver_profile');
+                    }),
+                  ),
 
                   DrawerMenuItem(
                     icon: Icons.help_outline,
                     label: 'Help',
                     imageColor: Colors.black,
-                    isSelected: _selectedIndex == 3,
-                    onTap: () => _onSelect(3, () {
+                    isSelected: _selectedIndex == 5,
+                    onTap: () => _onSelect(4, () {
                       Navigator.pushNamed(context, '/help');
                     }),
                   ),

@@ -1,70 +1,72 @@
-import 'dart:ui';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthController {
   AuthController._internal();
   static final AuthController instance = AuthController._internal();
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  String? _verificationId;
+  final supabase = Supabase.instance.client;
+  String? _phone;
+  String? _debugOtp;
 
-  /// Validates Pakistani phone number (03XXXXXXXXX)
   bool isValidPakNumber(String input) {
     final cleaned = input.replaceAll(RegExp(r'\D'), '');
-    return RegExp(r'^3\d{9}$').hasMatch(cleaned);
+    return RegExp(r'^(0?3\d{9}|92\d{10})$').hasMatch(cleaned);
   }
 
-  /// Converts 03XXXXXXXXX → +923XXXXXXXXX
-  String toFirebasePhone(String input) {
+  String normalizePhone(String input) {
     final cleaned = input.replaceAll(RegExp(r'\D'), '');
-    return '+92$cleaned';
+    return cleaned.startsWith('92') ? '+$cleaned' : '+92$cleaned';
   }
 
-  void requestOtp({
+  Future<void> requestOtp({
     required String phone,
-    required VoidCallback onSuccess,
-    required void Function(String error) onError,
-  }) {
-    _auth.verifyPhoneNumber(
-      phoneNumber: phone,
-      timeout: const Duration(seconds: 60),
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        // OPTIONAL: auto-login
-        await _auth.signInWithCredential(credential);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        onError(e.message ?? 'Verification failed');
-      },
-      codeSent: (String verificationId, int? resendToken) {
-        _verificationId = verificationId;
-        onSuccess();
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {
-        _verificationId = verificationId;
-      },
-    );
-  }
-
-  void verifyOtp({
-    required String otp,
-    required VoidCallback onSuccess,
+    required void Function() onSuccess,
     required void Function(String error) onError,
   }) async {
     try {
-      if (_verificationId == null) {
-        onError('OTP expired. Please resend.');
+      _phone = normalizePhone(phone);
+
+      final response = await supabase.functions.invoke(
+        'send-otp',
+        body: {'phone': _phone},
+      );
+
+      if (response.data['success'] == true) {
+        _debugOtp = response.data['debug_otp']; // DEV only
+        onSuccess();
+      } else {
+        onError(response.data['error'] ?? 'Failed to send OTP');
+      }
+    } catch (e) {
+      onError('Error sending OTP: $e');
+    }
+  }
+
+  Future<void> verifyOtp({
+    required String otp,
+    required void Function() onSuccess,
+    required void Function(String error) onError,
+  }) async {
+    try {
+      if (_phone == null) {
+        onError('Phone number missing. Please retry.');
         return;
       }
 
-      final credential = PhoneAuthProvider.credential(
-        verificationId: _verificationId!,
-        smsCode: otp,
+      final response = await supabase.functions.invoke(
+        'verify-otp',
+        body: {'phone': _phone, 'otp': otp},
       );
 
-      await _auth.signInWithCredential(credential);
-      onSuccess();
+      if (response.data['success'] == true) {
+        onSuccess();
+      } else {
+        onError('Invalid verification code');
+      }
     } catch (e) {
-      onError('Invalid OTP');
+      onError('Verification error: $e');
     }
   }
+
+  String? getDebugOtp() => _debugOtp;
 }
