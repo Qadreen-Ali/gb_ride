@@ -21,5 +21,6 @@
     "fs",
     "http",
     "net"
-  ]
+  ],
+  "CodeGPT.apiKey": "Google AI Studio"
 }

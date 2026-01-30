@@ -3,7 +3,7 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
 
 class ProfileDrawer extends StatefulWidget {
-  const ProfileDrawer({Key? key}) : super(key: key);
+  const ProfileDrawer({super.key});
 
   @override
   State<ProfileDrawer> createState() => _ProfileDrawerState();
