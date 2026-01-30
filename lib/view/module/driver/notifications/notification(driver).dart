@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
+import 'package:gb_ride/view/module/driver/notifications/all_notification(driver).dart';
+import 'package:gb_ride/view/module/driver/notifications/system_notifications_screen.dart';
 import '../../../../utils/constants/custom_app-bar.dart';
-import '../../../../utils/constants/image_string.dart';
-import 'all_notifications_screen.dart';
-import 'message_notifiactions_screen.dart';
 
-class NotificationScreen extends StatelessWidget {
-  const NotificationScreen({super.key});
+class NotificationDriverScreen extends StatelessWidget {
+  const NotificationDriverScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
-      // indicatorColor:Colors.grey,
+      length: 3, // 3 tabs
       child: Scaffold(
         backgroundColor: GBColor.secondary,
         appBar: CustomAppBar(
@@ -26,7 +24,7 @@ class NotificationScreen extends StatelessWidget {
                 child: Container(
                   width: 40,
                   height: 40,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: GBColor.primary,
                     shape: BoxShape.circle,
                   ),
@@ -36,14 +34,11 @@ class NotificationScreen extends StatelessWidget {
             ),
           ],
         ),
-
         body: Column(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: TabBar(
-                indicatorColor: Colors.grey.shade400,
-                indicatorWeight: 4,
                 indicatorSize: TabBarIndicatorSize.tab,
                 labelColor: GBColor.primary,
                 unselectedLabelColor: GBColor.textFieldText,
@@ -58,16 +53,17 @@ class NotificationScreen extends StatelessWidget {
                 ),
                 tabs: const [
                   Tab(text: 'All'),
-                  Tab(text: 'Messages'),
+                  Tab(text: 'System'),
+                  Tab(text: 'Promos'),
                 ],
               ),
             ),
-
             Expanded(
               child: TabBarView(
                 children: [
-                  AllNotificationScreen(),
-                  MessageNotificationsScreen(),
+                  NotificationAllScreen(),
+                  NotificationSystemScreen(),
+                  // PromosNotificationScreen(),
                 ],
               ),
             ),

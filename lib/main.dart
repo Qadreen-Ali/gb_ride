@@ -1,8 +1,13 @@
 // 03465407068
 import 'package:flutter/material.dart';
-import 'package:gb_ride/view/module/driver/home/driver_home_screen.dart';
+import 'package:gb_ride/view/module/driver/bottom_sheet/offer_fare_screen.dart';
 import 'package:gb_ride/view/module/driver/home/app_drawer/driver_trips.dart';
-import 'package:gb_ride/view/module/driver/setting/profile/profile_screen.dart';
+import 'package:gb_ride/view/module/driver/home/driver_home_screen.dart';
+import 'package:gb_ride/view/module/driver/notifications/notification(driver).dart';
+import 'package:gb_ride/view/module/driver/settings/profile/profile_information.dart';
+import 'package:gb_ride/view/module/driver/settings/profile/profile_screen.dart';
+import 'package:gb_ride/view/module/driver/settings/settings_driver.dart';
+import 'package:gb_ride/view/module/driver/settings/wallet/driver_wallet.dart';
 import 'package:gb_ride/view/module/local/home/home_screen.dart';
 import 'package:gb_ride/view/module/local/notifications/notification_screen.dart';
 import 'package:gb_ride/view/module/local/setting/help_and_support/help_screen.dart';
@@ -40,10 +45,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-       //  home: const DriverTripsScreen(),
+      //   home: const BottomNavBar(),
       routes: {
         '/': (context) => SplashScreen(), //initial Screen
         '/login': (context) => const LoginScreen(),
+
         '/otp': (context) {
           final args = ModalRoute.of(context)?.settings.arguments as String?;
           return OTPVerificationScreen(phoneNumber: args ?? '');
@@ -58,9 +64,13 @@ class MyApp extends StatelessWidget {
         '/paymentmethod': (context) => const PaymentMethodsScreen(),
         '/history': (context) => const HistoryScreen(),
         '/driverhome': (context) => const DriverHomeScreen(),
-        //'/fare': (context) => const OfferFareScreen(),
+        '/notification(driver)': (context) => const NotificationDriverScreen(),
+        '/settings(driver)': (context) => const DriverSettings(),
+        '/driverProfile': (context) => const DriverProfileScreen(),
+        '/driverWallet': (context) => const DriverWallet(),
         '/trips': (context) => const DriverTripsScreen(),
-        '/driver_profile': (context) => const DriverProfileScreen(),
+        '/driver(profile)': (context) => const DriverProfileInformation(),
+
       },
     );
   }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/secondary_button.dart';
 import 'package:gb_ride/view/module/driver/common/widget/heading_text.dart';
-import 'package:gb_ride/view/module/driver/setting/profile/widget/trip_widget.dart';
+import 'package:gb_ride/view/module/driver/settings/profile/widget/trip_widget.dart';
+
 import '../../../../../utils/constants/color_string.dart';
 import '../../../../../utils/constants/custom_app-bar.dart';
 import '../../../../../utils/constants/image_string.dart';
 import '../../../local/setting/profile/widget/profile_picker.dart';
-import '../../wallet/widget/transaction_detail_widget.dart';
+import '../wallet/widget/transaction_detail_widget.dart';
 
 class DriverProfileScreen extends StatelessWidget {
   const DriverProfileScreen({super.key});
@@ -15,7 +16,14 @@ class DriverProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: GBColor.secondary,
-      appBar: CustomAppBar(title: 'Profile', background: GBColor.secondary),
+      appBar: CustomAppBar(
+        title: 'Profile',
+        background: GBColor.secondary,
+        actions: [IconButton(onPressed: () {
+          Navigator.pushNamed(context, '/driver(profile)');
+
+        }, icon: Icon(Icons.edit, size: 20,color: GBColor.black,))],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14.0),
@@ -65,7 +73,7 @@ class DriverProfileScreen extends StatelessWidget {
                         ),
                         SizedBox(width: 10),
                         Text(
-                          "(152 reviwes)",
+                          "(152 reviews)",
                           style: TextStyle(
                             color: GBColor.black,
                             fontSize: 13,
@@ -95,53 +103,36 @@ class DriverProfileScreen extends StatelessWidget {
                 rideNumber: 'Honda G11',
                 rideTime: 'Gilgit237',
                 image: GBImagePath.car,
-                showImage: true,
+                showImage: false,
                 ridePkr: '',
               ),
               SizedBox(height: 14),
               HeadingText(titleText: "Account"),
               SizedBox(height: 12),
               Container(
-                width: double.infinity,
-                height: 228,
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(
                   border: Border.all(color: GBColor.borderColor),
                   borderRadius: BorderRadius.circular(18),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Column(
-                    children: [
-                      AccountItems(
-                        headingText: "My Documents",
-                        imagePath: GBImagePath.file,
-                        badgeText: "Verified",
-                        badgeColor: GBColor.lightBlue,
-                        showBadge: true,
-                      ),
-                      AccountItems(
-                        headingText: "Online Check",
-                        imagePath: GBImagePath.verify,
-                        badgeText: "Passed",
-                        badgeColor: GBColor.secondary,
-                        badgeTextColor: GBColor.gray,
-                        showBadge: true,
-                      ),
-                      AccountItems(
-                        headingText: "Language",
-                        imagePath: GBImagePath.language,
-                        badgeText: "English",
-                        badgeColor: GBColor.secondary,
-                        badgeTextColor: GBColor.gray,
-                        showBadge: true,
-                      ),
-                      AccountItems(
-                        headingText: "Settings",
-                        imagePath: GBImagePath.setting,
-                        showBadge: false,
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  children: [
+                    AccountItems(
+                      headingText: "My Documents",
+                      imagePath: GBImagePath.file,
+                      badgeText: "Verified",
+                      badgeColor: GBColor.lightBlue,
+                      showBadge: true,
+                    ),
+                    AccountItems(
+                      headingText: "Online Check",
+                      imagePath: GBImagePath.verify,
+                      badgeText: "Passed",
+                      badgeColor: GBColor.secondary,
+                      badgeTextColor: GBColor.gray,
+                      showBadge: true,
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 40),
@@ -154,7 +145,6 @@ class DriverProfileScreen extends StatelessWidget {
                 leadingIcon: Icon(Icons.logout, color: GBColor.error),
               ),
               SizedBox(height: 20),
-              
             ],
           ),
         ),
@@ -231,5 +221,3 @@ class AccountItems extends StatelessWidget {
     );
   }
 }
-
-

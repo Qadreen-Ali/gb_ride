@@ -3,11 +3,10 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/utils/constants/secondary_button.dart';
-import 'package:gb_ride/view/module/driver/wallet/widget/transaction_detail_widget.dart';
+import 'package:gb_ride/view/module/driver/settings/wallet/widget/transaction_detail_widget.dart';
 
-import '../../../../utils/constants/custom_app-bar.dart';
-import '../common/widget/heading_text.dart';
-
+import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../common/widget/heading_text.dart';
 class DriverWallet extends StatefulWidget {
   const DriverWallet({super.key});
 
@@ -156,14 +155,14 @@ class _DriverWalletState extends State<DriverWallet> {
                     TransactionDetailsWidget(
                       rideNumber: 'Ride #492944-KIU',
                       rideTime: "2:30 PM",
-                      ridePkr: '"200.PKR"',
+                      ridePkr: "200.PKR",
                       image: GBImagePath.dollar, showImage: false,
                     ),
                     SizedBox(height: 10),
                     TransactionDetailsWidget(
                       rideNumber: 'Ride #492944-KIU',
                       rideTime: "1:30 PM",
-                      ridePkr: '"180.PKR"',
+                      ridePkr: "180.PKR",
                       image: GBImagePath.dollar,
                       showImage: false,
                     ),
@@ -174,7 +173,7 @@ class _DriverWalletState extends State<DriverWallet> {
                     TransactionDetailsWidget(
                       rideNumber: 'Ride #492944-KIU',
                       rideTime: "1:30 PM",
-                      ridePkr: '"800.PKR"',
+                      ridePkr: "800.PKR",
                       image: GBImagePath.dollar,
                       showImage: false,
                     ),
@@ -182,7 +181,7 @@ class _DriverWalletState extends State<DriverWallet> {
                     TransactionDetailsWidget(
                       rideNumber: 'Withdrawal to Bank',
                       rideTime: "Processed  4:30 PM",
-                      ridePkr: '"-6000.PKR"',
+                      ridePkr: "-6000.PKR",
                       image: GBImagePath.bank,
                       showImage: false,
                     ),

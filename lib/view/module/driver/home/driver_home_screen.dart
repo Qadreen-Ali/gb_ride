@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-// import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:gb_ride/view/module/driver/home/widgets/top_bar.dart';
 import 'package:gb_ride/view/module/driver/home/app_drawer/app_drawer.dart';
 import 'package:gb_ride/view/module/driver/home/driver_bottom_sheet.dart';
-import 'package:gb_ride/view/module/driver/bottom_sheet/offer_fare_screen.dart';
-import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/ride_flow_screen.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:async';
 
@@ -194,7 +191,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
           TopBar(
             onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
             onNotificationPressed: () {
-              // Navigator.pushNamed(context, '/notification');
+              Navigator.pushNamed(context, '/notification(driver)');
             },
           ),
 

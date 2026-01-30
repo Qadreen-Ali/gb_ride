@@ -6,7 +6,6 @@ import 'package:gb_ride/view/auth/common/bottom_sheet_selector.dart';
 import 'package:gb_ride/view/module/local/setting/profile/widget/profile_picker.dart';
 
 import '../../../../../utils/constants/custom_app-bar.dart';
-// import '../../../../../utils/constants/image_string.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

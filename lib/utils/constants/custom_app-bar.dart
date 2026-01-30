@@ -15,7 +15,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onBackTap,
     this.showLeading = true,
     this.actions,
-    this.background = Colors.white, this.leading,
+    this.background = Colors.white,
+    this.leading,
   });
 
   @override
@@ -25,15 +26,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       automaticallyImplyLeading: false,
       surfaceTintColor: Colors.white,
-      leading: leading ??
+      leading:
+          leading ??
           (showLeading
               ? IconButton(
-            icon: const Icon(
-              Icons.arrow_back_rounded,
-              color: Colors.black,
-            ),
-            onPressed: onBackTap ?? () => Navigator.pop(context),
-          )
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    color: Colors.black,
+                  ),
+                  onPressed: onBackTap ?? () => Navigator.pop(context),
+                )
               : null),
       title: Text(
         title,
@@ -41,7 +43,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: GBColor.black,
           fontSize: 20,
           fontWeight: FontWeight.w500,
-          fontFamily: 'Poppins'
+          fontFamily: 'Poppins',
         ),
       ),
       centerTitle: true,

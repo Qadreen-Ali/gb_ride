@@ -32,4 +32,5 @@ class GBImagePath {
   static final String verify = "assets/images/verify.png";
   static final String language = "assets/images/language.png";
   static final String line = "assets/images/Line.png";
+  static final String cloud = "assets/images/cloud.png";
 }

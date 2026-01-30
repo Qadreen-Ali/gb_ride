@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/utils/constants/color_string.dart';
 
 class NotificationTile extends StatelessWidget {
   final IconData icon;
+  final Color iconColor; // ✅ NEW
+  final Color iconBgColor;
   final String title;
   final String subtitle;
   final String time;
@@ -11,6 +14,8 @@ class NotificationTile extends StatelessWidget {
   const NotificationTile({
     super.key,
     required this.icon,
+    this.iconColor = GBColor.secondary, // default
+    this.iconBgColor = GBColor.primary, // default
     required this.title,
     required this.subtitle,
     required this.time,
@@ -25,20 +30,18 @@ class NotificationTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Icon Circle
           Container(
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: Colors.grey.shade200,
+              color: iconBgColor,
               shape: BoxShape.circle,
             ),
-            child: Icon(icon, size: 22, color: Colors.black),
+            child: Icon(icon, size: 22, color: iconColor),
           ),
 
           const SizedBox(width: 12),
 
-          // Content
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +67,7 @@ class NotificationTile extends StatelessWidget {
             ),
           ),
 
-          // Right side indicator
+          /// 🔹 UNREAD INDICATOR
           if (unread)
             Padding(
               padding: const EdgeInsets.only(top: 22.0),
@@ -72,12 +75,13 @@ class NotificationTile extends StatelessWidget {
                 width: 10,
                 height: 10,
                 decoration: const BoxDecoration(
-                  color: Colors.blue,
+                  color: GBColor.primary,
                   shape: BoxShape.circle,
                 ),
               ),
             ),
 
+          /// 🔹 OPTIONAL TRAILING TEXT
           if (trailingText != null)
             Padding(
               padding: const EdgeInsets.only(left: 8),
