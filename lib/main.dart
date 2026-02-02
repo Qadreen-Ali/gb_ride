@@ -1,9 +1,13 @@
 // 03465407068
 import 'package:flutter/material.dart';
 import 'package:gb_ride/view/module/driver/bottom_sheet/offer_fare_screen.dart';
+import 'package:gb_ride/view/module/driver/home/app_drawer/driver_trips.dart';
 import 'package:gb_ride/view/module/driver/home/driver_home_screen.dart';
 import 'package:gb_ride/view/module/driver/notifications/notification(driver).dart';
+import 'package:gb_ride/view/module/driver/settings/profile/profile_information.dart';
+import 'package:gb_ride/view/module/driver/settings/profile/profile_screen.dart';
 import 'package:gb_ride/view/module/driver/settings/settings_driver.dart';
+import 'package:gb_ride/view/module/driver/settings/wallet/driver_wallet.dart';
 import 'package:gb_ride/view/module/local/home/home_screen.dart';
 import 'package:gb_ride/view/module/local/notifications/notification_screen.dart';
 import 'package:gb_ride/view/module/local/setting/help_and_support/help_screen.dart';
@@ -63,6 +67,11 @@ class MyApp extends StatelessWidget {
         '/driverhome': (context) => const DriverHomeScreen(),
         '/notification(driver)': (context) => const NotificationDriverScreen(),
         '/settings(driver)': (context) => const DriverSettings(),
+        '/driverProfile': (context) => const DriverProfileScreen(),
+        '/driverWallet': (context) => const DriverWallet(),
+        '/trips': (context) => const DriverTripsScreen(),
+        '/driver(profile)': (context) => const DriverProfileInformation(),
+
       },
     );
   }

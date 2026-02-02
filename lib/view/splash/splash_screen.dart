@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/view/auth/login_screen.dart';
-// import 'package:gb_ride/view/module/student/home/home_screen.dart';
 import '../../utils/constants/color_string.dart';
 import '../../utils/constants/image_string.dart';
 import '../../utils/constants/text_string.dart';
-import '../module/local/home/home_screen.dart';
-
-// import '../auth/signup_screen.dart';
-// import '../auth/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

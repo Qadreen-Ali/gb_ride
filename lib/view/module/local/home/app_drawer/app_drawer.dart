@@ -53,26 +53,29 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  const Expanded(
-                    child: Text(
-                      'Profile',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/profile');
+                    },
+                    child: const Expanded(
+                      child: Text(
+                        'Profile',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),
-
+            Divider(),
 
             // Menu items
             Expanded(
               child: ListView(
-
                 children: [
                   DrawerMenuItem(
                     icon: Icons.home_outlined,
@@ -118,15 +121,18 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
             // History
             InkWell(
-              onTap: (){
-               // Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen(),));
+              onTap: () {
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen(),));
               },
               child: GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.pushNamed(context, '/history');
                 },
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 20,
+                    horizontal: 10,
+                  ),
                   child: Container(
                     width: double.infinity,
                     height: 54,
@@ -204,7 +210,6 @@ class DrawerMenuItem extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: isSelected ? GBColor.primary : GBColor.secondary,
-
       ),
       child: ListTile(
         leading: _buildIcon(),

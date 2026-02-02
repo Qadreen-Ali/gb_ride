@@ -38,7 +38,7 @@ class SecondaryButton extends StatelessWidget {
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(12),
-            side: BorderSide(color: borderColor ?? Colors.transparent),
+            side: BorderSide(width: 1,color: borderColor ?? Colors.transparent, ),
           ),
         ),
         child: Row(

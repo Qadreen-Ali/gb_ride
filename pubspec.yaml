@@ -59,6 +59,7 @@ dependencies:
   web: ^1.1.1
   sliding_up_panel: ^2.0.0+1
   supabase_flutter: ^2.5.0
+  dotted_border: ^2.1.0
 
 dev_dependencies:
   flutter_test:

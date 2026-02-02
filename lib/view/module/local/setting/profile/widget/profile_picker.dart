@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ProfileImagePicker extends StatefulWidget {
   const ProfileImagePicker({super.key});
@@ -14,15 +15,47 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(
-      source: ImageSource.gallery,
-    );
+    // Request gallery permission
+    final permissionStatus = await Permission.photos.request();
+
+    if (!permissionStatus.isGranted) {
+      _showPermissionDeniedDialog();
+      return;
+    }
+
+    final XFile? pickedFile =
+    await _picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
       });
     }
+  }
+
+  void _showPermissionDeniedDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Permission Required'),
+        content: const Text(
+          'Gallery permission is required to select a profile image.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              openAppSettings();
+              Navigator.pop(context);
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -37,9 +70,14 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
               CircleAvatar(
                 radius: 55,
                 backgroundColor: Colors.grey.shade300,
-                backgroundImage: _image != null ? FileImage(_image!) : null,
+                backgroundImage:
+                _image != null ? FileImage(_image!) : null,
                 child: _image == null
-                    ? const Icon(Icons.person, size: 60, color: Colors.grey)
+                    ? const Icon(
+                  Icons.person,
+                  size: 60,
+                  color: Colors.grey,
+                )
                     : null,
               ),
               Container(
@@ -48,7 +86,11 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
                   color: Colors.orange,
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.edit, size: 18, color: Colors.white),
+                child: const Icon(
+                  Icons.edit,
+                  size: 18,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),

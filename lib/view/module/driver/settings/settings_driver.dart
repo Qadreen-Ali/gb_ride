@@ -26,17 +26,10 @@ class _DriverSettingsState extends State<DriverSettings> {
   Widget build(BuildContext context) {
     final account = [
       SettingsItem(
-        icons: SolarLinearIcons.user,
-        title: 'Profile Information',
-        onTap: () {
-          Navigator.pushNamed(context, '/profile');
-        },
-      ),
-      SettingsItem(
         icons: SolarLinearIcons.card,
-        title: 'Manage Payment Methods',
+        title: 'Driver Wallet',
         onTap: () {
-          Navigator.pushNamed(context, '/paymentmethod');
+          Navigator.pushNamed(context, '/driverWallet');
         },
       ),
     ];

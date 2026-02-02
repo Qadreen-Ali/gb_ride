@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
 
+import '../../../local/home/app_drawer/app_drawer.dart';
+
 class ProfileDrawer extends StatefulWidget {
   const ProfileDrawer({super.key});
 
@@ -53,19 +55,26 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  const Expanded(
-                    child: Text(
-                      'Profile',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                  InkWell(
+                    onTap: () => _onSelect(3, () {
+                      Navigator.pushNamed(context, '/driverProfile');
+                    }),
+                    child: const Expanded(
+                      child: Text(
+                        'Ali',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
+            Divider(),
+
 
             // Menu items
             Expanded(
@@ -112,7 +121,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     icon: Icons.help_outline,
                     label: 'Help',
                     imageColor: Colors.black,
-                    isSelected: _selectedIndex == 4,
+                    isSelected: _selectedIndex == 5,
                     onTap: () => _onSelect(4, () {
                       Navigator.pushNamed(context, '/help');
                     }),
@@ -124,7 +133,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
             // History
             InkWell(
               onTap: () {
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen(),));
               },
               child: GestureDetector(
                 onTap: () {
@@ -184,75 +192,5 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
         ),
       ),
     );
-  }
-}
-
-class DrawerMenuItem extends StatelessWidget {
-  final IconData? icon;
-  final Image? image;
-  final Color? imageColor;
-  final Color? selectedImageColor;
-  final String label;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const DrawerMenuItem({
-    Key? key,
-    this.icon,
-    this.image,
-    required this.label,
-    this.isSelected = false,
-    required this.onTap,
-    this.imageColor,
-    this.selectedImageColor,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isSelected ? GBColor.primary : GBColor.secondary,
-      ),
-      child: ListTile(
-        leading: _buildIcon(),
-        title: Text(
-          label,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-            color: isSelected ? GBColor.secondary : Colors.black,
-          ),
-        ),
-        onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      ),
-    );
-  }
-
-  Widget _buildIcon() {
-    if (image != null) {
-      return SizedBox(
-        width: 24,
-        height: 24,
-        child: ColorFiltered(
-          colorFilter: ColorFilter.mode(
-            isSelected
-                ? (selectedImageColor ?? GBColor.secondary)
-                : (imageColor ?? Colors.black),
-            BlendMode.srcIn,
-          ),
-          child: FittedBox(fit: BoxFit.contain, child: image!),
-        ),
-      );
-    } else if (icon != null) {
-      return Icon(
-        icon,
-        color: isSelected ? GBColor.secondary : Colors.black,
-        size: 24,
-      );
-    } else {
-      return const SizedBox(width: 24);
-    }
   }
 }
