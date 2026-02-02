@@ -4,6 +4,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:gb_ride/view/module/driver/home/widgets/top_bar.dart';
 import 'package:gb_ride/view/module/driver/home/app_drawer/app_drawer.dart';
 import 'package:gb_ride/view/module/driver/home/driver_bottom_sheet.dart';
+import 'package:gb_ride/services/supabase_service.dart';
+import 'package:gb_ride/models/ride_adapter.dart';
 import 'package:latlong2/latlong.dart';
 import 'dart:async';
 
@@ -16,20 +18,16 @@ class DriverHomeScreen extends StatefulWidget {
 
 class _DriverHomeScreenState extends State<DriverHomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  MapController? _mapController;
+  final SupabaseService _supabaseService = SupabaseService();
 
+  MapController? _mapController;
   bool _isLoadingLocation = true;
   LatLng _currentLocation = const LatLng(35.911383, 74.341500);
   LatLng? _pickupLocation;
   LatLng? _destinationLocation;
-  //routing variables
   List<List<LatLng>> _routes = [];
-  // double? _distanceKm;
-  // int? _etaMinutes;
   bool _showBottomSheet = true;
   Timer? _mapGestureTimer;
-
-  // Live location
   LatLng? _liveLocation;
   StreamSubscription<Position>? _liveLocationStream;
 
@@ -44,7 +42,23 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _getCurrentLocation();
       _startLiveLocation();
+      _updateDriverLocation();
     });
+  }
+
+  Future<void> _updateDriverLocation() async {
+    final driverId = _supabaseService.getCurrentUserId();
+    if (driverId != null && _liveLocation != null) {
+      try {
+        await _supabaseService.updateDriverLocation(
+          driverId,
+          _liveLocation!.latitude,
+          _liveLocation!.longitude,
+        );
+      } catch (e) {
+        debugPrint('Error updating driver location: $e');
+      }
+    }
   }
 
   Future<void> _getCurrentLocation() async {
@@ -93,10 +107,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     }
   }
 
-  //live location functions
   void _startLiveLocation() {
     _liveLocationStream?.cancel();
-
     _liveLocationStream =
         Geolocator.getPositionStream(
           locationSettings: const LocationSettings(
@@ -107,6 +119,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
           setState(() {
             _liveLocation = LatLng(position.latitude, position.longitude);
           });
+          _updateDriverLocation();
         });
   }
 
@@ -203,6 +216,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeOut,
             child: DriverBottomSheet(
+              supabaseService: _supabaseService,
               onOfferTap: () {
                 setState(() {
                   _showBottomSheet = false;

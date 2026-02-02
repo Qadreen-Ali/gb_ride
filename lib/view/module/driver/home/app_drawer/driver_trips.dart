@@ -1,9 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/custom_app-bar.dart';
+import 'package:gb_ride/services/supabase_service.dart';
+import 'package:gb_ride/models/ride_adapter.dart';
 
-class DriverTripsScreen extends StatelessWidget {
+class DriverTripsScreen extends StatefulWidget {
   const DriverTripsScreen({super.key});
+
+  @override
+  State<DriverTripsScreen> createState() => _DriverTripsScreenState();
+}
+
+class _DriverTripsScreenState extends State<DriverTripsScreen> {
+  late Future<List<dynamic>> _tripsFuture;
+  final SupabaseService _supabaseService = SupabaseService();
+  int _selectedTab = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTrips();
+  }
+
+  void _loadTrips() {
+    final driverId = _supabaseService.getCurrentUserId();
+    if (driverId != null) {
+      _tripsFuture = _supabaseService.fetchRidesByDriver(driverId);
+    } else {
+      _tripsFuture = Future.value([]);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,26 +40,39 @@ class DriverTripsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            _tabBar(),
+            _buildTabBar(),
             const SizedBox(height: 16),
             Expanded(
-              child: ListView(
-                children: [
-                  _sectionTitle("Today"),
-                  _tripCard(),
-                  const SizedBox(height: 16),
-                  _sectionTitle("Yesterday"),
-                  _tripCard(),
-                ],
+              child: FutureBuilder<List<dynamic>>(
+                future: _tripsFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('No trips found'));
+                  }
+                  final rides = snapshot.data!;
+                  return ListView.builder(
+                    itemCount: rides.length,
+                    itemBuilder: (context, index) {
+                      final ride = rides[index];
+                      return _buildTripCard(ride);
+                    },
+                  );
+                },
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _tabBar() {
+  Widget _buildTabBar() {
     return Container(
       height: 42,
       decoration: BoxDecoration(
@@ -42,54 +81,49 @@ class DriverTripsScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _tabItem("All", true),
-          _tabItem("Upcoming", false),
-          _tabItem("Canceled", false),
+          _buildTabItem("All", 0),
+          _buildTabItem("Completed", 1),
+          _buildTabItem("Canceled", 2),
         ],
       ),
     );
   }
 
-  Widget _tabItem(String title, bool selected) {
+  Widget _buildTabItem(String title, int index) {
     return Expanded(
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: selected ? GBColor.secondary.withOpacity(0.15) : Colors.transparent,
-          borderRadius: BorderRadius.circular(24),
-          border: selected
-              ? Border.all(color: GBColor.primary)
-              : null,
-        ),
-        child: Text(
-          title,
-          style: TextStyle(
-            color: selected ? GBColor.primary : GBColor.gray,
-            fontWeight: FontWeight.w500,
+      child: GestureDetector(
+        onTap: () => setState(() => _selectedTab = index),
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: _selectedTab == index
+                ? GBColor.secondary.withOpacity(0.15)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(24),
+            border: _selectedTab == index
+                ? Border.all(color: GBColor.primary)
+                : null,
+          ),
+          child: Text(
+            title,
+            style: TextStyle(
+              color: _selectedTab == index ? GBColor.primary : GBColor.gray,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _sectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            color: GBColor.textFieldText,
-          ),
-        ),
-      ),
-    );
-  }
+  Widget _buildTripCard(dynamic ride) {
+    final pickup = ride.pickupLocation ?? 'Pickup Location';
+    final destination = ride.destinationLocation ?? 'Destination';
+    final status = ride.status ?? 'pending';
+    final fare = ride.acceptedFare ?? ride.offeredFare ?? 0.0;
 
-  Widget _tripCard() {
     return Container(
+      margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: GBColor.secondary,
@@ -99,71 +133,63 @@ class DriverTripsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _topRow(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                status.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: _getStatusColor(status),
+                ),
+              ),
+              Text(
+                'Rs. $fare',
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
           const SizedBox(height: 12),
-
-          // Custom location row with vertical indicators
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Column(
                 children: [
-                  _LocationIndicator(
-                    color: GBColor.primary,
-                    showLine: true,
-                  ),
+                  _LocationIndicator(color: GBColor.primary, showLine: true),
                   SizedBox(height: 6),
-                  _LocationIndicator(
-                    color: GBColor.green,
-                    showLine: false,
-                  ),
+                  _LocationIndicator(color: GBColor.green, showLine: false),
                 ],
               ),
               const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    // First location
+                  children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Khomar Gilgit",
-                          style: TextStyle(
-                            fontSize: 15,
+                          pickup.toString().split(',').first,
+                          style: const TextStyle(
+                            fontSize: 14,
                             fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          "Khomar XYZ Gilgit", 
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: GBColor.gray,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 26),
-
-                    // Second location
+                    const SizedBox(height: 20),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "KIU Gilgit",
-                          style: TextStyle(
-                            fontSize: 15,
+                          destination.toString().split(',').first,
+                          style: const TextStyle(
+                            fontSize: 14,
                             fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          "KIU  XYZ Gilgit", 
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: GBColor.gray,
                           ),
                         ),
                       ],
@@ -171,103 +197,24 @@ class DriverTripsScreen extends StatelessWidget {
                   ],
                 ),
               ),
-
             ],
           ),
-
-          const SizedBox(height: 12),
-          const Divider(color: GBColor.linegrey, thickness: 1, height: 16), // Divider 
-          _driverRow(),
         ],
       ),
     );
   }
 
-  Widget _topRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Time + Price Column
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              "10:45 AM",
-              style: TextStyle(
-                fontSize: 14,
-                color: GBColor.textFieldText,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(height: 4),
-            Text(
-              "PKR 850", 
-              style: TextStyle(
-                fontSize: 20, 
-                fontWeight: FontWeight.w500,
-                color: GBColor.black,
-              ),
-            ),
-          ],
-        ),
-
-        // Status Container
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: GBColor.green.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Text(
-            "Completed",
-            style: TextStyle(
-              color: GBColor.green,
-              fontSize: 12,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _driverRow() {
-    return Row(
-      children: [
-        const CircleAvatar(
-          radius: 18,
-          backgroundImage: AssetImage("assets/driver.png"),
-        ),
-        const SizedBox(width: 10),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text("Muzafar D", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15)),
-            Row(
-              children: [
-                Icon(Icons.star, color: Colors.orange, size: 14),
-                SizedBox(width: 4),
-                Text("4.9", style: TextStyle(fontSize: 12)),
-              ],
-            ),
-          ],
-        ),
-        const Spacer(),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: GBColor.containerGrayColor.withOpacity(0.15),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Text(
-            "Details",
-            style: TextStyle(
-              color: GBColor.gray,
-              fontSize: 12,
-            ),
-          ),
-        ),
-      ],
-    );
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'completed':
+        return GBColor.green;
+      case 'cancelled':
+        return Colors.red;
+      case 'pending':
+        return Colors.orange;
+      default:
+        return GBColor.primary;
+    }
   }
 }
 
@@ -276,10 +223,7 @@ class _LocationIndicator extends StatelessWidget {
   final Color color;
   final bool showLine;
 
-  const _LocationIndicator({
-    required this.color,
-    required this.showLine,
-  });
+  const _LocationIndicator({required this.color, required this.showLine});
 
   @override
   Widget build(BuildContext context) {
@@ -296,10 +240,7 @@ class _LocationIndicator extends StatelessWidget {
             child: Container(
               width: 10,
               height: 10,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
             ),
           ),
         ),
@@ -307,9 +248,7 @@ class _LocationIndicator extends StatelessWidget {
           Container(
             height: 42,
             margin: const EdgeInsets.only(top: 2),
-            child: CustomPaint(
-              painter: _DottedLinePainter(),
-            ),
+            child: CustomPaint(painter: _DottedLinePainter()),
           ),
       ],
     );

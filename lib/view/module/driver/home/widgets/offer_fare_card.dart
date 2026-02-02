@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/view/module/driver/bottom_sheet/offer_fare_screen.dart';
-import 'package:gb_ride/view/module/driver/models/ride_model.dart';
+import 'package:gb_ride/models/ride_ui_model.dart';
 
 class OfferFareCard extends StatefulWidget {
-  final RideModel rideModel;
+  final RideUiModel rideModel;
   final VoidCallback? onOfferTap;
   final VoidCallback? onOfferClose;
 
@@ -47,9 +46,7 @@ class _OfferFareCardState extends State<OfferFareCard> {
                   children: [
                     CircleAvatar(
                       radius: 18,
-                      backgroundImage: AssetImage(
-                        ride.driverImagePath,
-                      ),
+                      backgroundImage: AssetImage(ride.driverImagePath),
                     ),
                     const SizedBox(width: 10),
 
@@ -89,10 +86,7 @@ class _OfferFareCardState extends State<OfferFareCard> {
                         const SizedBox(height: 2),
                         const Text(
                           '(34 rides)',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.grey,
-                          ),
+                          style: TextStyle(fontSize: 11, color: Colors.grey),
                         ),
                       ],
                     ),
@@ -214,9 +208,7 @@ class _OfferFareCardState extends State<OfferFareCard> {
                     context: context,
                     isScrollControlled: true,
                     backgroundColor: Colors.transparent,
-                    builder: (_) => OfferFareScreen(
-                      rideModel: ride,
-                    ),
+                    builder: (_) => OfferFareScreen(rideModel: ride),
                   );
 
                   if (mounted) {

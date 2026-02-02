@@ -8,11 +8,37 @@ class DriverForm extends StatefulWidget {
 
   @override
   State<DriverForm> createState() => _DriverFormState();
+
+  /// Get form data for driver registration
+  static Map<String, dynamic>? getFormData(BuildContext context) {
+    final state = context.findAncestorStateOfType<_DriverFormState>();
+    if (state == null || !state.widget.formKey.currentState!.validate()) {
+      return null;
+    }
+
+    return {
+      'fullName': state._nameController.text,
+      'cnic': state._cnicController.text,
+      'gender': state._genderController.text,
+      'age': int.tryParse(state._ageController.text),
+      'address': state._addressController.text,
+      'vehicleType': state._vehicleController.text,
+      'vehicleNumber': state._vehicleNumberController.text,
+      'licenseNumber': state._licenseController.text,
+    };
+  }
 }
 
 class _DriverFormState extends State<DriverForm> {
-  final TextEditingController _vehicleController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _cnicController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _vehicleController = TextEditingController();
+  final TextEditingController _vehicleNumberController =
+      TextEditingController();
+  final TextEditingController _licenseController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +46,18 @@ class _DriverFormState extends State<DriverForm> {
       key: widget.formKey,
       child: Column(
         children: [
-          // // Name
-          TTextField(titleText: '', hintText: 'Full Name (as per CNIC)'),
+          // Full Name
+          TTextField(
+            titleText: '',
+            hintText: 'Full Name (as per CNIC)',
+            controller: _nameController,
+          ),
           // CNIC / B-Form
           TTextField(
             titleText: '',
             hintText: 'CNIC / B-Form',
+            controller: _cnicController,
             keyboardType: TextInputType.number,
-            // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
 
           // Gender
@@ -47,18 +77,21 @@ class _DriverFormState extends State<DriverForm> {
               );
             },
           ),
-          // Number
+          // Age
           TTextField(
             titleText: '',
             hintText: 'Age',
+            controller: _ageController,
             keyboardType: TextInputType.number,
           ),
           // Address
-          TTextField(titleText: '', hintText: 'Address'),
-          // Institution (Optional)
-          TTextField(titleText: '', hintText: 'Number'),
+          TTextField(
+            titleText: '',
+            hintText: 'Address',
+            controller: _addressController,
+          ),
 
-          // Vehichle Type
+          // Vehicle Type
           TTextField(
             titleText: '',
             hintText: 'Vehicle Type',
@@ -76,11 +109,20 @@ class _DriverFormState extends State<DriverForm> {
             },
           ),
 
-          //Vehicle Number
+          // Vehicle Number
           TTextField(
             titleText: '',
-            hintText: 'Number',
-            keyboardType: TextInputType.number,
+            hintText: 'Vehicle Number/Registration',
+            controller: _vehicleNumberController,
+            keyboardType: TextInputType.text,
+          ),
+
+          // License Number
+          TTextField(
+            titleText: '',
+            hintText: 'License Number',
+            controller: _licenseController,
+            keyboardType: TextInputType.text,
           ),
         ],
       ),

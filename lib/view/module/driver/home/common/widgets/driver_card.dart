@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
-import 'package:gb_ride/view/module/driver/models/ride_model.dart';
+import 'package:gb_ride/models/ride_ui_model.dart';
 
 class DriverCard extends StatelessWidget {
-  
   const DriverCard({
     super.key,
     required this.rideModel,
@@ -12,7 +11,7 @@ class DriverCard extends StatelessWidget {
     this.showFare = false,
   });
 
-  final RideModel rideModel;
+  final RideUiModel rideModel;
   final bool showContacts;
   final bool showFare;
 
@@ -67,7 +66,7 @@ class DriverCard extends StatelessWidget {
           const Spacer(),
 
           /// 🔹 RIGHT SIDE (DYNAMIC)
-          if (showFare) _FareChip(amount: rideModel.fare),
+          if (showFare) _FareChip(amount: rideModel.currentFare),
 
           if (showContacts) ...[
             ContactWidget(

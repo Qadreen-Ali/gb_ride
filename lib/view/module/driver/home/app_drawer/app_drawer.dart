@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
+import 'package:gb_ride/services/supabase_service.dart';
+import 'package:gb_ride/models/user_model.dart';
 
 class ProfileDrawer extends StatefulWidget {
   const ProfileDrawer({super.key});
@@ -10,7 +12,22 @@ class ProfileDrawer extends StatefulWidget {
 }
 
 class _ProfileDrawerState extends State<ProfileDrawer> {
-  int _selectedIndex = -1; // -1 means nothing selected by default
+  int _selectedIndex = -1;
+  late Future<UserModel?> _userFuture;
+  final SupabaseService _supabaseService = SupabaseService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserProfile();
+  }
+
+  void _loadUserProfile() {
+    final userId = _supabaseService.getCurrentUserId();
+    _userFuture = userId != null
+        ? _supabaseService.fetchUserById(userId)
+        : Future.value(null);
+  }
 
   void _onSelect(int index, VoidCallback action) {
     setState(() => _selectedIndex = index);
@@ -26,48 +43,67 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
         color: Colors.white,
         child: Column(
           children: [
-            // Header with profile info
-            Container(
-              padding: const EdgeInsets.only(
-                top: 55,
-                left: 16,
-                right: 16,
-                bottom: 10,
-              ),
-              child: Row(
-                children: [
-                  // Profile avatar
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [Colors.pink.shade300, Colors.orange.shade300],
-                      ),
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 28,
-                    ),
+            FutureBuilder<UserModel?>(
+              future: _userFuture,
+              builder: (context, snapshot) {
+                final user = snapshot.data;
+                final userName = user?.fullName ?? 'Profile';
+                return Container(
+                  padding: const EdgeInsets.only(
+                    top: 55,
+                    left: 16,
+                    right: 16,
+                    bottom: 10,
                   ),
-                  const SizedBox(width: 16),
-                  const Expanded(
-                    child: Text(
-                      'Profile',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.pink.shade300,
+                              Colors.orange.shade300,
+                            ],
+                          ),
+                        ),
+                        child: const Icon(
+                          Icons.person,
+                          color: Colors.white,
+                          size: 28,
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              userName,
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            if (user?.phoneNumber != null)
+                              Text(
+                                user!.phoneNumber.toString(),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             ),
-
-            // Menu items
             Expanded(
               child: ListView(
                 children: [

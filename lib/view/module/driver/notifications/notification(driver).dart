@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/view/module/driver/notifications/all_notification(driver).dart';
 import 'package:gb_ride/view/module/driver/notifications/system_notifications_screen.dart';
+import 'package:gb_ride/services/supabase_service.dart';
 import '../../../../utils/constants/custom_app-bar.dart';
 
-class NotificationDriverScreen extends StatelessWidget {
+class NotificationDriverScreen extends StatefulWidget {
   const NotificationDriverScreen({super.key});
+
+  @override
+  State<NotificationDriverScreen> createState() =>
+      _NotificationDriverScreenState();
+}
+
+class _NotificationDriverScreenState extends State<NotificationDriverScreen> {
+  final SupabaseService _supabaseService = SupabaseService();
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // 3 tabs
+      length: 2,
       child: Scaffold(
         backgroundColor: GBColor.secondary,
         appBar: CustomAppBar(
@@ -54,16 +63,14 @@ class NotificationDriverScreen extends StatelessWidget {
                 tabs: const [
                   Tab(text: 'All'),
                   Tab(text: 'System'),
-                  Tab(text: 'Promos'),
                 ],
               ),
             ),
             Expanded(
               child: TabBarView(
                 children: [
-                  NotificationAllScreen(),
-                  NotificationSystemScreen(),
-                  // PromosNotificationScreen(),
+                  NotificationAllScreen(supabaseService: _supabaseService),
+                  NotificationSystemScreen(supabaseService: _supabaseService),
                 ],
               ),
             ),

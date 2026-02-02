@@ -9,10 +9,28 @@ class LocalForm extends StatefulWidget {
 
   @override
   State<LocalForm> createState() => _LocalFormState();
+
+  /// Get form data for rider registration
+  static Map<String, dynamic>? getFormData(BuildContext context) {
+    final state = context.findAncestorStateOfType<_LocalFormState>();
+    if (state == null || !state.widget.formKey.currentState!.validate()) {
+      return null;
+    }
+
+    return {
+      'fullName': state._nameController.text,
+      'cnic': state._cnicController.text,
+      'gender': state._genderController.text,
+      'address': state._addressController.text,
+    };
+  }
 }
 
 class _LocalFormState extends State<LocalForm> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _cnicController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +38,18 @@ class _LocalFormState extends State<LocalForm> {
       key: widget.formKey,
       child: Column(
         children: [
-          // // Name
-          TTextField(titleText: '', hintText: 'Full Name (as per CNIC)'),
+          // Full Name
+          TTextField(
+            titleText: '',
+            hintText: 'Full Name (as per CNIC)',
+            controller: _nameController,
+          ),
           // CNIC / B-Form
           TTextField(
             titleText: '',
             hintText: 'CNIC / B-Form',
+            controller: _cnicController,
             keyboardType: TextInputType.number,
-            // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
 
           // Gender
@@ -35,7 +57,7 @@ class _LocalFormState extends State<LocalForm> {
             titleText: '',
             hintText: 'Gender',
             controller: _genderController,
-            readOnly: true, //
+            readOnly: true,
             onTap: () {
               showSelectionBottomSheet(
                 context: context,
@@ -47,14 +69,12 @@ class _LocalFormState extends State<LocalForm> {
               );
             },
           ),
-          // Number
+          // Address
           TTextField(
             titleText: '',
-            hintText: 'Age',
-            keyboardType: TextInputType.phone,
+            hintText: 'Address',
+            controller: _addressController,
           ),
-          // Address
-          TTextField(titleText: '', hintText: 'Address'),
         ],
       ),
     );

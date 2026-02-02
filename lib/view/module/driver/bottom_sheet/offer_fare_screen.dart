@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/ride_flow_screen.dart';
-import 'package:gb_ride/view/module/driver/models/ride_model.dart';
+import 'package:gb_ride/models/ride_ui_model.dart';
+import 'package:gb_ride/services/supabase_service.dart';
 
 class OfferFareScreen extends StatefulWidget {
-  final RideModel rideModel;
+  final RideUiModel rideModel;
+  final SupabaseService? supabaseService;
 
   const OfferFareScreen({
     super.key,
     required this.rideModel,
+    this.supabaseService,
   });
 
   @override
@@ -20,13 +23,16 @@ class OfferFareScreen extends StatefulWidget {
 
 class _OfferFareScreenState extends State<OfferFareScreen> {
   late TextEditingController _fareController;
+  late SupabaseService _supabaseService;
+  bool _isSubmitting = false;
 
   @override
   void initState() {
     super.initState();
     _fareController = TextEditingController(
-      text: widget.rideModel.fare.toStringAsFixed(0),
+      text: widget.rideModel.currentFare.toStringAsFixed(0),
     );
+    _supabaseService = widget.supabaseService ?? SupabaseService();
   }
 
   @override
@@ -35,36 +41,57 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
     super.dispose();
   }
 
-  void _sendOffer() {
-  if (_fareController.text.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please enter a fare amount')),
-    );
-    return;
+  void _sendOffer() async {
+    if (_fareController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a fare amount')),
+      );
+      return;
+    }
+
+    final fare = double.tryParse(_fareController.text);
+    if (fare == null || fare <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a valid fare amount')),
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      final driverId = _supabaseService.getCurrentUserId();
+      if (driverId == null) {
+        throw Exception('Driver not authenticated');
+      }
+
+      await _supabaseService.acceptRideAsDriver(
+        widget.rideModel.rideId,
+        driverId,
+        acceptedFare: fare,
+      );
+
+      if (mounted) {
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => RideFlowScreen(rideModel: widget.rideModel),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
+    }
   }
-
-  final fare = double.tryParse(_fareController.text);
-  if (fare == null || fare <= 0) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please enter a valid fare amount')),
-    );
-    return;
-  }
-
-  /// ✅ Create UPDATED ride model
-  final updatedRide = widget.rideModel.copyWith(fare: fare);
-
-  Navigator.pop(context);
-
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (_) => RideFlowScreen(
-      rideModel: updatedRide,
-    ),
-  );
-}
 
   @override
   Widget build(BuildContext context) {
@@ -180,8 +207,8 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
               SizedBox(
                 width: double.infinity,
                 child: PrimaryButton(
-                  title: 'Send Offer',
-                  onPressed: _sendOffer,
+                  title: _isSubmitting ? 'Sending...' : 'Send Offer',
+                  onPressed: _isSubmitting ? null : _sendOffer,
                   backgroundColor: GBColor.primary,
                   textColor: GBColor.secondary,
                   fontsize: 18,
