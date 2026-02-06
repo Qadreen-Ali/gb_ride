@@ -8,29 +8,25 @@ class LocalForm extends StatefulWidget {
   const LocalForm({super.key, required this.formKey});
 
   @override
-  State<LocalForm> createState() => _LocalFormState();
+  State<LocalForm> createState() => LocalFormState();
 
   /// Get form data for rider registration
-  static Map<String, dynamic>? getFormData(BuildContext context) {
-    final state = context.findAncestorStateOfType<_LocalFormState>();
-    if (state == null) {
-      return null;
-    }
-
-    return {
-      'fullName': state._nameController.text,
-      'cnic': state._cnicController.text,
-      'gender': state._genderController.text,
-      'address': state._addressController.text,
-    };
-  }
 }
 
-class _LocalFormState extends State<LocalForm> {
+class LocalFormState extends State<LocalForm> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _cnicController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
+
+  Map<String, dynamic> getFormData() {
+    return {
+      'fullName': _nameController.text.trim(),
+      'cnic': _cnicController.text.trim(),
+      'gender': _genderController.text.trim(),
+      'address': _addressController.text.trim(),
+    };
+  }
 
   @override
   Widget build(BuildContext context) {

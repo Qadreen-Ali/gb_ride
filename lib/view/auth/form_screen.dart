@@ -7,6 +7,7 @@ import 'package:gb_ride/view/module/local/auth/local_form.dart';
 import 'package:gb_ride/utils/constants/secondary_button.dart';
 import 'package:gb_ride/services/auth_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../services/local_service.dart';
 import '../module/student/auth/student_form.dart';
 
 enum UserRole { student, local, driver }
@@ -24,18 +25,24 @@ class _FormScreenState extends State<FormScreen> {
   UserRole _selectedRole = UserRole.student;
   bool _isLoading = false;
 
+  //global key
+
   final GlobalKey<FormState> _studentKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _localKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _driverKey = GlobalKey<FormState>();
 
   final _authService = AuthService();
+  final _localService = LocalService();
+
+  final GlobalKey<LocalFormState> _localFormStateKey =
+      GlobalKey<LocalFormState>();
 
   Widget _buildForm() {
     switch (_selectedRole) {
       case UserRole.student:
         return StudentForm(formKey: _studentKey);
       case UserRole.local:
-        return LocalForm(formKey: _localKey);
+        return LocalForm(key: _localFormStateKey, formKey: _localKey);
       case UserRole.driver:
         return DriverForm(formKey: _driverKey);
     }
@@ -189,17 +196,16 @@ class _FormScreenState extends State<FormScreen> {
     try {
       setState(() => _isLoading = true);
 
-      final formData = LocalForm.getFormData(context);
+      final formData = _localFormStateKey.currentState?.getFormData();
       if (formData == null) {
         _showError('Could not retrieve form data');
         return;
       }
 
       // Save user profile to database using phone number from OTP
-      await _authService.completeUserProfile(
+      await _localService.createLocal(
         phoneNumber: widget.phoneNumber,
-        fullName: formData['fullName'] ?? '',
-        role: 'rider',
+        fullName: formData['fullName'],
         gender: formData['gender'],
         cnic: formData['cnic'],
         address: formData['address'],
