@@ -4,32 +4,17 @@ import 'package:gb_ride/view/auth/common/bottom_sheet_selector.dart';
 
 class DriverForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
-  const DriverForm({super.key, required this.formKey});
+
+  const DriverForm({
+    super.key,
+    required this.formKey,
+  });
 
   @override
-  State<DriverForm> createState() => _DriverFormState();
-
-  /// Get form data for driver registration
-  static Map<String, dynamic>? getFormData(BuildContext context) {
-    final state = context.findAncestorStateOfType<_DriverFormState>();
-    if (state == null) {
-      return null;
-    }
-
-    return {
-      'fullName': state._nameController.text,
-      'cnic': state._cnicController.text,
-      'gender': state._genderController.text,
-      'age': int.tryParse(state._ageController.text),
-      'address': state._addressController.text,
-      'vehicleType': state._vehicleController.text,
-      'vehicleNumber': state._vehicleNumberController.text,
-      'licenseNumber': state._licenseController.text,
-    };
-  }
+  DriverFormState createState() => DriverFormState();
 }
 
-class _DriverFormState extends State<DriverForm> {
+class DriverFormState extends State<DriverForm> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _cnicController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
@@ -40,6 +25,19 @@ class _DriverFormState extends State<DriverForm> {
       TextEditingController();
   final TextEditingController _licenseController = TextEditingController();
 
+  Map<String, dynamic> getFormData() {
+    return {
+      'fullName': _nameController.text.trim(),
+      'cnic': _cnicController.text.trim(),
+      'gender': _genderController.text.trim(),
+      'age': int.tryParse(_ageController.text),
+      'address': _addressController.text.trim(),
+      'vehicleType': _vehicleController.text.trim(),
+      'vehicleNumber': _vehicleNumberController.text.trim(),
+      'licenseNumber': _licenseController.text.trim(),
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -48,14 +46,13 @@ class _DriverFormState extends State<DriverForm> {
         children: [
           TTextField(
             titleText: '',
-            hintText: 'Full Name (as per CNIC)',
+            hintText: 'Full Name',
             controller: _nameController,
           ),
           TTextField(
             titleText: '',
-            hintText: 'CNIC / B-Form',
+            hintText: 'CNIC',
             controller: _cnicController,
-            keyboardType: TextInputType.number,
           ),
           TTextField(
             titleText: '',
@@ -67,9 +64,7 @@ class _DriverFormState extends State<DriverForm> {
                 context: context,
                 title: 'Select Gender',
                 options: ['Male', 'Female', 'Other'],
-                onSelected: (value) {
-                  _genderController.text = value;
-                },
+                onSelected: (v) => _genderController.text = v,
               );
             },
           ),
@@ -94,26 +89,22 @@ class _DriverFormState extends State<DriverForm> {
                 context: context,
                 title: 'Select Vehicle',
                 options: ['Bike', 'Car'],
-                onSelected: (value) {
-                  _vehicleController.text = value;
-                },
+                onSelected: (v) => _vehicleController.text = v,
               );
             },
           ),
           TTextField(
             titleText: '',
-            hintText: 'Vehicle Number/Registration',
+            hintText: 'Vehicle Number',
             controller: _vehicleNumberController,
-            keyboardType: TextInputType.text,
           ),
           TTextField(
             titleText: '',
             hintText: 'License Number',
             controller: _licenseController,
-            keyboardType: TextInputType.text,
           ),
-        ],
+        ]
       ),
-    );
+          );
   }
 }

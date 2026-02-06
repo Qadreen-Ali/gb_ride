@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
+import 'package:gb_ride/utils/constants/image_string.dart';
+import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/ride_flow_screen.dart';
 import 'package:gb_ride/models/ride_ui_model.dart';
 
 class DriverCommonItemWidget extends StatelessWidget {

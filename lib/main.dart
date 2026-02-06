@@ -27,6 +27,9 @@ void main() async {
     anonKey: 'sb_publishable_aORB6QRHAWCP1CXkXPHC1Q_jEhirfeq',
   );
 
+
+
+
   runApp(const MyApp());
 }
 
@@ -75,6 +78,8 @@ class MyApp extends StatelessWidget {
         '/settings(driver)': (context) => const DriverSettings(),
 
         ///    '/fare': (context) => const OfferFareScreen(),
+        '/settings(driver)': (context) => const DriverSettings(),  
+    ///    '/fare': (context) => const OfferFareScreen(),
         '/trips': (context) => const DriverTripsScreen(),
       },
     );

@@ -8,6 +8,7 @@ import 'package:gb_ride/utils/constants/secondary_button.dart';
 import 'package:gb_ride/services/auth_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../services/local_service.dart';
+import '../../services/driver_service.dart';
 import '../module/student/auth/student_form.dart';
 
 enum UserRole { student, local, driver }
@@ -33,9 +34,12 @@ class _FormScreenState extends State<FormScreen> {
 
   final _authService = AuthService();
   final _localService = LocalService();
+  final _driverService = DriverService(); // ✅ ADD THIS
 
   final GlobalKey<LocalFormState> _localFormStateKey =
       GlobalKey<LocalFormState>();
+  final GlobalKey<DriverFormState> _driverFormKey =
+      GlobalKey<DriverFormState>();
 
   Widget _buildForm() {
     switch (_selectedRole) {
@@ -44,7 +48,7 @@ class _FormScreenState extends State<FormScreen> {
       case UserRole.local:
         return LocalForm(key: _localFormStateKey, formKey: _localKey);
       case UserRole.driver:
-        return DriverForm(formKey: _driverKey);
+        return DriverForm(key: _driverFormKey, formKey: _driverKey);
     }
   }
 
@@ -198,7 +202,7 @@ class _FormScreenState extends State<FormScreen> {
 
       final formData = _localFormStateKey.currentState?.getFormData();
       if (formData == null) {
-        _showError('Could not retrieve form data');
+        print('Could not retrieve form data');
         return;
       }
 
@@ -220,7 +224,7 @@ class _FormScreenState extends State<FormScreen> {
       // Navigate to local home
       Navigator.pushNamed(context, '/localhome');
     } catch (e) {
-      _showError('Error saving profile: $e');
+      print('Error saving profile: $e');
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -233,53 +237,35 @@ class _FormScreenState extends State<FormScreen> {
     try {
       setState(() => _isLoading = true);
 
-      final formData = DriverForm.getFormData(context);
+      final formData = _driverFormKey.currentState?.getFormData();
       if (formData == null) {
-        _showError('Could not retrieve form data');
+        print('❌ Could not retrieve driver form data');
         return;
       }
 
-      // First save user profile using phone number from OTP
-      final userProfile = await _authService.completeUserProfile(
+      await _driverService.createDriver(
         phoneNumber: widget.phoneNumber,
-        fullName: formData['fullName'] ?? '',
-        role: 'driver',
+        fullName: formData['fullName'],
         gender: formData['gender'],
         cnic: formData['cnic'],
         age: formData['age'],
         address: formData['address'],
-      );
-
-      // Then save driver profile
-      await _authService.completeDriverProfile(
-        userId: userProfile.id,
-        licenseNumber: formData['licenseNumber'] ?? '',
+        licenseNumber: formData['licenseNumber'],
         vehicleType: formData['vehicleType'],
         vehicleNumber: formData['vehicleNumber'],
       );
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('✅ Driver profile saved successfully')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('✅ Driver profile saved')));
 
-      // Navigate to driver home
       Navigator.pushNamed(context, '/driverhome');
     } catch (e) {
-      _showError('Error saving driver profile: $e');
+      print('❌ Error saving driver profile: $e');
     } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
-  }
-
-  /// Show error message
-  void _showError(String message) {
-    if (!mounted) return;
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('❌ $message')));
   }
 }
