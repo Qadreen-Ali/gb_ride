@@ -3,10 +3,12 @@ import '../models/user_model.dart';
 import '../models/ride_model.dart';
 import '../models/driver_model.dart';
 import '../models/notification_model.dart';
-import '../models/rating_model.dart';
 
 class SupabaseService {
   final _client = Supabase.instance.client;
+
+  /// Expose Supabase client for advanced queries
+  SupabaseClient getSupabaseClient() => _client;
 
   String? getCurrentUserId() => _client.auth.currentUser?.id;
 
@@ -299,44 +301,207 @@ class SupabaseService {
   }
 
   Future<void> updateDriverStatus(
-  String driverId, {
-  required String status,
-  bool? isOnline,
-}) async {
-  try {
-    final Map<String, dynamic> updates = {
-      'status': status,
-    };
+    String driverId, {
+    required String status,
+    bool? isOnline,
+  }) async {
+    try {
+      final Map<String, dynamic> updates = {'status': status};
 
-    if (isOnline != null) {
-      updates['is_online'] = isOnline;
+      if (isOnline != null) {
+        updates['is_online'] = isOnline;
+      }
+
+      await _client.from('drivers').update(updates).eq('id', driverId);
+    } catch (e) {
+      throw Exception('Error updating driver status: $e');
     }
-
-    await _client.from('drivers').update(updates).eq('id', driverId);
-  } catch (e) {
-    throw Exception('Error updating driver status: $e');
   }
-}
 
-Future<void> updateDriverLocation(
-  String driverId,
-  double latitude,
-  double longitude,
-) async {
-  try {
-    await _client
-        .from('drivers')
-        .update({
-          'current_latitude': latitude,
-          'current_longitude': longitude,
-          'updated_at': DateTime.now().toIso8601String(),
-        })
-        .eq('id', driverId);
-  } catch (e) {
-    throw Exception('Error updating driver location: $e');
+  Future<void> updateDriverLocation(
+    String driverId,
+    double latitude,
+    double longitude,
+  ) async {
+    try {
+      await _client
+          .from('drivers')
+          .update({
+            'current_latitude': latitude,
+            'current_longitude': longitude,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('id', driverId);
+    } catch (e) {
+      throw Exception('Error updating driver location: $e');
+    }
   }
-}
 
+  // ========================================
+  // RIDER PROFILES
+  // ========================================
+
+  Future<void> createOrUpdateRiderProfile(
+    String userId, {
+    bool? isVerified,
+    String? preferredPaymentMethod,
+  }) async {
+    try {
+      final existing = await _client
+          .from('rider_profiles')
+          .select()
+          .eq('user_id', userId);
+
+      if ((existing as List).isEmpty) {
+        // Create new rider profile
+        await _client.from('rider_profiles').insert({
+          'user_id': userId,
+          'total_rides': 0,
+          'rating': 0,
+          'is_verified': isVerified ?? false,
+          'preferred_payment_method': preferredPaymentMethod,
+        });
+      } else {
+        // Update existing rider profile
+        final updates = <String, dynamic>{};
+        if (isVerified != null) updates['is_verified'] = isVerified;
+        if (preferredPaymentMethod != null) {
+          updates['preferred_payment_method'] = preferredPaymentMethod;
+        }
+        if (updates.isNotEmpty) {
+          await _client
+              .from('rider_profiles')
+              .update(updates)
+              .eq('user_id', userId);
+        }
+      }
+    } catch (e) {
+      throw Exception('Error creating/updating rider profile: $e');
+    }
+  }
+
+  // ========================================
+  // SAVED ADDRESSES
+  // ========================================
+
+  Future<List<Map<String, dynamic>>> fetchSavedAddresses(String userId) async {
+    try {
+      final res = await _client
+          .from('saved_addresses')
+          .select()
+          .eq('user_id', userId)
+          .order('created_at', ascending: false);
+      return (res as List).map((e) => Map<String, dynamic>.from(e)).toList();
+    } catch (e) {
+      throw Exception('Error fetching saved addresses: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> addSavedAddress({
+    required String userId,
+    required String name,
+    required double latitude,
+    required double longitude,
+    required String address,
+  }) async {
+    try {
+      final res = await _client
+          .from('saved_addresses')
+          .insert({
+            'user_id': userId,
+            'name': name,
+            'latitude': latitude,
+            'longitude': longitude,
+            'address': address,
+          })
+          .select()
+          .single();
+      return Map<String, dynamic>.from(res);
+    } catch (e) {
+      throw Exception('Error adding saved address: $e');
+    }
+  }
+
+  Future<void> deleteSavedAddress(String addressId) async {
+    try {
+      await _client.from('saved_addresses').delete().eq('id', addressId);
+    } catch (e) {
+      throw Exception('Error deleting saved address: $e');
+    }
+  }
+
+  // ========================================
+  // PAYMENT METHODS
+  // ========================================
+
+  Future<List<Map<String, dynamic>>> fetchPaymentMethods(String userId) async {
+    try {
+      final res = await _client
+          .from('payment_methods')
+          .select()
+          .eq('user_id', userId)
+          .order('is_default', ascending: false);
+      return (res as List).map((e) => Map<String, dynamic>.from(e)).toList();
+    } catch (e) {
+      throw Exception('Error fetching payment methods: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> addPaymentMethod({
+    required String userId,
+    required String type,
+    String? cardLast4,
+    String? bankName,
+  }) async {
+    try {
+      final res = await _client
+          .from('payment_methods')
+          .insert({
+            'user_id': userId,
+            'type': type,
+            'card_last4': cardLast4,
+            'bank_name': bankName,
+            'is_default': false,
+          })
+          .select()
+          .single();
+      return Map<String, dynamic>.from(res);
+    } catch (e) {
+      throw Exception('Error adding payment method: $e');
+    }
+  }
+
+  Future<void> setDefaultPaymentMethod(String paymentMethodId) async {
+    try {
+      // First, set all to false for the user
+      final paymentMethod = await _client
+          .from('payment_methods')
+          .select('user_id')
+          .eq('id', paymentMethodId)
+          .single();
+
+      await _client
+          .from('payment_methods')
+          .update({'is_default': false})
+          .eq('user_id', paymentMethod['user_id']);
+
+      // Then set this one to true
+      await _client
+          .from('payment_methods')
+          .update({'is_default': true})
+          .eq('id', paymentMethodId);
+    } catch (e) {
+      throw Exception('Error setting default payment method: $e');
+    }
+  }
+
+  Future<void> deletePaymentMethod(String paymentMethodId) async {
+    try {
+      await _client.from('payment_methods').delete().eq('id', paymentMethodId);
+    } catch (e) {
+      throw Exception('Error deleting payment method: $e');
+    }
+  }
 
   // ========================================
   // NOTIFICATIONS

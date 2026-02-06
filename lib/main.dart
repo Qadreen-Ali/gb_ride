@@ -27,9 +27,6 @@ void main() async {
     anonKey: 'sb_publishable_aORB6QRHAWCP1CXkXPHC1Q_jEhirfeq',
   );
 
-
-
-
   runApp(const MyApp());
 }
 
@@ -45,7 +42,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-       //  home: const DriverTripsScreen(),
+      //  home: const DriverTripsScreen(),
       routes: {
         '/': (context) => SplashScreen(), //initial Screen
         '/login': (context) => const LoginScreen(),
@@ -54,7 +51,11 @@ class MyApp extends StatelessWidget {
           final args = ModalRoute.of(context)?.settings.arguments as String?;
           return OTPVerificationScreen(phoneNumber: args ?? '');
         },
-        '/form': (context) => FormScreen(),
+        '/form': (context) {
+          final phoneNumber =
+              ModalRoute.of(context)?.settings.arguments as String?;
+          return FormScreen(phoneNumber: phoneNumber ?? '');
+        },
         '/localhome': (context) => const LocalHomeScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/profile': (context) => const ProfileScreen(),
@@ -62,11 +63,18 @@ class MyApp extends StatelessWidget {
         '/help': (context) => const HelpScreen(),
         '/safety': (context) => const SafetyScreen(),
         '/paymentmethod': (context) => const PaymentMethodsScreen(),
-        '/history': (context) => const HistoryScreen(),
+        '/history': (context) {
+          final riderId = ModalRoute.of(context)!.settings.arguments as String?;
+          if (riderId == null || riderId.isEmpty) {
+            return const Center(child: Text('User not logged in'));
+          }
+          return HistoryScreen(riderId: riderId);
+        },
         '/driverhome': (context) => const DriverHomeScreen(),
         '/notification(driver)': (context) => const NotificationDriverScreen(),
-        '/settings(driver)': (context) => const DriverSettings(),  
-    ///    '/fare': (context) => const OfferFareScreen(),
+        '/settings(driver)': (context) => const DriverSettings(),
+
+        ///    '/fare': (context) => const OfferFareScreen(),
         '/trips': (context) => const DriverTripsScreen(),
       },
     );

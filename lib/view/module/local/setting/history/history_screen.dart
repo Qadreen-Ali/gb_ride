@@ -1,65 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
+import 'package:gb_ride/services/rider_service.dart';
+import 'package:gb_ride/services/supabase_service.dart';
+import 'package:gb_ride/models/ride_model.dart';
 import 'package:gb_ride/view/module/local/setting/history/ride_history_screen.dart';
-
 import '../../../../../utils/constants/custom_app-bar.dart';
 
-class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({super.key});
+class HistoryScreen extends StatefulWidget {
+  final String riderId; // Receive from login/home
+
+  const HistoryScreen({super.key, required this.riderId});
+
+  @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
+  late RiderService _riderService;
+  late SupabaseService _supabaseService;
+
+  @override
+  void initState() {
+    super.initState();
+    _supabaseService = SupabaseService();
+    _riderService = RiderService(_supabaseService);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final riderId = widget.riderId;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: CustomAppBar(
-       showLeading: false,
+        showLeading: false,
         title: 'History',
-        actions: [Padding(
-          padding: const EdgeInsets.all(8),
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color:GBColor.primary,
-                shape: BoxShape.circle,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: const BoxDecoration(
+                  color: GBColor.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.close, color: GBColor.secondary),
               ),
-              child: const Icon(Icons.close, color:GBColor.secondary),
             ),
           ),
-        ),],
+        ],
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.only(bottom: 12),
-        itemCount: 8,
-        separatorBuilder: (_, _) => Divider(
-          height: 1,
-          thickness: 1,
-          color: GBColor.linegrey,
-          indent: 16,
-          endIndent: 16,
-        ),
-        itemBuilder: (context, index) {
-          return _HistoryTile(
-            date: '20 sep, 8:55 AM',
-            pickupLocation: 'Sonikot Gilgit Baltistan',
-            destinationLocation: 'Silicon Global Khomar',
-            fare: 'PKR 130.00',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const RideHistoryDetailScreen(
-                    date: 'October 26, 2025, 10: 30 AM',
-                    pickupLocation: 'Jutial Noor Plaza Gilgit',
-                    destinationLocation: 'KIU main Road',
-                    fare: '80.00PKR',
-                    driverName: 'AbuHassan',
-                    driverRating: '4.9',
-                    vehicleModel: 'Blue Toyota\nSMz40',
-                  ),
-                ),
+      body: FutureBuilder<List<RideModel>>(
+        future: _riderService.getRideHistory(riderId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(color: GBColor.primary),
+            );
+          }
+
+          if (snapshot.hasError) return _errorState();
+
+          final rides = snapshot.data ?? [];
+
+          if (rides.isEmpty) return _emptyState();
+
+          return ListView.separated(
+            padding: const EdgeInsets.only(bottom: 12),
+            itemCount: rides.length,
+            separatorBuilder: (_, __) => Divider(
+              height: 1,
+              thickness: 1,
+              color: GBColor.linegrey,
+              indent: 16,
+              endIndent: 16,
+            ),
+            itemBuilder: (context, index) {
+              final ride = rides[index];
+              return _HistoryTile(
+                ride: ride,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          RideHistoryScreen(riderId: riderId),
+                    ),
+                  );
+                },
               );
             },
           );
@@ -67,108 +98,136 @@ class HistoryScreen extends StatelessWidget {
       ),
     );
   }
+
+  /// ================= STATES =================
+
+  Widget _emptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.history, size: 48, color: Colors.grey),
+          const SizedBox(height: 16),
+          Text(
+            'No rides yet',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Your completed rides will appear here',
+            style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _errorState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.error_outline, size: 48, color: Colors.red),
+          const SizedBox(height: 16),
+          Text(
+            'Failed to load ride history',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
+            ),
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () => setState(() {}),
+            style:
+                ElevatedButton.styleFrom(backgroundColor: GBColor.primary),
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
+/// ================= TILE =================
 
 class _HistoryTile extends StatelessWidget {
-  final String date;
-  final String pickupLocation;
-  final String destinationLocation;
-  final String fare;
+  final RideModel ride;
   final VoidCallback onTap;
 
   const _HistoryTile({
-    required this.date,
-    required this.pickupLocation,
-    required this.destinationLocation,
-    required this.fare,
+    required this.ride,
     required this.onTap,
   });
 
+  String _formatDate(DateTime? dateTime) {
+    if (dateTime == null) return 'Unknown date';
+    const months = [
+      'Jan','Feb','Mar','Apr','May','Jun',
+      'Jul','Aug','Sep','Oct','Nov','Dec'
+    ];
+    return '${dateTime.day} ${months[dateTime.month - 1]}, '
+        '${dateTime.hour.toString().padLeft(2, '0')}:'
+        '${dateTime.minute.toString().padLeft(2, '0')}';
+  }
+
+  String _getAddress(Map<String, dynamic>? location) {
+    return location?['address']?.toString() ?? 'Unknown location';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final pickup = _getAddress(
+      ride.pickupLocation is String ? null : ride.pickupLocation,
+    );
+    final destination = _getAddress(
+      ride.destinationLocation is String ? null : ride.destinationLocation,
+    );
+
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.zero, 
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha:0.03),
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
+        color: Colors.white,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// LEFT
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /// DATE
                   Text(
-                    date,
+                    _formatDate(ride.createdAt),
                     style: const TextStyle(
                       fontSize: 16,
-                      color: Colors.black,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 10),
-
-                  /// LOCATION TIMELINE
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Column(
-                        children: [
-                          _LocationIndicator(
-                            color: GBColor.primary,
-                            showLine: true,
-                          ),
-                          SizedBox(height: 6),
-                          _LocationIndicator(
-                            color: GBColor.green,
-                            showLine: false,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              pickupLocation,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            const SizedBox(height: 26),
-                            Text(
-                              destinationLocation,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  Text(
+                    pickup,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    destination,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
 
-            /// FARE
+            /// RIGHT
             Text(
-              fare,
+              'PKR ${ride.acceptedFare?.toStringAsFixed(2) ?? '0.00'}',
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -181,45 +240,6 @@ class _HistoryTile extends StatelessWidget {
   }
 }
 
-/// 🔵 Ring icon + dotted vertical line
-class _LocationIndicator extends StatelessWidget {
-  final Color color;
-  final bool showLine;
-
-  const _LocationIndicator({required this.color, required this.showLine});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 20,
-          height: 20,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: color, width: 2),
-          ),
-          child: Center(
-            child: Container(
-              width: 12,
-              height: 12,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-        ),
-        if (showLine)
-          Container(
-            height: 20,
-            margin: const EdgeInsets.only(top: 2),
-            child: CustomPaint(painter: _DottedLinePainter()),
-          ),
-      ],
-    );
-  }
-}
 
 /// 🔹 Dotted vertical line painter
 class _DottedLinePainter extends CustomPainter {

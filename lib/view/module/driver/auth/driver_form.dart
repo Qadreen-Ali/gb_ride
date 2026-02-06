@@ -12,7 +12,7 @@ class DriverForm extends StatefulWidget {
   /// Get form data for driver registration
   static Map<String, dynamic>? getFormData(BuildContext context) {
     final state = context.findAncestorStateOfType<_DriverFormState>();
-    if (state == null || !state.widget.formKey.currentState!.validate()) {
+    if (state == null) {
       return null;
     }
 
@@ -46,21 +46,17 @@ class _DriverFormState extends State<DriverForm> {
       key: widget.formKey,
       child: Column(
         children: [
-          // Full Name
           TTextField(
             titleText: '',
             hintText: 'Full Name (as per CNIC)',
             controller: _nameController,
           ),
-          // CNIC / B-Form
           TTextField(
             titleText: '',
             hintText: 'CNIC / B-Form',
             controller: _cnicController,
             keyboardType: TextInputType.number,
           ),
-
-          // Gender
           TTextField(
             titleText: '',
             hintText: 'Gender',
@@ -77,21 +73,17 @@ class _DriverFormState extends State<DriverForm> {
               );
             },
           ),
-          // Age
           TTextField(
             titleText: '',
             hintText: 'Age',
             controller: _ageController,
             keyboardType: TextInputType.number,
           ),
-          // Address
           TTextField(
             titleText: '',
             hintText: 'Address',
             controller: _addressController,
           ),
-
-          // Vehicle Type
           TTextField(
             titleText: '',
             hintText: 'Vehicle Type',
@@ -108,16 +100,12 @@ class _DriverFormState extends State<DriverForm> {
               );
             },
           ),
-
-          // Vehicle Number
           TTextField(
             titleText: '',
             hintText: 'Vehicle Number/Registration',
             controller: _vehicleNumberController,
             keyboardType: TextInputType.text,
           ),
-
-          // License Number
           TTextField(
             titleText: '',
             hintText: 'License Number',

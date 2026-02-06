@@ -28,7 +28,8 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
       _authController.verifyOtp(
         otp: _otp,
         onSuccess: () {
-          Navigator.pushNamed(context, '/form');
+          // Pass phone number to form screen
+          Navigator.pushNamed(context, '/form', arguments: widget.phoneNumber);
         },
         onError: (error) {
           ScaffoldMessenger.of(

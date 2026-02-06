@@ -13,7 +13,7 @@ class LocalForm extends StatefulWidget {
   /// Get form data for rider registration
   static Map<String, dynamic>? getFormData(BuildContext context) {
     final state = context.findAncestorStateOfType<_LocalFormState>();
-    if (state == null || !state.widget.formKey.currentState!.validate()) {
+    if (state == null) {
       return null;
     }
 
@@ -38,21 +38,17 @@ class _LocalFormState extends State<LocalForm> {
       key: widget.formKey,
       child: Column(
         children: [
-          // Full Name
           TTextField(
             titleText: '',
             hintText: 'Full Name (as per CNIC)',
             controller: _nameController,
           ),
-          // CNIC / B-Form
           TTextField(
             titleText: '',
             hintText: 'CNIC / B-Form',
             controller: _cnicController,
             keyboardType: TextInputType.number,
           ),
-
-          // Gender
           TTextField(
             titleText: '',
             hintText: 'Gender',
@@ -69,7 +65,6 @@ class _LocalFormState extends State<LocalForm> {
               );
             },
           ),
-          // Address
           TTextField(
             titleText: '',
             hintText: 'Address',
