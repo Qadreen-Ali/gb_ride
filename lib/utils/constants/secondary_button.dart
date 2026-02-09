@@ -3,7 +3,7 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 
 class SecondaryButton extends StatelessWidget {
   final String title;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final double? width;
   final double? height;
   final Color? backgroundColor;
@@ -38,7 +38,10 @@ class SecondaryButton extends StatelessWidget {
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: borderRadius ?? BorderRadius.circular(12),
-            side: BorderSide(width: 1,color: borderColor ?? Colors.transparent, ),
+            side: BorderSide(
+              width: 1,
+              color: borderColor ?? Colors.transparent,
+            ),
           ),
         ),
         child: Row(

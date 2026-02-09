@@ -94,6 +94,7 @@ class _DriverFormState extends State<DriverForm> {
             titleText: '',
             hintText: 'Driving License Number',
             controller: widget.licenseController,
+            keyboardType: TextInputType.number,
           ),
 
           // Vehichle Type
