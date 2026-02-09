@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/view/module/driver/home/common/widgets/driver_card.dart';
-import 'package:gb_ride/view/module/driver/models/ride_model.dart';
+import 'package:gb_ride/models/ride_model.dart';
 
 class DriverCommonItemWidget extends StatelessWidget {
   final RideModel rideModel;

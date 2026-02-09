@@ -4,15 +4,26 @@ import 'package:gb_ride/view/auth/common/bottom_sheet_selector.dart';
 
 class LocalForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
+  final TextEditingController fullNameController;
+  final TextEditingController cnicController;
+  final TextEditingController genderController;
+  final TextEditingController addressController;
 
-  const LocalForm({super.key, required this.formKey});
+  const LocalForm({
+    super.key,
+    required this.formKey,
+    required this.fullNameController,
+    required this.cnicController,
+    required this.genderController,
+    required this.addressController,
+  });
 
   @override
   State<LocalForm> createState() => _LocalFormState();
 }
 
 class _LocalFormState extends State<LocalForm> {
-  final TextEditingController _genderController = TextEditingController();
+  // final TextEditingController _genderController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +32,17 @@ class _LocalFormState extends State<LocalForm> {
       child: Column(
         children: [
           // // Name
-          TTextField(titleText: '', hintText: 'Full Name (as per CNIC)'),
+          TTextField(
+            titleText: '',
+            hintText: 'Full Name (as per CNIC)',
+            controller: widget.fullNameController,
+          ),
           // CNIC / B-Form
           TTextField(
             titleText: '',
             hintText: 'CNIC / B-Form',
             keyboardType: TextInputType.number,
+            controller: widget.cnicController,
             // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
 
@@ -34,7 +50,7 @@ class _LocalFormState extends State<LocalForm> {
           TTextField(
             titleText: '',
             hintText: 'Gender',
-            controller: _genderController,
+            controller: widget.genderController,
             readOnly: true, //
             onTap: () {
               showSelectionBottomSheet(
@@ -42,19 +58,17 @@ class _LocalFormState extends State<LocalForm> {
                 title: 'Select Gender',
                 options: ['Male', 'Female', 'Other'],
                 onSelected: (value) {
-                  _genderController.text = value;
+                  widget.genderController.text = value;
                 },
               );
             },
           ),
-          // Number
+          // Address
           TTextField(
             titleText: '',
-            hintText: 'Age',
-            keyboardType: TextInputType.phone,
+            hintText: 'Address',
+            controller: widget.addressController,
           ),
-          // Address
-          TTextField(titleText: '', hintText: 'Address'),
         ],
       ),
     );

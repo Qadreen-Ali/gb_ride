@@ -7,6 +7,8 @@ class AuthController {
   final supabase = Supabase.instance.client;
   String? _phone;
   String? _debugOtp;
+  String? get verifiedPhone => _phone;
+
 
   bool isValidPakNumber(String input) {
     final cleaned = input.replaceAll(RegExp(r'\D'), '');

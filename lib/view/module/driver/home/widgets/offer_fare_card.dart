@@ -3,7 +3,7 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/view/module/driver/bottom_sheet/offer_fare_screen.dart';
-import 'package:gb_ride/view/module/driver/models/ride_model.dart';
+import 'package:gb_ride/models/ride_model.dart';
 
 class OfferFareCard extends StatefulWidget {
   final RideModel rideModel;

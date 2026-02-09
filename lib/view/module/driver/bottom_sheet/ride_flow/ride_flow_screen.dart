@@ -6,8 +6,8 @@ import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/widget/ongoing
 import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/widget/waiting_widget.dart';
 import 'package:gb_ride/view/module/driver/home/common/common_item_widget.dart';
 import 'package:gb_ride/view/module/driver/home/common/widgets/driver_card.dart';
-import 'package:gb_ride/view/module/driver/models/ride_model.dart';
-import 'package:gb_ride/view/module/driver/models/ride_status.dart';
+import 'package:gb_ride/models/ride_model.dart';
+import 'package:gb_ride/enum/ride_status.dart';
 
 class RideFlowScreen extends StatefulWidget {
   final RideModel rideModel;

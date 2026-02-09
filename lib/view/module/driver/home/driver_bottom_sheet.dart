@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/view/module/driver/home/widgets/offer_fare_card.dart';
-import 'package:gb_ride/view/module/driver/models/ride_model.dart';
+import 'package:gb_ride/models/ride_model.dart';
 
 class DriverBottomSheet extends StatefulWidget {
   final VoidCallback? onOfferTap;

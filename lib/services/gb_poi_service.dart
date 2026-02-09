@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import '../models/gb_poi.dart';
+import '../models/gb_location_data/gb_poi.dart';
 
 class GbPoiService {
   static List<GbPoi> _cachedPois = [];

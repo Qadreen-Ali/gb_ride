@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/common/form_button.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
-import 'package:gb_ride/utils/logger.dart';
 import 'package:gb_ride/view/module/driver/auth/driver_form.dart';
+import 'package:gb_ride/view/module/driver/home/driver_home_screen.dart';
 import 'package:gb_ride/view/module/local/auth/local_form.dart';
 import 'package:gb_ride/utils/constants/secondary_button.dart';
 import '../module/student/auth/student_form.dart';
+import 'package:gb_ride/view/auth/controller/form_controller.dart';
 
-enum UserRole { student, local, driver }
+// enum UserRole { student, local, driver }
 
 class FormScreen extends StatefulWidget {
   const FormScreen({super.key});
@@ -18,20 +19,44 @@ class FormScreen extends StatefulWidget {
 }
 
 class _FormScreenState extends State<FormScreen> {
-  UserRole _selectedRole = UserRole.student;
-
   final GlobalKey<FormState> _studentKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _localKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _driverKey = GlobalKey<FormState>();
 
+  @override
+  void initState() {
+    super.initState();
+    controller = FormController();
+  }
+
+  late final FormController controller;
+
   Widget _buildForm() {
-    switch (_selectedRole) {
+    switch (controller.selectedRole) {
       case UserRole.student:
         return StudentForm(formKey: _studentKey);
+
       case UserRole.local:
-        return LocalForm(formKey: _localKey);
+        return LocalForm(
+          formKey: _localKey,
+          fullNameController: controller.localFullName,
+          cnicController: controller.localCnic,
+          genderController: controller.localGender,
+          addressController: controller.localAddress,
+        );
+
       case UserRole.driver:
-        return DriverForm(formKey: _driverKey);
+        return DriverForm(
+          formKey: _driverKey,
+          fullNameController: controller.driverFullName,
+          cnicController: controller.driverCnic,
+          genderController: controller.driverGender,
+          ageController: controller.driverAge,
+          addressController: controller.driverAddress,
+          licenseController: controller.driverLicense,
+          vehicleTypeController: controller.driverVehicleType,
+          vehicleNumberController: controller.driverVehicleNumber,
+        );
     }
   }
 
@@ -79,7 +104,7 @@ class _FormScreenState extends State<FormScreen> {
                 children: [
                   FormButton(
                     title: 'Student',
-                    isSelected: _selectedRole == UserRole.student,
+                    isSelected: controller.selectedRole == UserRole.student,
                     prefixIcon: Image.asset(
                       'assets/icons/ph_student.png',
                       width: 28,
@@ -87,13 +112,13 @@ class _FormScreenState extends State<FormScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                        _selectedRole = UserRole.student;
+                        controller.selectedRole = UserRole.student;
                       });
                     },
                   ),
                   FormButton(
                     title: 'Local',
-                    isSelected: _selectedRole == UserRole.local,
+                    isSelected: controller.selectedRole == UserRole.local,
                     width: 90,
                     prefixIcon: Image.asset(
                       'assets/icons/local.png',
@@ -102,13 +127,13 @@ class _FormScreenState extends State<FormScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                        _selectedRole = UserRole.local;
+                        controller.selectedRole = UserRole.local;
                       });
                     },
                   ),
                   FormButton(
                     title: 'Driver',
-                    isSelected: _selectedRole == UserRole.driver,
+                    isSelected: controller.selectedRole == UserRole.driver,
                     prefixIcon: Image.asset(
                       'assets/icons/driver.png',
                       width: 28,
@@ -116,7 +141,7 @@ class _FormScreenState extends State<FormScreen> {
                     ),
                     onPressed: () {
                       setState(() {
-                        _selectedRole = UserRole.driver;
+                        controller.selectedRole = UserRole.driver;
                       });
                     },
                   ),
@@ -140,10 +165,10 @@ class _FormScreenState extends State<FormScreen> {
               //Continue button pinned at bottom
               SecondaryButton(
                 title: GBText.continueBtn,
-                onPressed: () {
+                onPressed: () async {
                   bool isValid = false;
 
-                  switch (_selectedRole) {
+                  switch (controller.selectedRole) {
                     case UserRole.student:
                       isValid = _studentKey.currentState?.validate() ?? false;
                       if (isValid) {
@@ -152,16 +177,41 @@ class _FormScreenState extends State<FormScreen> {
                       break;
 
                     case UserRole.local:
-                      isValid = _localKey.currentState?.validate() ?? false;
-                      if (isValid) {
+                      if (!(_localKey.currentState?.validate() ?? false)) {
+                        return;
+                      }
+
+                      try {
+                        await controller.submitLocal();
+                        if (!mounted) return;
                         Navigator.pushNamed(context, '/localhome');
+                      } catch (e) {
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(e.toString())));
                       }
                       break;
 
                     case UserRole.driver:
-                      isValid = _driverKey.currentState?.validate() ?? false;
-                      if (isValid) {
-                        Navigator.pushNamed(context, '/driverhome');
+                      if (!(_driverKey.currentState?.validate() ?? false))
+                        return;
+
+                      try {
+                        await controller.submitDriver();
+
+                        if (!mounted) return;
+                        Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                            builder: (_) => const DriverHomeScreen(),
+                          ),
+                          (_) => false,
+                        );
+                      } catch (e) {
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(e.toString())));
                       }
                       break;
                   }
@@ -172,5 +222,11 @@ class _FormScreenState extends State<FormScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }

@@ -4,16 +4,34 @@ import 'package:gb_ride/view/auth/common/bottom_sheet_selector.dart';
 
 class DriverForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
-  const DriverForm({super.key, required this.formKey});
+  final TextEditingController fullNameController;
+  // final TextEditingController phoneController;
+  final TextEditingController cnicController;
+  final TextEditingController genderController;
+  final TextEditingController ageController;
+  final TextEditingController addressController;
+  final TextEditingController licenseController;
+  final TextEditingController vehicleTypeController;
+  final TextEditingController vehicleNumberController;
+  const DriverForm({
+    super.key,
+    required this.formKey,
+    required this.fullNameController,
+    // required this.phoneController,
+    required this.cnicController,
+    required this.genderController,
+    required this.ageController,
+    required this.addressController,
+    required this.licenseController,
+    required this.vehicleTypeController,
+    required this.vehicleNumberController,
+  });
 
   @override
   State<DriverForm> createState() => _DriverFormState();
 }
 
 class _DriverFormState extends State<DriverForm> {
-  final TextEditingController _vehicleController = TextEditingController();
-  final TextEditingController _genderController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -21,12 +39,17 @@ class _DriverFormState extends State<DriverForm> {
       child: Column(
         children: [
           // // Name
-          TTextField(titleText: '', hintText: 'Full Name (as per CNIC)'),
+          TTextField(
+            titleText: '',
+            hintText: 'Full Name (as per CNIC)',
+            controller: widget.fullNameController,
+          ),
           // CNIC / B-Form
           TTextField(
             titleText: '',
             hintText: 'CNIC / B-Form',
             keyboardType: TextInputType.number,
+            controller: widget.cnicController,
             // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
 
@@ -34,7 +57,7 @@ class _DriverFormState extends State<DriverForm> {
           TTextField(
             titleText: '',
             hintText: 'Gender',
-            controller: _genderController,
+            controller: widget.genderController,
             readOnly: true,
             onTap: () {
               showSelectionBottomSheet(
@@ -42,7 +65,7 @@ class _DriverFormState extends State<DriverForm> {
                 title: 'Select Gender',
                 options: ['Male', 'Female', 'Other'],
                 onSelected: (value) {
-                  _genderController.text = value;
+                  widget.genderController.text = value;
                 },
               );
             },
@@ -51,18 +74,33 @@ class _DriverFormState extends State<DriverForm> {
           TTextField(
             titleText: '',
             hintText: 'Age',
+            controller: widget.ageController,
             keyboardType: TextInputType.number,
           ),
           // Address
-          TTextField(titleText: '', hintText: 'Address'),
-          // Institution (Optional)
-          TTextField(titleText: '', hintText: 'Number'),
+          TTextField(
+            titleText: '',
+            hintText: 'Address',
+            controller: widget.addressController,
+          ),
+          // // Phone Number
+          // TTextField(
+          //   titleText: '',
+          //   hintText: 'Phone Number',
+          //   controller: widget.phoneController,
+          // ),
+          //license Number
+          TTextField(
+            titleText: '',
+            hintText: 'Driving License Number',
+            controller: widget.licenseController,
+          ),
 
           // Vehichle Type
           TTextField(
             titleText: '',
             hintText: 'Vehicle Type',
-            controller: _vehicleController,
+            controller: widget.vehicleTypeController,
             readOnly: true,
             onTap: () {
               showSelectionBottomSheet(
@@ -70,7 +108,7 @@ class _DriverFormState extends State<DriverForm> {
                 title: 'Select Vehicle',
                 options: ['Bike', 'Car'],
                 onSelected: (value) {
-                  _vehicleController.text = value;
+                  widget.vehicleTypeController.text = value;
                 },
               );
             },
@@ -79,7 +117,8 @@ class _DriverFormState extends State<DriverForm> {
           //Vehicle Number
           TTextField(
             titleText: '',
-            hintText: 'Number',
+            hintText: 'Vehicle Number',
+            controller: widget.vehicleNumberController,
             keyboardType: TextInputType.number,
           ),
         ],

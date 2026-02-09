@@ -16,7 +16,7 @@ import 'widgets/map_markers.dart';
 import 'widgets/map_selection_overlay.dart';
 import 'widgets/top_bar.dart';
 import 'dart:math';
-import 'package:gb_ride/models/gb_poi.dart';
+import 'package:gb_ride/models/gb_location_data/gb_poi.dart';
 
 class LocalHomeScreen extends StatefulWidget {
   const LocalHomeScreen({super.key});

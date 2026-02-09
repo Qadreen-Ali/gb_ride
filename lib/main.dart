@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      showPerformanceOverlay: true,
+      // showPerformanceOverlay: true,
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -71,7 +71,6 @@ class MyApp extends StatelessWidget {
         '/driverWallet': (context) => const DriverWallet(),
         '/trips': (context) => const DriverTripsScreen(),
         '/driver(profile)': (context) => const DriverProfileInformation(),
-
       },
     );
   }
