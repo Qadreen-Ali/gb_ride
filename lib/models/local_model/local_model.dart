@@ -12,6 +12,7 @@ class LocalModel {
 
   final DateTime createdAt;
 
+
   LocalModel({
     required this.id,
     required this.phoneNumber,
