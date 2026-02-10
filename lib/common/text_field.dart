@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 
-class TTextField extends StatefulWidget {
+class TTextField extends StatelessWidget {
   final String titleText;
   final String hintText;
   final TextEditingController? controller;
@@ -16,23 +16,19 @@ class TTextField extends StatefulWidget {
   final bool readOnly;
   final VoidCallback? onTap;
   final List<TextInputFormatter>? inputFormatters;
-  final Color? textColor; // ✅ Custom text color
+  final Color? textColor;
   final Color? titleTextColor;
   final Color? hintTextColor;
-
-  final dynamic prefix; // ✅ Custom text color
 
   const TTextField({
     super.key,
     required this.titleText,
     required this.hintText,
-    this.hintTextColor,
     this.controller,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.prefixIcon,
     this.suffixIcon,
-    this.prefix,
     this.enabled = true,
     this.validator,
     this.maxLines = 1,
@@ -41,95 +37,88 @@ class TTextField extends StatefulWidget {
     this.inputFormatters,
     this.textColor,
     this.titleTextColor,
-    ValueChanged<String>? onChanged,
+    this.hintTextColor,
   });
 
-  @override
-  State<TTextField> createState() => _TTextFieldState();
-}
-
-class _TTextFieldState extends State<TTextField> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-
-        if (widget.titleText != null && widget.titleText.isNotEmpty)
+        if (titleText.isNotEmpty)
           Text(
-            widget.titleText!,
-            style: const TextStyle(
-              fontSize: 16,
+            titleText,
+            style: TextStyle(
+              fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: GBColor.gray,
+              color: titleTextColor ?? GBColor.gray,
             ),
           ),
 
-        const SizedBox(height: 10),
-        SizedBox(
-          width: 378,
-          height: 48,
-          child: TextFormField(
-            controller: widget.controller,
-            obscureText: widget.obscureText,
-            keyboardType: widget.keyboardType,
-            maxLines: widget.maxLines,
-            readOnly: widget.readOnly,
-            textAlign: TextAlign.start,
-            onTap: widget.onTap,
-            validator: widget.validator,
-            inputFormatters: widget.inputFormatters,
-            style: TextStyle(
-              color:
-                  widget.textColor ??
-                  GBColor.textFieldText, // ✅ Use custom color if provided
+        const SizedBox(height: 8),
+
+        TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          keyboardType: keyboardType,
+          maxLines: maxLines,
+          readOnly: readOnly,
+          enabled: enabled,
+          onTap: onTap,
+          validator: validator,
+          inputFormatters: inputFormatters,
+          style: TextStyle(
+            color: textColor ?? GBColor.textFieldText,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: GBColor.secondary,
+            hintText: hintText,
+            hintStyle: TextStyle(
+              color: hintTextColor ?? GBColor.textFieldText,
               fontSize: 14,
-              fontWeight: FontWeight.w500,
             ),
-            decoration: InputDecoration(
-              prefixIconConstraints: const BoxConstraints(
-                minWidth: 0,
-                minHeight: 0,
-              ),
-              filled: true,
-              fillColor: GBColor.secondary,
-              hintText: widget.hintText,
-              hintStyle: TextStyle(
-                color: widget.hintTextColor ?? GBColor.textFieldText,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: 10,
-                horizontal: 18,
-              ),
-
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: GBColor.lineColor.withValues(alpha: 0.4),
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                  color: GBColor.textFieldText.withValues(alpha: 0.4),
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: GBColor.primary),
-              ),
-              prefixIcon: widget.prefixIcon == null
-                  ? null
-                  : Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: widget.prefixIcon,
-                    ),
-
-              suffixIcon: widget.suffixIcon,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 14,
+              horizontal: 16,
             ),
+
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                color: GBColor.lineColor.withValues(alpha: 0.4),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                color: GBColor.textFieldText.withValues(alpha: 0.4),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: GBColor.primary),
+            ),
+
+            // 🔥 REQUIRED FOR VALIDATION UI
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Colors.red),
+            ),
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(color: Colors.red),
+            ),
+
+            prefixIcon: prefixIcon == null
+                ? null
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: prefixIcon,
+                  ),
+            suffixIcon: suffixIcon,
           ),
         ),
       ],

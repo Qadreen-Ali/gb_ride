@@ -7,9 +7,10 @@ import 'package:gb_ride/view/auth/controller/auth_controller.dart';
 
 enum UserRole { student, local, driver }
 
-class FormController {
+class FormController extends ChangeNotifier {
   bool isSubmitting = false;
   UserRole selectedRole = UserRole.student;
+  //  bool get isSubmitting => _isSubmitting;
 
   // Driver controllers
   final driverFullName = TextEditingController();
@@ -29,7 +30,10 @@ class FormController {
 
   Future<void> submitDriver() async {
     if (isSubmitting) return;
+
+
     isSubmitting = true;
+    notifyListeners();
 
     try {
       final phone = AuthController.instance.verifiedPhone;
@@ -53,25 +57,36 @@ class FormController {
       await DriverService().createDriver(driver);
     } finally {
       isSubmitting = false;
+       notifyListeners();
     }
   }
 
   Future<void> submitLocal() async {
-    final phone = AuthController.instance.verifiedPhone;
-    if (phone == null) {
-      throw Exception('Verified phone not found');
+    if (isSubmitting) return;
+
+    isSubmitting = true;
+     notifyListeners();
+
+    try {
+      final phone = AuthController.instance.verifiedPhone;
+      if (phone == null) {
+        throw Exception('Verified phone not found');
+      }
+
+      final local = LocalModel(
+        id: '',
+        phoneNumber: phone,
+        fullName: localFullName.text.trim(),
+        cnic: localCnic.text.trim(),
+        gender: localGender.text.trim(),
+        address: localAddress.text.trim(),
+      );
+
+      await LocalService.instance.createLocal(local);
+    } finally {
+      isSubmitting = false;
+       notifyListeners();
     }
-
-    final local = LocalModel(
-      id: '',
-      phoneNumber: phone,
-      fullName: localFullName.text.trim(),
-      cnic: localCnic.text.trim(),
-      gender: localGender.text.trim(),
-      address: localAddress.text.trim(),
-    );
-
-    await LocalService.instance.createLocal(local);
   }
 
   void dispose() {

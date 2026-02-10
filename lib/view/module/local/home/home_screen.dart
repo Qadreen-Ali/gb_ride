@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:gb_ride/view/module/local/home/widgets/map_selection_overlay.dart';
+import '../../../../models/local_model/local_bottomsheet_model.dart';
+import '../../../../models/local_model/local_model.dart';
 import '../../../../utils/constants/color_string.dart';
 import '../../driver/home/app_drawer/app_drawer.dart';
 import '../../driver/home/widgets/map_markers.dart';
 import '../../driver/home/widgets/top_bar.dart';
 import 'controller/local_home_controller.dart';
 import 'home_bottom_sheet.dart';
+import 'home_screen.dart' as c;
 
 class LocalHomeScreen extends StatefulWidget {
   const LocalHomeScreen({super.key});
@@ -14,6 +17,7 @@ class LocalHomeScreen extends StatefulWidget {
   @override
   State<LocalHomeScreen> createState() => _LocalHomeScreenState();
 }
+final LocalModel localUser = c.localUser!;
 
 
 
@@ -160,33 +164,28 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
                     offset: c.showBottomSheet ? Offset.zero : const Offset(0, 1),
                     duration: const Duration(milliseconds: 250),
                     curve: Curves.easeOut,
-                    child: HomeBottomSheet(
-                      pickupController: c.pickupController,
-                      destinationController: c.destinationController,
-                      distanceKm: c.distanceKm,
-                      etaMinutes: c.etaMinutes,
-
-                      onPickupTap: () async {
-                        await c.openLocationSearch(context: context, isPickup: true);
-                      },
-                      onDestinationTap: () async {
-                        await c.openLocationSearch(context: context, isPickup: false);
-                      },
-
-                      onStartPickupSelection: c.startPickupSelection,
-                      onStartDestinationSelection: c.startDestinationSelection,
-                      onExpandSheet: () {},
-                      pickupLocation: c.pickupLocation,
-                      destinationLocation: c.destinationLocation,
-                      selectedVehicle: c.selectedVehicle,
-                      onVehicleSelect: (v) => c.setVehicle(v),
-                      mapController: c.mapController,
-
-                      onPickupSelected: (pos, name) => c.setPickup(pos, name),
-                      onDestinationSelected: (pos, name) async {
-                        await c.setDestination(pos, name);
-                      },
+                    child:HomeBottomSheet(
+                      user: localUser, // LocalModel
+                      params: HomeBottomSheetParams(
+                        pickupController: c.pickupController,
+                        destinationController: c.destinationController,
+                        distanceKm: c.distanceKm,
+                        etaMinutes: c.etaMinutes,
+                        onStartPickupSelection: c.startPickupSelection,
+                        onStartDestinationSelection: c.startDestinationSelection,
+                        onExpandSheet: () {},
+                        pickupLocation: c.pickupLocation,
+                        destinationLocation: c.destinationLocation,
+                        onVehicleSelect: c.setVehicle,
+                        selectedVehicle: c.selectedVehicle,
+                        onPickupTap: () => c.openLocationSearch(context: context, isPickup: true),
+                        onDestinationTap: () => c.openLocationSearch(context: context, isPickup: false),
+                        mapController: c.mapController,
+                        onPickupSelected: (pos, name) => c.setPickup(pos, name),
+                        onDestinationSelected: (pos, name) => c.setDestination(pos, name),
+                      ),
                     ),
+
                   ),
                 ),
             ],

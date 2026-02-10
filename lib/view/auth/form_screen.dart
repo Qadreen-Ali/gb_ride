@@ -6,10 +6,9 @@ import 'package:gb_ride/view/module/driver/auth/driver_form.dart';
 import 'package:gb_ride/view/module/driver/home/driver_home_screen.dart';
 import 'package:gb_ride/view/module/local/auth/local_form.dart';
 import 'package:gb_ride/utils/constants/secondary_button.dart';
+import 'package:provider/provider.dart';
 import '../module/student/auth/student_form.dart';
 import 'package:gb_ride/view/auth/controller/form_controller.dart';
-
-// enum UserRole { student, local, driver }
 
 class FormScreen extends StatefulWidget {
   const FormScreen({super.key});
@@ -23,15 +22,57 @@ class _FormScreenState extends State<FormScreen> {
   final GlobalKey<FormState> _localKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _driverKey = GlobalKey<FormState>();
 
-  @override
-  void initState() {
-    super.initState();
-    controller = FormController();
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   controller = FormController();
+  // }
+  Future<void> _handleSubmit(
+    BuildContext context,
+    FormController controller,
+  ) async {
+    switch (controller.selectedRole) {
+      case UserRole.student:
+        if (_studentKey.currentState?.validate() ?? false) {}
+        break;
+
+      case UserRole.local:
+        if (!(_localKey.currentState?.validate() ?? false)) return;
+
+        try {
+          await controller.submitLocal();
+          if (!context.mounted) return;
+          Navigator.pushNamed(context, '/localhome');
+        } catch (e) {
+          if (!context.mounted) return;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(e.toString())));
+        }
+        break;
+
+      case UserRole.driver:
+        if (!(_driverKey.currentState?.validate() ?? false)) return;
+
+        try {
+          await controller.submitDriver();
+          if (!context.mounted) return;
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const DriverHomeScreen()),
+            (_) => false,
+          );
+        } catch (e) {
+          if (!context.mounted) return;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(e.toString())));
+        }
+        break;
+    }
   }
+  // late final FormController controller;
 
-  late final FormController controller;
-
-  Widget _buildForm() {
+  Widget _buildForm(FormController controller) {
     switch (controller.selectedRole) {
       case UserRole.student:
         return StudentForm(formKey: _studentKey);
@@ -62,6 +103,7 @@ class _FormScreenState extends State<FormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.watch<FormController>();
     return Scaffold(
       backgroundColor: GBColor.secondary,
       resizeToAvoidBottomInset: true,
@@ -155,7 +197,7 @@ class _FormScreenState extends State<FormScreen> {
                 child: SingleChildScrollView(
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
-                    child: _buildForm(),
+                    child: _buildForm(controller),
                   ),
                 ),
               ),
@@ -164,58 +206,14 @@ class _FormScreenState extends State<FormScreen> {
 
               //Continue button pinned at bottom
               SecondaryButton(
-                title: GBText.continueBtn,
-                onPressed: () async {
-                  bool isValid = false;
-
-                  switch (controller.selectedRole) {
-                    case UserRole.student:
-                      isValid = _studentKey.currentState?.validate() ?? false;
-                      if (isValid) {
-                        // Navigator.pushNamed(context, '/');
-                      }
-                      break;
-
-                    case UserRole.local:
-                      if (!(_localKey.currentState?.validate() ?? false)) {
-                        return;
-                      }
-
-                      try {
-                        await controller.submitLocal();
-                        if (!mounted) return;
-                        Navigator.pushNamed(context, '/localhome');
-                      } catch (e) {
-                        if (!mounted) return;
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(e.toString())));
-                      }
-                      break;
-
-                    case UserRole.driver:
-                      if (!(_driverKey.currentState?.validate() ?? false))
-                        return;
-
-                      try {
-                        await controller.submitDriver();
-
-                        if (!mounted) return;
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (_) => const DriverHomeScreen(),
-                          ),
-                          (_) => false,
-                        );
-                      } catch (e) {
-                        if (!mounted) return;
-                        ScaffoldMessenger.of(
-                          context,
-                        ).showSnackBar(SnackBar(content: Text(e.toString())));
-                      }
-                      break;
-                  }
-                },
+                title: controller.isSubmitting
+                    ? 'Please wait…'
+                    : GBText.continueBtn,
+                onPressed: controller.isSubmitting
+                    ? null
+                    : () {
+                        _handleSubmit(context, controller);
+                      },
               ),
             ],
           ),
@@ -226,7 +224,7 @@ class _FormScreenState extends State<FormScreen> {
 
   @override
   void dispose() {
-    controller.dispose();
+    // controller.dispose();
     super.dispose();
   }
 }

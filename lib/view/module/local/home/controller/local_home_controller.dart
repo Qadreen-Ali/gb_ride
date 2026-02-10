@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import '../../../../../models/gb_location_data/gb_poi.dart';
-import '../../../../../services/gb_poi_service.dart';
-import '../../../../../services/location_routing_service.dart';
-import '../../../../../services/location_search_service.dart';
+import '../../../../../services/map_services/gb_poi_service.dart';
+import '../../../../../services/map_services/location_routing_service.dart';
+import '../../../../../services/map_services/location_search_service.dart';
 import '../widgets/location_search_screen.dart';
 
 class LocalHomeController extends ChangeNotifier {

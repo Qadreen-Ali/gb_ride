@@ -1,5 +1,6 @@
 // 03465407068
 import 'package:flutter/material.dart';
+import 'package:gb_ride/view/auth/controller/form_controller.dart';
 import 'package:gb_ride/view/module/driver/bottom_sheet/offer_fare_screen.dart';
 import 'package:gb_ride/view/module/driver/home/app_drawer/driver_trips.dart';
 import 'package:gb_ride/view/module/driver/home/driver_home_screen.dart';
@@ -21,6 +22,7 @@ import 'package:gb_ride/view/auth/form_screen.dart';
 import 'package:gb_ride/view/module/local/setting/payment_method/payment_methods_screen.dart';
 import 'package:gb_ride/view/module/local/setting/history/history_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,7 +57,10 @@ class MyApp extends StatelessWidget {
           final args = ModalRoute.of(context)?.settings.arguments as String?;
           return OTPVerificationScreen(phoneNumber: args ?? '');
         },
-        '/form': (context) => FormScreen(),
+        '/form': (context) => ChangeNotifierProvider(
+          create: (_) => FormController(),
+          child: const FormScreen(),
+        ),
         '/localhome': (context) => const LocalHomeScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/profile': (context) => const ProfileScreen(),
