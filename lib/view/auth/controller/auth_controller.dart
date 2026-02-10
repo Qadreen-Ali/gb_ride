@@ -1,3 +1,4 @@
+import 'package:gb_ride/utils/logger.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthController {
@@ -52,23 +53,31 @@ class AuthController {
     required void Function(String error) onError,
   }) async {
     try {
+      // 🔥 DEV MODE BYPASS (MUST BE FIRST)
+      if (otp.trim() == '123456') {
+        logger.i('DEV OTP ACCEPTED');
+        await supabase.auth.signInAnonymously();
+        logger.i('AUTH USER: ${supabase.auth.currentUser}');
+        onSuccess();
+        return;
+      }
+
+      // 🛑 SAFETY CHECK
       if (_phone == null) {
         onError('Phone number missing. Please retry.');
         return;
       }
 
-      final response = await supabase.functions.invoke(
-        'verify-otp',
-        body: {'phone': _phone, 'otp': otp},
+      // 🔴 PRODUCTION OTP (WILL FAIL IN DEV – THAT’S OK)
+      await supabase.auth.verifyOTP(
+        phone: _phone!,
+        token: otp.trim(),
+        type: OtpType.sms,
       );
 
-      if (response.data['success'] == true) {
-        onSuccess();
-      } else {
-        onError('Invalid verification code');
-      }
+      onSuccess();
     } catch (e) {
-      onError('Verification error: $e');
+      onError('Invalid OTP');
     }
   }
 
@@ -77,7 +86,7 @@ class AuthController {
     try {
       // check driver first
       final driver = await supabase
-          .from('driver')
+          .from('drivers')
           .select()
           .eq('auth_id', authId)
           .maybeSingle();
@@ -88,7 +97,7 @@ class AuthController {
 
       // check local
       final local = await supabase
-          .from('local')
+          .from('locals')
           .select()
           .eq('auth_id', authId)
           .maybeSingle();
