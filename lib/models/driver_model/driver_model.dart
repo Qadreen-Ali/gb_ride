@@ -1,99 +1,97 @@
 class DriverModel {
   final String id;
 
+  // 🔑 Auth linkage
+  final String authId;
+
   // Personal info
-  final String fullName;
-  final String cnic;
-  final String gender;
-  final int age;
-  final String address;
   final String phoneNumber;
+  final String fullName;
+  final String? gender;
+  final String? cnic;
+  final int? age;
+  final String? address;
 
   // Vehicle info
-  final String vehicleType; // Bike / Car
-  final String vehicleNumber;
   final String licenseNumber;
+  final String vehicleType;
+  final String vehicleNumber;
 
-  // Meta
-  final bool isActive;
   final DateTime createdAt;
 
   DriverModel({
     required this.id,
-    required this.fullName,
-    required this.cnic,
-    required this.gender,
-    required this.age,
-    required this.address,
+    required this.authId,
     required this.phoneNumber,
+    required this.fullName,
+    this.gender,
+    this.cnic,
+    this.age,
+    this.address,
+    required this.licenseNumber,
     required this.vehicleType,
     required this.vehicleNumber,
-    required this.licenseNumber,
-    this.isActive = true,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
-  /// Convert model → Map (API / Firebase)
+  /// Convert model → Supabase insert/update map
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'fullName': fullName,
-      'cnic': cnic,
+      'auth_id': authId, // 🔑 REQUIRED
+      'phone_number': phoneNumber,
+      'full_name': fullName,
       'gender': gender,
+      'cnic': cnic,
       'age': age,
       'address': address,
-      'phoneNumber': phoneNumber,
-      'vehicleType': vehicleType,
-      'vehicleNumber': vehicleNumber,
-      'isActive': isActive,
-      'createdAt': createdAt.toIso8601String(),
+      'license_number': licenseNumber,
+      'vehicle_type': vehicleType,
+      'vehicle_number': vehicleNumber,
+      'created_at': createdAt.toIso8601String(),
     };
   }
 
-  /// Convert Map → Model (API response)
+  /// Convert Supabase response → model
   factory DriverModel.fromMap(Map<String, dynamic> map) {
     return DriverModel(
       id: map['id'] ?? '',
-      fullName: map['fullName'] ?? '',
-      cnic: map['cnic'] ?? '',
-      gender: map['gender'] ?? '',
-      age: map['age'] is int ? map['age'] : int.tryParse('${map['age']}') ?? 0,
-      address: map['address'] ?? '',
-      phoneNumber: map['phoneNumber'] ?? '',
-      vehicleType: map['vehicleType'] ?? '',
-      licenseNumber: map['licenseNumber'] ?? '',
-      vehicleNumber: map['vehicleNumber'] ?? '',
-      isActive: map['isActive'] ?? true,
-      createdAt: map['createdAt'] != null
-          ? DateTime.tryParse(map['createdAt'])
+      authId: map['auth_id'] ?? '',
+      phoneNumber: map['phone_number'] ?? '',
+      fullName: map['full_name'] ?? '',
+      gender: map['gender'],
+      cnic: map['cnic'],
+      age: map['age'],
+      address: map['address'],
+      licenseNumber: map['license_number'] ?? '',
+      vehicleType: map['vehicle_type'] ?? '',
+      vehicleNumber: map['vehicle_number'] ?? '',
+      createdAt: map['created_at'] != null
+          ? DateTime.tryParse(map['created_at'])
           : DateTime.now(),
     );
   }
 
-  /// CopyWith (state updates)
   DriverModel copyWith({
     String? fullName,
-    String? cnic,
     String? gender,
+    String? cnic,
     int? age,
     String? address,
-    String? phoneNumber,
     String? vehicleType,
     String? vehicleNumber,
-    bool? isActive,
   }) {
     return DriverModel(
       id: id,
+      authId: authId,
+      phoneNumber: phoneNumber,
       fullName: fullName ?? this.fullName,
-      cnic: cnic ?? this.cnic,
       gender: gender ?? this.gender,
+      cnic: cnic ?? this.cnic,
       age: age ?? this.age,
       address: address ?? this.address,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      vehicleType: vehicleType ?? this.vehicleType,
       licenseNumber: licenseNumber,
+      vehicleType: vehicleType ?? this.vehicleType,
       vehicleNumber: vehicleNumber ?? this.vehicleNumber,
-      isActive: isActive ?? this.isActive,
       createdAt: createdAt,
     );
   }

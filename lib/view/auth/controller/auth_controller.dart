@@ -4,11 +4,13 @@ class AuthController {
   AuthController._internal();
   static final AuthController instance = AuthController._internal();
 
+  //handle all auth related logic here (requesting OTP, verifying OTP, fetching user profile, etc.)
+  User? get currentUser => supabase.auth.currentUser;
+
   final supabase = Supabase.instance.client;
   String? _phone;
   String? _debugOtp;
   String? get verifiedPhone => _phone;
-
 
   bool isValidPakNumber(String input) {
     final cleaned = input.replaceAll(RegExp(r'\D'), '');
@@ -68,6 +70,42 @@ class AuthController {
     } catch (e) {
       onError('Verification error: $e');
     }
+  }
+
+  // Fetch user profile from 'drivers' or 'locals' table based on current user's phone number
+  Future<Map<String, dynamic>?> getExistingProfile(String authId) async {
+    try {
+      // check driver first
+      final driver = await supabase
+          .from('driver')
+          .select()
+          .eq('auth_id', authId)
+          .maybeSingle();
+
+      if (driver != null) {
+        return {'role': 'driver', 'data': driver};
+      }
+
+      // check local
+      final local = await supabase
+          .from('local')
+          .select()
+          .eq('auth_id', authId)
+          .maybeSingle();
+
+      if (local != null) {
+        return {'role': 'local', 'data': local};
+      }
+
+      return null; // new user
+    } catch (_) {
+      return null;
+    }
+  }
+
+  // Logout user
+  Future<void> logout() async {
+    await supabase.auth.signOut();
   }
 
   String? getDebugOtp() => _debugOtp;
