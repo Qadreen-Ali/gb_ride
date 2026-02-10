@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:gb_ride/services/location_search_service.dart';
+import 'package:gb_ride/services/map_services/location_search_service.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:gb_ride/services/gb_poi_service.dart';
+import 'package:gb_ride/services/map_services/gb_poi_service.dart';
 import 'package:gb_ride/models/gb_location_data/gb_poi.dart';
 
 class LocationSearchScreen extends StatefulWidget {

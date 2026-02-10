@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gb_ride/common/text_field.dart';
 import 'package:gb_ride/view/auth/common/bottom_sheet_selector.dart';
 
@@ -43,6 +44,12 @@ class _DriverFormState extends State<DriverForm> {
             titleText: '',
             hintText: 'Full Name (as per CNIC)',
             controller: widget.fullNameController,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Full name is required';
+              }
+              return null;
+            },
           ),
           // CNIC / B-Form
           TTextField(
@@ -50,7 +57,13 @@ class _DriverFormState extends State<DriverForm> {
             hintText: 'CNIC / B-Form',
             keyboardType: TextInputType.number,
             controller: widget.cnicController,
-            // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'CNIC is required';
+              }
+              return null;
+            },
           ),
 
           // Gender
@@ -69,6 +82,12 @@ class _DriverFormState extends State<DriverForm> {
                 },
               );
             },
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Gender is required';
+              }
+              return null;
+            },
           ),
           // Number
           TTextField(
@@ -76,19 +95,26 @@ class _DriverFormState extends State<DriverForm> {
             hintText: 'Age',
             controller: widget.ageController,
             keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Age is required';
+              }
+              return null;
+            },
           ),
           // Address
           TTextField(
             titleText: '',
             hintText: 'Address',
             controller: widget.addressController,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Full name is required';
+              }
+              return null;
+            },
           ),
-          // // Phone Number
-          // TTextField(
-          //   titleText: '',
-          //   hintText: 'Phone Number',
-          //   controller: widget.phoneController,
-          // ),
+
           //license Number
           TTextField(
             titleText: '',

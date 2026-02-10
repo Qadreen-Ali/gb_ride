@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:gb_ride/services/gb_poi_service.dart';
-import 'package:gb_ride/services/location_routing_service.dart';
-import 'package:gb_ride/services/location_search_service.dart';
+import 'package:gb_ride/services/map_services/gb_poi_service.dart';
+import 'package:gb_ride/services/map_services/location_routing_service.dart';
+import 'package:gb_ride/services/map_services/location_search_service.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/view/module/local/home/widgets/location_search_screen.dart';
 // import 'package:geocoding/geocoding.dart';
