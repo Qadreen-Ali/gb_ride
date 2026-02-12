@@ -43,6 +43,7 @@ class FormController extends ChangeNotifier {
 
       final driver = DriverModel(
         id: '',
+        authId: AuthController.instance.currentUser!.id,
         phoneNumber: phone,
         fullName: driverFullName.text.trim(),
         cnic: driverCnic.text.trim(),
@@ -75,6 +76,7 @@ class FormController extends ChangeNotifier {
 
       final local = LocalModel(
         id: '',
+        authId: AuthController.instance.currentUser!.id,
         phoneNumber: phone,
         fullName: localFullName.text.trim(),
         cnic: localCnic.text.trim(),

@@ -17,6 +17,37 @@ class OTPVerificationScreen extends StatefulWidget {
 }
 
 class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
+  //handle OTP verification and resend logic here
+  Future<void> _handlePostOtpNavigation() async {
+    final user = _authController.currentUser; // from auth controller
+
+    if (user == null) return;
+
+    final existingUser = await _authController.getExistingProfile(user.id);
+
+    if (existingUser != null) {
+      // OLD USER → GO HOME
+      final role = existingUser['role'];
+
+      if (role == 'driver') {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/driver-home',
+          (route) => false,
+        );
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/local-home',
+          (route) => false,
+        );
+      }
+    } else {
+      // NEW USER → REGISTRATION FORM
+      Navigator.pushReplacementNamed(context, '/form');
+    }
+  }
+
   //
   final AuthController _authController = AuthController.instance;
   String _otp = '';
@@ -27,8 +58,8 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen> {
     if (_isOTPComplete) {
       _authController.verifyOtp(
         otp: _otp,
-        onSuccess: () {
-          Navigator.pushNamed(context, '/form');
+        onSuccess: () async {
+          await _handlePostOtpNavigation();
         },
         onError: (error) {
           ScaffoldMessenger.of(

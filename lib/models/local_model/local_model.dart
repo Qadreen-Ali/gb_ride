@@ -1,16 +1,23 @@
 class LocalModel {
   final String id;
+
+  // 🔑 Auth linkage (MOST IMPORTANT)
+  final String authId;
+
+  // Identity
   final String phoneNumber;
+
+  // Profile info
   final String fullName;
   final String cnic;
   final String gender;
   final String address;
+
   final DateTime createdAt;
-
-
 
   LocalModel({
     required this.id,
+    required this.authId,
     required this.phoneNumber,
     required this.fullName,
     required this.cnic,
@@ -19,50 +26,48 @@ class LocalModel {
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
+  /// Convert model → Supabase insert map
   Map<String, dynamic> toMap() {
     return {
+      'auth_id': authId, // 🔑 REQUIRED
       'phone_number': phoneNumber,
       'full_name': fullName,
       'cnic': cnic,
       'gender': gender,
-      // 'age': age,
       'address': address,
       'created_at': createdAt.toIso8601String(),
     };
   }
 
+  /// Convert Supabase response → model
   factory LocalModel.fromMap(Map<String, dynamic> map) {
     return LocalModel(
-      id: map['id']?.toString() ?? '',
-      phoneNumber: map['phone_number']?.toString() ?? '',
-      fullName: map['full_name']?.toString() ?? '',
-      cnic: map['cnic']?.toString() ?? '',
-      gender: map['gender']?.toString() ?? '',
-      // age: (map['age'] is int)
-      //     ? map['age'] as int
-      //     : int.tryParse(map['age']?.toString() ?? '') ?? 0,
-      address: map['address']?.toString() ?? '',
+      id: map['id'] ?? '',
+      authId: map['auth_id'] ?? '',
+      phoneNumber: map['phone_number'] ?? '',
+      fullName: map['full_name'] ?? '',
+      cnic: map['cnic'] ?? '',
+      gender: map['gender'] ?? '',
+      address: map['address'] ?? '',
       createdAt: map['created_at'] != null
-          ? DateTime.tryParse(map['created_at'].toString()) ?? DateTime.now()
+          ? DateTime.tryParse(map['created_at'])
           : DateTime.now(),
     );
   }
 
   LocalModel copyWith({
-    String? phoneNumber,
     String? fullName,
     String? cnic,
     String? gender,
-    /// int? age,
     String? address,
   }) {
     return LocalModel(
       id: id,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
+      authId: authId,
+      phoneNumber: phoneNumber,
       fullName: fullName ?? this.fullName,
       cnic: cnic ?? this.cnic,
       gender: gender ?? this.gender,
-      // age: age ?? this.age,
       address: address ?? this.address,
       createdAt: createdAt,
     );
