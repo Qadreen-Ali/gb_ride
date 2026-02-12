@@ -7,6 +7,8 @@ class LocalModel {
   final String address;
   final DateTime createdAt;
 
+
+
   LocalModel({
     required this.id,
     required this.phoneNumber,
@@ -51,7 +53,7 @@ class LocalModel {
     String? fullName,
     String? cnic,
     String? gender,
-    int? age,
+    /// int? age,
     String? address,
   }) {
     return LocalModel(

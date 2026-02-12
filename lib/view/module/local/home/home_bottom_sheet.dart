@@ -28,27 +28,27 @@ class HomeBottomSheet extends StatefulWidget {
 }
 
 class _HomeBottomSheetState extends State<HomeBottomSheet> {
-  Future<void> openWhatsAppChat({
-    required String phoneNumber,
-    String message = '',
-  }) async {
-    final Uri uri = Uri.parse(
-      'whatsapp://send?phone=$phoneNumber&text=${Uri.encodeComponent(message)}',
-    );
-
-    try {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } catch (e) {
-      debugPrint('WhatsApp not installed');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('WhatsApp not installed')),
-      );
-    }
-  }
+  // Future<void> openWhatsAppChat({
+  //   required String phoneNumber,
+  //   String message = '',
+  // }) async {
+  //   final Uri uri = Uri.parse(
+  //     'whatsapp://send?phone=$phoneNumber&text=${Uri.encodeComponent(message)}',
+  //   );
+  //
+  //   try {
+  //     await launchUrl(uri, mode: LaunchMode.externalApplication);
+  //   } catch (e) {
+  //     debugPrint('WhatsApp not installed');
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('WhatsApp not installed')),
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final p = widget.params; // ✅ shorthand
+    final p = widget.params;
     final u = widget.user; // ✅ available if you want to show name/phone later
 
     return SafeArea(
@@ -255,10 +255,10 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        openWhatsAppChat(
-                          phoneNumber: '923554445863',
-                          message: 'Hello! I need help with my ride.',
-                        );
+                        // openWhatsAppChat(
+                        //   phoneNumber: '923554445863',
+                        //   message: 'Hello! I need help with my ride.',
+                        // );
                       },
                       child: Image.asset(GBImagePath.chat, width: 44),
                     ),
