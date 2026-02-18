@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gb_ride/common/form_button.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
@@ -6,7 +7,6 @@ import 'package:gb_ride/view/module/driver/auth/driver_form.dart';
 import 'package:gb_ride/view/module/driver/home/driver_home_screen.dart';
 import 'package:gb_ride/view/module/local/auth/local_form.dart';
 import 'package:gb_ride/utils/constants/secondary_button.dart';
-import 'package:provider/provider.dart';
 import '../module/student/auth/student_form.dart';
 import 'package:gb_ride/view/auth/controller/form_controller.dart';
 
@@ -22,15 +22,44 @@ class _FormScreenState extends State<FormScreen> {
   final GlobalKey<FormState> _localKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _driverKey = GlobalKey<FormState>();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   controller = FormController();
-  // }
-  Future<void> _handleSubmit(
-    BuildContext context,
-    FormController controller,
-  ) async {
+  // ✅ SINGLE controller instance
+  final FormController controller = Get.find<FormController>();
+
+  bool _checkingRoute = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _decideRoute();
+  }
+
+  /// 🔐 AUTO REDIRECT LOGIC (FROM NEW VERSION)
+  Future<void> _decideRoute() async {
+    final route = await controller.checkUserRoute();
+
+    if (!mounted) return;
+
+    switch (route) {
+      case FormRoute.driverHome:
+        Get.offAllNamed('/driverhome');
+        break;
+
+      case FormRoute.localHome:
+        Get.offAllNamed('/localhome');
+        break;
+
+      case FormRoute.formSelection:
+        setState(() => _checkingRoute = false);
+        break;
+
+      case FormRoute.login:
+      default:
+        Get.offAllNamed('/login');
+    }
+  }
+
+  /// 📤 SUBMIT HANDLER (UNCHANGED UI FLOW)
+  Future<void> _handleSubmit() async {
     switch (controller.selectedRole) {
       case UserRole.student:
         if (_studentKey.currentState?.validate() ?? false) {}
@@ -41,13 +70,12 @@ class _FormScreenState extends State<FormScreen> {
 
         try {
           await controller.submitLocal();
-          if (!context.mounted) return;
-          Navigator.pushNamed(context, '/localhome');
+          if (!mounted) return;
+          Get.offAllNamed('/localhome');
         } catch (e) {
-          if (!context.mounted) return;
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(e.toString())));
+          if (!mounted) return;
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(e.toString())));
         }
         break;
 
@@ -56,23 +84,18 @@ class _FormScreenState extends State<FormScreen> {
 
         try {
           await controller.submitDriver();
-          if (!context.mounted) return;
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const DriverHomeScreen()),
-            (_) => false,
-          );
+          if (!mounted) return;
+          Get.offAll(() => const DriverHomeScreen());
         } catch (e) {
-          if (!context.mounted) return;
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(e.toString())));
+          if (!mounted) return;
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(e.toString())));
         }
         break;
     }
   }
-  // late final FormController controller;
 
-  Widget _buildForm(FormController controller) {
+  Widget _buildForm() {
     switch (controller.selectedRole) {
       case UserRole.student:
         return StudentForm(formKey: _studentKey);
@@ -81,6 +104,7 @@ class _FormScreenState extends State<FormScreen> {
         return LocalForm(
           formKey: _localKey,
           fullNameController: controller.localFullName,
+          phoneController: controller.phoneNumber, // NEW phone controller
           cnicController: controller.localCnic,
           genderController: controller.localGender,
           addressController: controller.localAddress,
@@ -90,6 +114,7 @@ class _FormScreenState extends State<FormScreen> {
         return DriverForm(
           formKey: _driverKey,
           fullNameController: controller.driverFullName,
+          phoneController: controller.phoneNumber, // NEW phone controller
           cnicController: controller.driverCnic,
           genderController: controller.driverGender,
           ageController: controller.driverAge,
@@ -103,7 +128,13 @@ class _FormScreenState extends State<FormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<FormController>();
+    // ⏳ WAIT UNTIL AUTO-CHECK IS DONE
+    if (_checkingRoute) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       backgroundColor: GBColor.secondary,
       resizeToAvoidBottomInset: true,
@@ -114,7 +145,6 @@ class _FormScreenState extends State<FormScreen> {
             children: [
               const SizedBox(height: 40),
 
-              // title
               Text(
                 GBText.createYourAccount,
                 textAlign: TextAlign.center,
@@ -140,13 +170,14 @@ class _FormScreenState extends State<FormScreen> {
 
               const SizedBox(height: 16),
 
-              // buttons
+              // 🎯 ROLE BUTTONS (UI UNCHANGED)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   FormButton(
                     title: 'Student',
-                    isSelected: controller.selectedRole == UserRole.student,
+                    isSelected:
+                        controller.selectedRole == UserRole.student,
                     prefixIcon: Image.asset(
                       'assets/icons/ph_student.png',
                       width: 28,
@@ -160,7 +191,8 @@ class _FormScreenState extends State<FormScreen> {
                   ),
                   FormButton(
                     title: 'Local',
-                    isSelected: controller.selectedRole == UserRole.local,
+                    isSelected:
+                        controller.selectedRole == UserRole.local,
                     width: 90,
                     prefixIcon: Image.asset(
                       'assets/icons/local.png',
@@ -175,7 +207,8 @@ class _FormScreenState extends State<FormScreen> {
                   ),
                   FormButton(
                     title: 'Driver',
-                    isSelected: controller.selectedRole == UserRole.driver,
+                    isSelected:
+                        controller.selectedRole == UserRole.driver,
                     prefixIcon: Image.asset(
                       'assets/icons/driver.png',
                       width: 28,
@@ -192,39 +225,28 @@ class _FormScreenState extends State<FormScreen> {
 
               const SizedBox(height: 20),
 
-              //FORM AREA
               Expanded(
                 child: SingleChildScrollView(
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
-                    child: _buildForm(controller),
+                    child: _buildForm(),
                   ),
                 ),
               ),
 
               const SizedBox(height: 12),
 
-              //Continue button pinned at bottom
               SecondaryButton(
                 title: controller.isSubmitting
                     ? 'Please wait…'
                     : GBText.continueBtn,
-                onPressed: controller.isSubmitting
-                    ? null
-                    : () {
-                        _handleSubmit(context, controller);
-                      },
+                onPressed:
+                    controller.isSubmitting ? null : _handleSubmit,
               ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    // controller.dispose();
-    super.dispose();
   }
 }

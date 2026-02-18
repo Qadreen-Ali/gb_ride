@@ -9,6 +9,7 @@ class LocalForm extends StatefulWidget {
   final TextEditingController cnicController;
   final TextEditingController genderController;
   final TextEditingController addressController;
+  final TextEditingController phoneController;
 
   const LocalForm({
     super.key,
@@ -17,6 +18,7 @@ class LocalForm extends StatefulWidget {
     required this.cnicController,
     required this.genderController,
     required this.addressController,
+    required this.phoneController,
   });
 
   @override
@@ -40,6 +42,19 @@ class _LocalFormState extends State<LocalForm> {
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
                 return 'Full name is required';
+              }
+              return null;
+            },
+          ),
+            // // Phone
+          TTextField(
+            titleText: '',
+            hintText: 'Phone Number',
+            keyboardType: TextInputType.phone,
+            controller: widget.phoneController,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Phone Number is required';
               }
               return null;
             },

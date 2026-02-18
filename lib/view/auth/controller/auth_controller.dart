@@ -1,121 +1,59 @@
-import 'package:gb_ride/utils/logger.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class AuthController {
-  AuthController._internal();
-  static final AuthController instance = AuthController._internal();
+class AuthController extends GetxController {
+  final SupabaseClient supabase = Supabase.instance.client;
 
-  //handle all auth related logic here (requesting OTP, verifying OTP, fetching user profile, etc.)
-  User? get currentUser => supabase.auth.currentUser;
+  final Rx<User?> currentUser = Rx<User?>(null);
+  final RxBool loading = false.obs;
 
-  final supabase = Supabase.instance.client;
-  String? _phone;
-  String? _debugOtp;
-  String? get verifiedPhone => _phone;
+  @override
+  void onInit() {
+    super.onInit();
 
-  bool isValidPakNumber(String input) {
-    final cleaned = input.replaceAll(RegExp(r'\D'), '');
-    return RegExp(r'^(0?3\d{9}|92\d{10})$').hasMatch(cleaned);
+    // Restore session on app start
+    currentUser.value = supabase.auth.currentUser;
+
+    // Listen to auth changes
+    supabase.auth.onAuthStateChange.listen((data) {
+      currentUser.value = data.session?.user;
+
+      if (data.event == AuthChangeEvent.signedIn) {
+        _handlePostLogin();
+      }
+
+      if (data.event == AuthChangeEvent.signedOut) {
+        Get.offAllNamed('/login');
+      }
+    });
   }
 
-  String normalizePhone(String input) {
-    final cleaned = input.replaceAll(RegExp(r'\D'), '');
-    return cleaned.startsWith('92') ? '+$cleaned' : '+92$cleaned';
-  }
+  /// Send magic link to email
+  Future<void> signInWithEmail(String email) async {
+    loading.value = true;
 
-  Future<void> requestOtp({
-    required String phone,
-    required void Function() onSuccess,
-    required void Function(String error) onError,
-  }) async {
     try {
-      _phone = normalizePhone(phone);
-
-      final response = await supabase.functions.invoke(
-        'send-otp',
-        body: {'phone': _phone},
+      await supabase.auth.signInWithOtp(
+        email: email,
+        emailRedirectTo: 'gbride://login-callback',
       );
 
-      if (response.data['success'] == true) {
-        _debugOtp = response.data['debug_otp']; // DEV only
-        onSuccess();
-      } else {
-        onError(response.data['error'] ?? 'Failed to send OTP');
-      }
+      Get.snackbar('Check your email', 'We sent you a login link');
     } catch (e) {
-      onError('Error sending OTP: $e');
+      Get.snackbar('Login failed', e.toString());
+    } finally {
+      loading.value = false;
     }
   }
 
-  Future<void> verifyOtp({
-    required String otp,
-    required void Function() onSuccess,
-    required void Function(String error) onError,
-  }) async {
-    try {
-      // 🔥 DEV MODE BYPASS (MUST BE FIRST)
-      if (otp.trim() == '123456') {
-        logger.i('DEV OTP ACCEPTED');
-        await supabase.auth.signInAnonymously();
-        logger.i('AUTH USER: ${supabase.auth.currentUser}');
-        onSuccess();
-        return;
-      }
-
-      // 🛑 SAFETY CHECK
-      if (_phone == null) {
-        onError('Phone number missing. Please retry.');
-        return;
-      }
-
-      // 🔴 PRODUCTION OTP (WILL FAIL IN DEV – THAT’S OK)
-      await supabase.auth.verifyOTP(
-        phone: _phone!,
-        token: otp.trim(),
-        type: OtpType.sms,
-      );
-
-      onSuccess();
-    } catch (e) {
-      onError('Invalid OTP');
-    }
+  /// Called automatically after magic link success
+  Future<void> _handlePostLogin() async {
+    // DO NOT put redirect logic here yet
+    // FormController will decide where to go
+    Get.offAllNamed('/loading');
   }
 
-  // Fetch user profile from 'drivers' or 'locals' table based on current user's phone number
-  Future<Map<String, dynamic>?> getExistingProfile(String authId) async {
-    try {
-      // check driver first
-      final driver = await supabase
-          .from('drivers')
-          .select()
-          .eq('auth_id', authId)
-          .maybeSingle();
-
-      if (driver != null) {
-        return {'role': 'driver', 'data': driver};
-      }
-
-      // check local
-      final local = await supabase
-          .from('locals')
-          .select()
-          .eq('auth_id', authId)
-          .maybeSingle();
-
-      if (local != null) {
-        return {'role': 'local', 'data': local};
-      }
-
-      return null; // new user
-    } catch (_) {
-      return null;
-    }
-  }
-
-  // Logout user
-  Future<void> logout() async {
+  Future<void> signOut() async {
     await supabase.auth.signOut();
   }
-
-  String? getDebugOtp() => _debugOtp;
 }
