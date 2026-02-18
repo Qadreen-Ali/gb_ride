@@ -62,7 +62,7 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   supabase_flutter: ^2.5.0
   dotted_border: ^2.1.0
-  mapbox_maps_flutter: ^2.18.0
+  get: ^4.7.3
 
 dev_dependencies:
   flutter_test:

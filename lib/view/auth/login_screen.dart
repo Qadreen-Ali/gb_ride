@@ -1,15 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/utils/constants/social_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
-import 'package:gb_ride/utils/formatters/pak_phone_formatter.dart';
 import 'package:gb_ride/utils/logger.dart';
 import 'package:gb_ride/view/auth/controller/auth_controller.dart';
 import '../../common/text_field.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
-
 import '../../utils/constants/app_sizes.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -20,42 +19,29 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  //added controller for phone
-  final TextEditingController _phoneController = TextEditingController();
-  final AuthController _authController = AuthController.instance;
+  final TextEditingController _emailController = TextEditingController();
+
+  final AuthController _authController = Get.find<AuthController>();
 
   @override
   void dispose() {
-    _phoneController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
-  void _onSignIn() {
-    final input = _phoneController.text.trim();
+  void _onSignIn() async {
+    final email = _emailController.text.trim();
 
-    if (!_authController.isValidPakNumber(input)) {
+    if (email.isEmpty || !email.contains('@')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Enter valid Pakistan phone number')),
+        const SnackBar(content: Text('Enter a valid email address')),
       );
       return;
     }
 
-    final phone = _authController.normalizePhone(input);
-
-    _authController.requestOtp(
-      phone: phone,
-      onSuccess: () {
-        Navigator.pushNamed(context, '/otp', arguments: phone);
-      },
-      onError: (error) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(error)));
-      },
-    );
+    await _authController.signInWithEmail(email);
   }
 
-  /// ✅ small helper: scales your fixed sizes on different screens (keeps same UI)
   double _scale(BuildContext context) {
     final w = MediaQuery.of(context).size.width;
     final s = w / 390.0;
@@ -74,8 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: GBSizes.lg * s, // was 24
-              vertical: (GBSizes.sm + GBSizes.xs) * s, // ~12-14
+              horizontal: GBSizes.lg * s,
+              vertical: (GBSizes.sm + GBSizes.xs) * s,
             ),
             child: Column(
               children: [
@@ -85,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   GBText.gbRide,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 50 * s, // was 50
+                    fontSize: 50 * s,
                     fontWeight: FontWeight.w600,
                     color: GBColor.black,
                   ),
@@ -93,53 +79,45 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 Spacer(flex: (3 * s).round()),
 
-                //Input Fields
+                // ✅ EMAIL INPUT (DESIGN UNCHANGED)
                 TTextField(
-                  controller: _phoneController,
+                  controller: _emailController,
                   titleText: '',
-                  hintText: '000 0000000',
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [PakPhoneFormatter()],
+                  hintText: 'example@email.com',
+                  keyboardType: TextInputType.emailAddress,
                   prefixIcon: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(width: (GBSizes.md - GBSizes.xs) * s), // was 12
-                      Icon(SolarLinearIcons.phone, size: GBSizes.iconMd * s),
-                      SizedBox(width: GBSizes.sm * s), // was 8
-                      Text(
-                        '+92',
-                        style: TextStyle(
-                          fontSize: GBSizes.fontSizeSm * s, // was 14
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
+                      SizedBox(width: (GBSizes.md - GBSizes.xs) * s),
+                      Icon(SolarLinearIcons.letter, size: GBSizes.iconMd * s),
+                      SizedBox(width: GBSizes.sm * s),
                     ],
                   ),
                 ),
 
-                SizedBox(height: (GBSizes.md + GBSizes.xs) * s), // was 20
-                //Primary Button (keep your button widget, just spacing responsive)
+                SizedBox(height: (GBSizes.md + GBSizes.xs) * s),
+
                 PrimaryButton(title: GBText.signIn, onPressed: _onSignIn),
 
-                SizedBox(height: (GBSizes.lg + GBSizes.sm) * s), // was 30
-                //Divider with text "Or continue with"
+                SizedBox(height: (GBSizes.lg + GBSizes.sm) * s),
+
+                // Divider
                 Row(
                   children: [
                     Expanded(
                       child: Container(
-                        height: (GBSizes.dividerHeight + 0.5) * s, // ~1.5
+                        height: (GBSizes.dividerHeight + 0.5) * s,
                         color: GBColor.secondary,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: (GBSizes.sm + GBSizes.xs) * s,
-                      ), // was 12
+                      ),
                       child: Text(
                         GBText.orContinuewith,
                         style: TextStyle(
-                          fontSize: GBSizes.fontSizeESm * s, // was 12
+                          fontSize: GBSizes.fontSizeESm * s,
                           fontWeight: FontWeight.w500,
                           color: GBColor.black,
                         ),
@@ -154,8 +132,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
 
-                SizedBox(height: (GBSizes.lg + GBSizes.sm) * s), // was 30
-                //Social Media Buttons
+                SizedBox(height: (GBSizes.lg + GBSizes.sm) * s),
+
+                // Social buttons (UNCHANGED)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -166,11 +145,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: 32 * s,
                         height: 32 * s,
                       ),
-                      onPressed: () {
-                        logger.i('Google Sign-In Pressed');
-                      },
+                      onPressed: () => logger.i('Google Sign-In Pressed'),
                     ),
-                    SizedBox(width: (GBSizes.lg + GBSizes.xs) * s), // was 25
+                    SizedBox(width: (GBSizes.lg + GBSizes.xs) * s),
                     SocialSignInButton(
                       title: '',
                       leadingIcon: Image.asset(
@@ -178,11 +155,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: 32 * s,
                         height: 32 * s,
                       ),
-                      onPressed: () {
-                        logger.i('Apple Sign-In Pressed');
-                      },
+                      onPressed: () => logger.i('Apple Sign-In Pressed'),
                     ),
-                    SizedBox(width: (GBSizes.lg + GBSizes.xs) * s), // was 25
+                    SizedBox(width: (GBSizes.lg + GBSizes.xs) * s),
                     SocialSignInButton(
                       title: '',
                       leadingIcon: Image.asset(
@@ -190,22 +165,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: 32 * s,
                         height: 32 * s,
                       ),
-                      onPressed: () {
-                        logger.i('Facebook Sign-In Pressed');
-                      },
+                      onPressed: () => logger.i('Facebook Sign-In Pressed'),
                     ),
                   ],
                 ),
 
-                SizedBox(
-                  height: (GBSizes.spaceBtwSections + GBSizes.md) * s,
-                ), // was 50
-                //Terms of Service Text
+                SizedBox(height: (GBSizes.spaceBtwSections + GBSizes.md) * s),
+
+                // Terms (UNCHANGED)
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
                     style: TextStyle(
-                      fontSize: GBSizes.fontSizeESm * s, // was 12
+                      fontSize: GBSizes.fontSizeESm * s,
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       color: GBColor.gray,
@@ -216,18 +188,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         text: GBText.termsofServices,
                         style: const TextStyle(color: GBColor.secondary),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            logger.i('Terms of Services Tapped');
-                          },
+                          ..onTap = () => logger.i('Terms tapped'),
                       ),
                       const TextSpan(text: " and "),
                       TextSpan(
                         text: GBText.privacyPolicy,
                         style: const TextStyle(color: GBColor.secondary),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            logger.i('Privacy Policy Tapped');
-                          },
+                          ..onTap = () => logger.i('Privacy tapped'),
                       ),
                       const TextSpan(text: "."),
                     ],

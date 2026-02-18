@@ -6,7 +6,7 @@ import 'package:gb_ride/view/auth/common/bottom_sheet_selector.dart';
 class DriverForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController fullNameController;
-  // final TextEditingController phoneController;
+  final TextEditingController phoneController;
   final TextEditingController cnicController;
   final TextEditingController genderController;
   final TextEditingController ageController;
@@ -18,7 +18,7 @@ class DriverForm extends StatefulWidget {
     super.key,
     required this.formKey,
     required this.fullNameController,
-    // required this.phoneController,
+    required this.phoneController,
     required this.cnicController,
     required this.genderController,
     required this.ageController,
@@ -47,6 +47,18 @@ class _DriverFormState extends State<DriverForm> {
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
                 return 'Full name is required';
+              }
+              return null;
+            },
+          ),
+          TTextField(
+            titleText: '',
+            hintText: 'Phone Number',
+            controller: widget.phoneController,
+            keyboardType: TextInputType.phone,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Phone Number is required';
               }
               return null;
             },
