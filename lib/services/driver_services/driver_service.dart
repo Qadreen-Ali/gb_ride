@@ -9,6 +9,7 @@ class DriverService {
     try {
       await _client.from('drivers').insert({
         'phone_number': driver.phoneNumber,
+        'auth_id' : driver.authId,
         'full_name': driver.fullName,
         'gender': driver.gender,
         'cnic': driver.cnic,

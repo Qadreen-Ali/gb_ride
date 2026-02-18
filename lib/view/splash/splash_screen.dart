@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (profile != null) {
         Navigator.pushReplacementNamed(
           context,
-          profile['role'] == 'driver' ? '/driver-home' : '/local-home',
+          profile['role'] == 'driver' ? '/driverhome' : '/localhome',
         );
       } else {
         Navigator.pushReplacementNamed(context, '/form');

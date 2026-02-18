@@ -1,26 +1,61 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:gb_ride/utils/constants/color_string.dart';
+import 'package:gb_ride/utils/constants/image_string.dart';
+import 'package:gb_ride/utils/constants/primary_button.dart';
+import 'package:gb_ride/utils/constants/text_string.dart';
 import 'package:gb_ride/view/module/local/home/widgets/fare_bottom_sheet.dart';
+import 'package:gb_ride/view/module/local/home/bottom_sheet/find_driver_bottom_sheet.dart';
 import 'package:gb_ride/view/module/local/home/widgets/location_input_field.dart';
 import 'package:gb_ride/view/module/local/home/widgets/vehicle_option.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../models/local_model/local_bottomsheet_model.dart';
-import '../../../../models/local_model/local_model.dart';
-import '../../../../utils/constants/color_string.dart';
-import '../../../../utils/constants/image_string.dart';
-import '../../../../utils/constants/primary_button.dart';
-import '../../../../utils/constants/text_string.dart';
-import 'bottom_sheet/find_driver_bottom_sheet.dart'; // ✅ your profile model
-
 class HomeBottomSheet extends StatefulWidget {
-  final LocalModel user; // ✅ LocalModel (profile)
-  final HomeBottomSheetParams params; // ✅ UI params
+  // final ScrollController scrollController;
+
+  final TextEditingController pickupController;
+  final TextEditingController destinationController;
+  final double? distanceKm;
+  final int? etaMinutes;
+
+  final VoidCallback onStartPickupSelection;
+  final VoidCallback onStartDestinationSelection;
+  final VoidCallback onExpandSheet;
+
+  final LatLng? pickupLocation;
+  final LatLng? destinationLocation;
+
+  final ValueChanged<String> onVehicleSelect;
+  final String selectedVehicle;
+  final VoidCallback onPickupTap;
+  final VoidCallback onDestinationTap;
+
+  final MapController? mapController;
+  final void Function(LatLng position, String displayName) onPickupSelected;
+  final void Function(LatLng position, String displayName)
+  onDestinationSelected;
 
   const HomeBottomSheet({
     super.key,
-    required this.user,
-    required this.params,
+    // required this.scrollController,
+    required this.pickupController,
+    required this.destinationController,
+    required this.onStartPickupSelection,
+    required this.onStartDestinationSelection,
+    required this.onExpandSheet,
+    required this.pickupLocation,
+    required this.destinationLocation,
+    required this.onVehicleSelect,
+    required this.selectedVehicle,
+    required this.mapController,
+    required this.onPickupSelected,
+    required this.onDestinationSelected,
+    required this.onPickupTap,
+    required this.onDestinationTap,
+    this.distanceKm,
+    this.etaMinutes,
   });
 
   @override
@@ -28,35 +63,33 @@ class HomeBottomSheet extends StatefulWidget {
 }
 
 class _HomeBottomSheetState extends State<HomeBottomSheet> {
-  // Future<void> openWhatsAppChat({
-  //   required String phoneNumber,
-  //   String message = '',
-  // }) async {
-  //   final Uri uri = Uri.parse(
-  //     'whatsapp://send?phone=$phoneNumber&text=${Uri.encodeComponent(message)}',
-  //   );
-  //
-  //   try {
-  //     await launchUrl(uri, mode: LaunchMode.externalApplication);
-  //   } catch (e) {
-  //     debugPrint('WhatsApp not installed');
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('WhatsApp not installed')),
-  //     );
-  //   }
-  // }
+  Future<void> openWhatsAppChat({
+    required String phoneNumber,
+    String message = '',
+  }) async {
+    final Uri uri = Uri.parse(
+      'whatsapp://send?phone=$phoneNumber&text=${Uri.encodeComponent(message)}',
+    );
+
+    try {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      debugPrint('WhatsApp not installed');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('WhatsApp not installed')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final p = widget.params;
-    final u = widget.user; // ✅ available if you want to show name/phone later
-
     return SafeArea(
       top: false,
       child: ClipRRect(
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         child: Container(
           color: Colors.white,
+          // padding: const EdgeInsets.only(bottom: 12),
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom + 12,
           ),
@@ -77,7 +110,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
               const SizedBox(height: 10),
 
               //routing code
-              if (p.distanceKm != null && p.etaMinutes != null)
+              if (widget.distanceKm != null && widget.etaMinutes != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -101,7 +134,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                             const Icon(Icons.route, size: 18),
                             const SizedBox(width: 6),
                             Text(
-                              '${p.distanceKm!.toStringAsFixed(1)} km',
+                              '${widget.distanceKm!.toStringAsFixed(1)} km',
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                               ),
@@ -113,7 +146,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                             const Icon(Icons.timer, size: 18),
                             const SizedBox(width: 6),
                             Text(
-                              '${p.etaMinutes} mins',
+                              '${widget.etaMinutes} mins',
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                               ),
@@ -129,12 +162,13 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: LocationInputField(
-                  controller: p.pickupController,
+                  controller: widget.pickupController,
                   hintText: 'From',
+                  // themeColor: GBColor.secondary,
                   iconColor: GBColor.black,
                   iconData: Icons.radio_button_checked,
-                  onMapIconPressed: p.onStartPickupSelection,
-                  onTap: p.onPickupTap,
+                  onMapIconPressed: widget.onStartPickupSelection,
+                  onTap: widget.onPickupTap,
                 ),
               ),
               const SizedBox(height: 12),
@@ -143,12 +177,12 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: LocationInputField(
-                  controller: p.destinationController,
+                  controller: widget.destinationController,
                   hintText: 'To',
                   iconData: Icons.location_on,
                   iconColor: GBColor.primary,
-                  onTap: p.onDestinationTap,
-                  onMapIconPressed: p.onStartDestinationSelection,
+                  onTap: widget.onDestinationTap,
+                  onMapIconPressed: widget.onStartDestinationSelection,
                 ),
               ),
 
@@ -158,7 +192,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: SizedBox(
-                  height: 70,
+                  height: 70, // 👈 controls height
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),
@@ -168,8 +202,8 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                         label: 'Car',
                         iconPath: 'assets/icons/car1.png',
                         capacity: 4,
-                        isSelected: p.selectedVehicle == 'car',
-                        onTap: () => p.onVehicleSelect('car'),
+                        isSelected: widget.selectedVehicle == 'car',
+                        onTap: () => widget.onVehicleSelect('car'),
                       ),
                       const SizedBox(width: 15),
                       VehicleOptionCard(
@@ -177,8 +211,8 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                         label: 'City',
                         iconPath: 'assets/icons/hiace.png',
                         capacity: 4,
-                        isSelected: p.selectedVehicle == 'city',
-                        onTap: () => p.onVehicleSelect('city'),
+                        isSelected: widget.selectedVehicle == 'city',
+                        onTap: () => widget.onVehicleSelect('city'),
                       ),
                       const SizedBox(width: 15),
                       VehicleOptionCard(
@@ -186,8 +220,8 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                         label: 'Bike',
                         iconPath: 'assets/icons/bike1.png',
                         capacity: 1,
-                        isSelected: p.selectedVehicle == 'bike',
-                        onTap: () => p.onVehicleSelect('bike'),
+                        isSelected: widget.selectedVehicle == 'bike',
+                        onTap: () => widget.onVehicleSelect('bike'),
                       ),
                     ],
                   ),
@@ -255,10 +289,10 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        // openWhatsAppChat(
-                        //   phoneNumber: '923554445863',
-                        //   message: 'Hello! I need help with my ride.',
-                        // );
+                        openWhatsAppChat(
+                          phoneNumber: '923554445863',
+                          message: 'Hello! I need help with my ride.',
+                        );
                       },
                       child: Image.asset(GBImagePath.chat, width: 44),
                     ),

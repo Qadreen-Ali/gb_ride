@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/models/driver_model/driver_model.dart';
-import 'package:gb_ride/models/local_model/local_model.dart';
+
 import 'package:gb_ride/services/driver_services/driver_service.dart';
 import 'package:gb_ride/services/local_service/local_service.dart';
 import 'package:gb_ride/view/auth/controller/auth_controller.dart';
+
+import '../../../models/local_model/local_model.dart';
 
 enum UserRole { student, local, driver }
 
@@ -91,7 +93,9 @@ class FormController extends ChangeNotifier {
     }
   }
 
+  @override
   void dispose() {
+    super.dispose();
     driverFullName.dispose();
     driverCnic.dispose();
     driverGender.dispose();
