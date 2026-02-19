@@ -7,7 +7,6 @@ class LocationInputField extends StatelessWidget {
   final IconData iconData;
   final Color iconColor;
   final VoidCallback onTap;
-  final VoidCallback onMapIconPressed;
 
   const LocationInputField({
     super.key,
@@ -16,7 +15,6 @@ class LocationInputField extends StatelessWidget {
     required this.iconData,
     required this.iconColor,
     required this.onTap,
-    required this.onMapIconPressed,
   });
 
   @override
@@ -45,7 +43,6 @@ class LocationInputField extends StatelessWidget {
                 ),
               ),
             ),
-
           ],
         ),
       ),

@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
       ),
       //   home: const BottomNavBar(),
       routes: {
-        '/': (context) => SplashScreen(), //initial Screen
+        '/': (context) => LocalHomeScreen(), //initial Screen
         '/login': (context) => const LoginScreen(),
 
         '/otp': (context) {

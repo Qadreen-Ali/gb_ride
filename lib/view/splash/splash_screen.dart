@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (!mounted) return;
 
       if (profile != null) {
-        Navigator.pushReplacementNamed(
+        Navigator.pushNamed(
           context,
           profile['role'] == 'driver' ? '/driverhome' : '/localhome',
         );
