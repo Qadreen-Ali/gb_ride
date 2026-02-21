@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import '../../../../utils/constants/custom_app-bar.dart';
+import '../../../../utils/constants/custom_app_bar.dart';
 import '../../../../utils/constants/image_string.dart';
 import 'all_notifications_screen.dart';
 import 'message_notifiactions_screen.dart';

@@ -34,97 +34,91 @@ class _RideFlowBottomSheetState extends State<RideFlowBottomSheet> {
   Widget build(BuildContext context) {
     final h = MediaQuery.of(context).size.height;
 
-    return WillPopScope(
-      onWillPop: () async {
-        _closeSheet();
-        return false;
-      },
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: _closeSheet,
       child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: _closeSheet,
-        child: GestureDetector(
-          onTap: () {},
-          child: SlidingUpPanel(
-            controller: _panelController,
-            minHeight: h * 0.45,
-            maxHeight: h * 0.82,
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(GBSizes.cardRadiusLg),
-            ),
-            color: Colors.white,
-            panelSnapping: true,
-            backdropEnabled: false,
-            body: const SizedBox.expand(),
+        onTap: () {},
+        child: SlidingUpPanel(
+          controller: _panelController,
+          minHeight: h * 0.45,
+          maxHeight: h * 0.82,
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(GBSizes.cardRadiusLg),
+          ),
+          color: Colors.white,
+          panelSnapping: true,
+          backdropEnabled: false,
+          body: const SizedBox.expand(),
 
-            panelBuilder: (sc) {
-              final config = _configForStep(_step);
+          panelBuilder: (sc) {
+            final config = _configForStep(_step);
 
-              return SafeArea(
-                top: false,
-                bottom: true,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: GBSizes.lg,
-                    vertical: GBSizes.sm,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Drag handle
-                      Center(
-                        child: Container(
-                          width: 40,
-                          height: GBSizes.dividerHeight * 2,
-                          decoration: BoxDecoration(
-                            color: GBColor.black,
-                            borderRadius: BorderRadius.circular(
-                              GBSizes.borderRadiusLg,
-                            ),
+            return SafeArea(
+              top: false,
+              bottom: true,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: GBSizes.lg,
+                  vertical: GBSizes.sm,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Drag handle
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: GBSizes.dividerHeight * 2,
+                        decoration: BoxDecoration(
+                          color: GBColor.black,
+                          borderRadius: BorderRadius.circular(
+                            GBSizes.borderRadiusLg,
                           ),
                         ),
                       ),
-                      const SizedBox(height: GBSizes.spaceBtwItems),
+                    ),
+                    const SizedBox(height: GBSizes.spaceBtwItems),
 
-                      // Title
-                      BottomSheetTopTitle(
-                        tiltetext: config.title,
-                        image: Image.asset(
-                          config.titleIcon,
-                          width: GBSizes.iconLg,
-                        ),
+                    // Title
+                    BottomSheetTopTitle(
+                      tiltetext: config.title,
+                      image: Image.asset(
+                        config.titleIcon,
+                        width: GBSizes.iconLg,
                       ),
+                    ),
 
+                    const SizedBox(height: GBSizes.xs),
+
+                    // Common UI (same for all)
+                    const CommonItemWidget(),
+
+                    const SizedBox(height: GBSizes.xs),
+
+                    // Primary Button (always visible)
+                    PrimaryButton(
+                      title: config.primaryButtonText,
+                      backgroundColor: GBColor.primary,
+                      textColor: GBColor.secondary,
+                      onPressed: config.primaryAction,
+                    ),
+
+                    // Optional second button
+                    if (config.secondaryButtonText != null) ...[
                       const SizedBox(height: GBSizes.xs),
-
-                      // Common UI (same for all)
-                      const CommonItemWidget(),
-
-                      const SizedBox(height: GBSizes.xs),
-
-                      // Primary Button (always visible)
                       PrimaryButton(
-                        title: config.primaryButtonText,
+                        title: config.secondaryButtonText!,
                         backgroundColor: GBColor.primary,
                         textColor: GBColor.secondary,
-                        onPressed: config.primaryAction,
+                        onPressed: config.secondaryAction ?? () {},
                       ),
-
-                      // Optional second button
-                      if (config.secondaryButtonText != null) ...[
-                        const SizedBox(height: GBSizes.xs),
-                        PrimaryButton(
-                          title: config.secondaryButtonText!,
-                          backgroundColor: GBColor.primary,
-                          textColor: GBColor.secondary,
-                          onPressed: config.secondaryAction ?? () {},
-                        ),
-                      ],
                     ],
-                  ),
+                  ],
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

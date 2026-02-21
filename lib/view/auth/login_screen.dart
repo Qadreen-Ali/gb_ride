@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:gb_ride/utils/constants/app_snackbar_string.dart';
 import 'package:get/get.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
@@ -33,8 +34,9 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _emailController.text.trim();
 
     if (email.isEmpty || !email.contains('@')) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Enter a valid email address')),
+      Get.snackbar(
+        AppSnackBarString.invalidEmailTitle,
+        AppSnackBarString.invalidEmailMessage,
       );
       return;
     }

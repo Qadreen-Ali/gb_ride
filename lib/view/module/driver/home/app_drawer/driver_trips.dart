@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import 'package:gb_ride/utils/constants/custom_app-bar.dart';
+import 'package:gb_ride/utils/constants/custom_app_bar.dart';
 
 class DriverTripsScreen extends StatelessWidget {
   const DriverTripsScreen({super.key});
@@ -55,7 +55,7 @@ class DriverTripsScreen extends StatelessWidget {
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? GBColor.secondary.withOpacity(0.15) : Colors.transparent,
+          color: selected ? GBColor.secondary.withValues(alpha :0.15) : Colors.transparent,
           borderRadius: BorderRadius.circular(24),
           border: selected
               ? Border.all(color: GBColor.primary)
@@ -215,7 +215,7 @@ class DriverTripsScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            color: GBColor.green.withOpacity(0.15),
+            color: GBColor.green.withValues(alpha :0.15),
             borderRadius: BorderRadius.circular(12),
           ),
           child: const Text(
@@ -255,7 +255,7 @@ class DriverTripsScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            color: GBColor.containerGrayColor.withOpacity(0.15),
+            color: GBColor.containerGrayColor.withValues(alpha :0.15),
             borderRadius: BorderRadius.circular(12),
           ),
           child: const Text(

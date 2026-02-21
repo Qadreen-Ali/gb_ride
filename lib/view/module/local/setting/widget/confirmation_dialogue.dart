@@ -52,7 +52,7 @@ class ConfirmationDialogue extends StatelessWidget {
               fontSize: 14,
               color: Colors.grey.shade600,
               fontWeight: FontWeight.w400,
-            //  fontFamily: 'Poppins',
+              //  fontFamily: 'Poppins',
               decoration: TextDecoration.none,
             ),
             // textAlign: TextAlign.center,

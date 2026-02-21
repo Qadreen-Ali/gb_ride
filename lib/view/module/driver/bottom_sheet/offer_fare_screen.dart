@@ -1,18 +1,18 @@
 // ignore_for_file: unused_local_variable
 
 import 'package:flutter/material.dart';
+import 'package:gb_ride/utils/constants/app_snackbar_string.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/ride_flow_screen.dart';
 import 'package:gb_ride/models/ride_model.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class OfferFareScreen extends StatefulWidget {
   final RideModel rideModel;
 
-  const OfferFareScreen({
-    super.key,
-    required this.rideModel,
-  });
+  const OfferFareScreen({super.key, required this.rideModel});
 
   @override
   State<OfferFareScreen> createState() => _OfferFareScreenState();
@@ -36,35 +36,35 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
   }
 
   void _sendOffer() {
-  if (_fareController.text.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please enter a fare amount')),
+    if (_fareController.text.isEmpty) {
+      Get.snackbar(
+        AppSnackBarString.fareRequiredTitle,
+        AppSnackBarString.fareRequiredMessage,
+      );
+      return;
+    }
+
+    final fare = double.tryParse(_fareController.text);
+    if (fare == null || fare <= 0) {
+      Get.snackbar(
+        AppSnackBarString.invalidFareTitle,
+        AppSnackBarString.invalidFareMessage,
+      );
+      return;
+    }
+
+    /// ✅ Create UPDATED ride model
+    final updatedRide = widget.rideModel.copyWith(fare: fare);
+
+    Navigator.pop(context);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => RideFlowScreen(rideModel: updatedRide),
     );
-    return;
   }
-
-  final fare = double.tryParse(_fareController.text);
-  if (fare == null || fare <= 0) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please enter a valid fare amount')),
-    );
-    return;
-  }
-
-  /// ✅ Create UPDATED ride model
-  final updatedRide = widget.rideModel.copyWith(fare: fare);
-
-  Navigator.pop(context);
-
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (_) => RideFlowScreen(
-      rideModel: updatedRide,
-    ),
-  );
-}
 
   @override
   Widget build(BuildContext context) {

@@ -8,6 +8,8 @@ import 'package:gb_ride/view/module/local/home/widgets/fare_bottom_sheet.dart';
 import 'package:gb_ride/view/module/local/home/bottom_sheet/find_driver_bottom_sheet.dart';
 import 'package:gb_ride/view/module/local/home/widgets/location_input_field.dart';
 import 'package:gb_ride/view/module/local/home/widgets/vehicle_option.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -74,9 +76,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (e) {
       debugPrint('WhatsApp not installed');
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('WhatsApp not installed')));
+      Get.snackbar('Error', 'WhatsApp is not installed on this device.');
     }
   }
 

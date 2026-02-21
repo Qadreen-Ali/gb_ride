@@ -52,7 +52,6 @@ class _SplashScreenState extends State<SplashScreen> {
         break;
 
       case FormRoute.login:
-      default:
         Get.offAllNamed('/login');
     }
   }

@@ -4,7 +4,7 @@ import 'package:gb_ride/view/module/driver/common/widget/heading_text.dart';
 import 'package:gb_ride/view/module/driver/settings/profile/widget/trip_widget.dart';
 
 import '../../../../../utils/constants/color_string.dart';
-import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/custom_app_bar.dart';
 import '../../../../../utils/constants/image_string.dart';
 import '../../../local/setting/profile/widget/profile_picker.dart';
 import '../wallet/widget/transaction_detail_widget.dart';

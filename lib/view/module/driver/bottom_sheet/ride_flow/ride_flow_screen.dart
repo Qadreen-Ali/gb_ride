@@ -179,7 +179,7 @@ class _RideFlowScreenState extends State<RideFlowScreen>
                 PrimaryButton(
                   title: 'Cancel Ride',
                   onPressed: () => Navigator.pop(context),
-                  backgroundColor: GBColor.black.withOpacity(0.3),
+                  backgroundColor: GBColor.black.withValues(alpha: 0.3),
                   textColor: GBColor.secondary,
                   fontsize: 16,
                 ),

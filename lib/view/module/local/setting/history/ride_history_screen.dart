@@ -3,7 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 
-import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/custom_app_bar.dart';
 import '../../../../../utils/constants/image_string.dart';
 
 class RideHistoryDetailScreen extends StatelessWidget {
