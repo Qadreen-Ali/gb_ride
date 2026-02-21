@@ -6,7 +6,7 @@ import 'package:solar_icon_pack/solar_icon_pack.dart';
 import 'package:gb_ride/view/module/local/setting/logout/logout_screen.dart';
 import 'package:gb_ride/view/module/local/setting/delete/delete_screen.dart';
 
-import '../../../../utils/constants/custom_app-bar.dart';
+import '../../../../utils/constants/custom_app_bar.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

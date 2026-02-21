@@ -22,7 +22,7 @@ import 'package:gb_ride/view/module/local/setting/history/history_screen.dart';
 
 // DRIVER
 import 'package:gb_ride/view/module/driver/home/driver_home_screen.dart';
-import 'package:gb_ride/view/module/driver/notifications/notification(driver).dart';
+import 'package:gb_ride/view/module/driver/notifications/notification_driver.dart';
 import 'package:gb_ride/view/module/driver/settings/profile/profile_information.dart';
 import 'package:gb_ride/view/module/driver/settings/profile/profile_screen.dart';
 import 'package:gb_ride/view/module/driver/settings/settings_driver.dart';

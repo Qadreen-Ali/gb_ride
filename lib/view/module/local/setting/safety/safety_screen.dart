@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/utils/constants/app_snackbar_string.dart';
+import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/view/module/local/setting/widget/settings_widget.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 
-import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/custom_app_bar.dart';
 import '../../../../../utils/constants/image_string.dart';
 
 class SafetyScreen extends StatelessWidget {
   const SafetyScreen({super.key});
 
-  void _onTap(BuildContext context, String title) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Tapped $title')));
+  void _onTap(String title) {
+    Get.snackbar('Action', 'Tapped $title');
   }
 
   @override
@@ -22,12 +24,12 @@ class SafetyScreen extends StatelessWidget {
       SettingsItem(
         icons: SolarLinearIcons.share,
         title: 'Share my Trip',
-        onTap: () => _onTap(context, 'Share my Trip'),
+        onTap: () => _onTap('Share my Trip'),
       ),
       SettingsItem(
         icons: SolarLinearIcons.usersGroupRounded,
         title: 'Trusted Contacts',
-        onTap: () => _onTap(context, 'Trusted Contacts'),
+        onTap: () => _onTap('Trusted Contacts'),
       ),
     ];
 
@@ -36,12 +38,12 @@ class SafetyScreen extends StatelessWidget {
       SettingsItem(
         icons: SolarLinearIcons.dangerTriangle,
         title: 'Report a safety issue',
-        onTap: () => _onTap(context, 'Report a safety issue'),
+        onTap: () => _onTap('Report a safety issue'),
       ),
       SettingsItem(
         icons: SolarLinearIcons.shieldCheck,
         title: 'Safety Guidelines & Tips',
-        onTap: () => _onTap(context, 'Safety Guidelines & Tips'),
+        onTap: () => _onTap('Safety Guidelines & Tips'),
       ),
       SettingsItem(
         icons: SolarLinearIcons.phoneCalling,
@@ -49,7 +51,7 @@ class SafetyScreen extends StatelessWidget {
         iconColor: Colors.red,
         textColor: Colors.red,
         arrowColor: Colors.red,
-        onTap: () => _onTap(context, 'Call Emergency Services'),
+        onTap: () => _onTap('Call Emergency Services'),
       ),
     ];
 
@@ -96,7 +98,8 @@ class SafetyScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 12,),
+              SizedBox(height: 12),
+
               /// Subtitle
               Center(
                 child: const Text(
@@ -105,7 +108,7 @@ class SafetyScreen extends StatelessWidget {
                     color: GBColor.black,
                     fontSize: 15,
                     fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400
+                    fontWeight: FontWeight.w400,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -114,15 +117,20 @@ class SafetyScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               /// SOS Button
-              Container(
+              PrimaryButton(
                 height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+                backgroundColor: Colors.red,
+                borderColor: Colors.red,
+                borderRadius: BorderRadius.circular(12),
+                onPressed: () {
+                  Get.snackbar(
+                    AppSnackBarString.sosTriggeredTitle,
+                    AppSnackBarString.sosTriggeredMessage,
+                  );
+                },
+                title: '',
                 child: Row(
                   children: [
-                    // Left SOS
                     Expanded(
                       child: Center(
                         child: Text(
@@ -136,19 +144,17 @@ class SafetyScreen extends StatelessWidget {
                       ),
                     ),
 
-                    // Divider
                     Container(
                       width: 1,
                       height: 30,
                       color: Colors.white.withValues(alpha: 0.3),
                     ),
 
-                    // Center Emergency
                     Expanded(
                       flex: 2,
                       child: Center(
                         child: Text(
-                          'Emergency',
+                          'Emergencey Call',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -158,14 +164,12 @@ class SafetyScreen extends StatelessWidget {
                       ),
                     ),
 
-                    // Divider
                     Container(
                       width: 1,
                       height: 30,
                       color: Colors.white.withValues(alpha: 0.3),
                     ),
 
-                    // Right SOS
                     Expanded(
                       child: Center(
                         child: Text(

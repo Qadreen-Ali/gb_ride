@@ -3,7 +3,7 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/view/module/local/setting/help_and_support/contact_us.dart';
 import 'package:gb_ride/view/module/local/setting/help_and_support/faqs.dart';
 
-import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/custom_app_bar.dart';
 
 class HelpScreen extends StatelessWidget {
   const HelpScreen({super.key});

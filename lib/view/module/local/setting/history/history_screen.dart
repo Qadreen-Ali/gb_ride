@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/view/module/local/setting/history/ride_history_screen.dart';
 
-import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/custom_app_bar.dart';
 
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({super.key});

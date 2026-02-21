@@ -5,7 +5,7 @@ import 'package:gb_ride/view/module/driver/common/widget/heading_text.dart';
 
 import '../../../../../common/text_field.dart';
 import '../../../../../utils/constants/color_string.dart';
-import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/custom_app_bar.dart';
 import '../../../../../utils/constants/secondary_button.dart';
 import '../../../../auth/common/bottom_sheet_selector.dart';
 

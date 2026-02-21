@@ -1,3 +1,4 @@
+import 'package:gb_ride/utils/constants/app_snackbar_string.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -14,12 +15,12 @@ class AuthController extends GetxController {
     // Restore session on app start
     currentUser.value = supabase.auth.currentUser;
 
-    // Listen to auth changes
     supabase.auth.onAuthStateChange.listen((data) {
       currentUser.value = data.session?.user;
 
       if (data.event == AuthChangeEvent.signedIn) {
-        _handlePostLogin();
+        // ✅ MAGIC LINK SUCCESS → GO TO SPLASH
+        Get.offAllNamed('/');
       }
 
       if (data.event == AuthChangeEvent.signedOut) {
@@ -28,7 +29,6 @@ class AuthController extends GetxController {
     });
   }
 
-  /// Send magic link to email
   Future<void> signInWithEmail(String email) async {
     loading.value = true;
 
@@ -46,14 +46,57 @@ class AuthController extends GetxController {
     }
   }
 
-  /// Called automatically after magic link success
-  Future<void> _handlePostLogin() async {
-    // DO NOT put redirect logic here yet
-    // FormController will decide where to go
-    Get.offAllNamed('/loading');
-  }
-
+  // Sign out method
   Future<void> signOut() async {
     await supabase.auth.signOut();
+  }
+
+  //delete account method
+  Future<void> deleteAccount() async {
+    try {
+      final user = supabase.auth.currentUser;
+      if (user == null) return;
+
+      bool deleted = false;
+
+      // 1️⃣ Try driver
+      final driverRes = await supabase
+          .from('drivers')
+          .update({'is_deleted': true})
+          .eq('auth_id', user.id)
+          .select();
+
+      if (driverRes.isNotEmpty) {
+        deleted = true;
+      }
+
+      // 2️⃣ If not driver, try local
+      if (!deleted) {
+        final localRes = await supabase
+            .from('locals')
+            .update({'is_deleted': true})
+            .eq('auth_id', user.id)
+            .select();
+
+        if (localRes.isNotEmpty) {
+          deleted = true;
+        }
+      }
+
+      if (!deleted) {
+        throw Exception('No user record found');
+      }
+
+      // 3️⃣ Sign out
+      await supabase.auth.signOut();
+
+      // 4️⃣ Same snackbar style as login
+      Get.snackbar(
+        AppSnackBarString.accountDeletedTitle,
+        AppSnackBarString.accountDeletedMessage,
+      );
+    } catch (e) {
+      Get.snackbar('Delete failed', e.toString());
+    }
   }
 }

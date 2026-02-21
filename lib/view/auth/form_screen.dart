@@ -53,8 +53,7 @@ class _FormScreenState extends State<FormScreen> {
         break;
 
       case FormRoute.login:
-      default:
-        Get.offAllNamed('/login');
+      Get.offAllNamed('/login');
     }
   }
 

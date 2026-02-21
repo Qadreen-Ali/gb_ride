@@ -3,6 +3,7 @@ import 'color_string.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String title;
+  final Widget? child; // 👈 NEW
   final double? fontsize;
   final FontWeight? weight;
   final VoidCallback? onPressed;
@@ -15,6 +16,7 @@ class PrimaryButton extends StatelessWidget {
 
   const PrimaryButton({
     super.key,
+    this.child,
     required this.title,
     required this.onPressed,
     this.fontsize,
@@ -55,18 +57,20 @@ class PrimaryButton extends StatelessWidget {
           disabledBackgroundColor: GBColor.secondary.withValues(alpha: 0.5),
           disabledForegroundColor: Colors.black.withValues(alpha: 0.5),
         ),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: fontsize ?? 16,
-            fontFamily: 'Poppins',
-            fontWeight: weight ?? FontWeight.w600,
-            color: isDisabled
-                ? Colors.black.withValues(alpha: 0.5)
-                : (textColor ?? GBColor.black),
-          ),
-          maxLines: 1,
-        ),
+        child:
+            child ??
+            Text(
+              title!,
+              style: TextStyle(
+                fontSize: fontsize ?? 16,
+                fontFamily: 'Poppins',
+                fontWeight: weight ?? FontWeight.w600,
+                color: isDisabled
+                    ? Colors.black.withValues(alpha: 0.5)
+                    : (textColor ?? GBColor.black),
+              ),
+              maxLines: 1,
+            ),
       ),
     );
   }

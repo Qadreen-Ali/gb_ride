@@ -82,7 +82,7 @@ class FormController extends ChangeNotifier {
     try {
       final user = _supabase.auth.currentUser;
 
-      if (user == null || user.phone == null) {
+      if (user == null) {
         throw Exception('User not authenticated');
       }
 
@@ -117,7 +117,7 @@ class FormController extends ChangeNotifier {
     try {
       final user = _supabase.auth.currentUser;
 
-      if (user == null || user.phone == null) {
+      if (user == null) {
         throw Exception('User not authenticated');
       }
 

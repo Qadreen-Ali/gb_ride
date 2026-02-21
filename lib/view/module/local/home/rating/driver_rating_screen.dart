@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:gb_ride/utils/constants/app_snackbar_string.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:logger/logger.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
 
-import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/custom_app_bar.dart';
 import '../../../../../utils/constants/image_string.dart';
 
 class DriverRatingScreen extends StatefulWidget {
@@ -53,28 +56,30 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
           padding: const EdgeInsets.all(8.0),
           child: Container(
             decoration: BoxDecoration(
-                color: GBColor.primary,
-                shape: BoxShape.circle,
+              color: GBColor.primary,
+              shape: BoxShape.circle,
             ),
-            child: Icon(Icons.notifications_none, color: GBColor.secondary,),
+            child: Icon(Icons.notifications_none, color: GBColor.secondary),
           ),
         ),
         title: 'Rating',
-        actions: [Padding(
-          padding: const EdgeInsets.all(8),
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color:GBColor.primary,
-                shape: BoxShape.circle,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: GBColor.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.close, color: GBColor.secondary),
               ),
-              child: const Icon(Icons.close, color:GBColor.secondary),
             ),
           ),
-        ),],
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -414,11 +419,9 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
     _logger.i('Comment: ${_commentController.text}');
 
     // Show success message
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Thank you for your feedback!'),
-        duration: Duration(seconds: 2),
-      ),
+    Get.snackbar(
+      AppSnackBarString.feedbackTitle,
+      AppSnackBarString.feedbackMessage,
     );
 
     // Navigate back

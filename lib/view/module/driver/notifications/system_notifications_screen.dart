@@ -74,7 +74,7 @@ class _NotificationSystemScreenState extends State<NotificationSystemScreen> {
     return ListView.separated(
       padding: const EdgeInsets.all(16),
       itemCount: notifications.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      separatorBuilder: (_, _) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         return SettingsSingleContainer(
           item: notifications[index],

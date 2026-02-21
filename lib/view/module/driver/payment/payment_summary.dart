@@ -102,7 +102,7 @@ class _PaymentSummaryState extends State<PaymentSummary> {
                         decoration: BoxDecoration(
                           border: Border.all(color: GBColor.primary),
                           borderRadius: BorderRadius.circular(25),
-                          color: GBColor.black.withOpacity(0.73),
+                          color: GBColor.black.withValues(alpha :0.73),
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),

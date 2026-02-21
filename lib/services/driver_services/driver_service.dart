@@ -4,10 +4,16 @@ import 'package:gb_ride/models/driver_model/driver_model.dart';
 class DriverService {
   final SupabaseClient _client = Supabase.instance.client;
 
-  /// Insert new driver
   Future<void> createDriver(DriverModel driver) async {
+    final user = _client.auth.currentUser;
+
+    if (user == null) {
+      throw Exception('User not authenticated');
+    }
+
     try {
       await _client.from('drivers').insert({
+        'auth_id': user.id, // 🔥 REQUIRED FOR RLS
         'phone_number': driver.phoneNumber,
         'auth_id' : driver.authId,
         'full_name': driver.fullName,
@@ -20,11 +26,7 @@ class DriverService {
         'vehicle_number': driver.vehicleNumber,
       });
     } on PostgrestException catch (e) {
-      // Supabase-specific error
       throw Exception(e.message);
-    } catch (e) {
-      // Any other error
-      throw Exception('Unexpected error: $e');
     }
   }
 

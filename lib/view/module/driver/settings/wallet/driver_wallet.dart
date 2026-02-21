@@ -5,7 +5,7 @@ import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/utils/constants/secondary_button.dart';
 import 'package:gb_ride/view/module/driver/settings/wallet/widget/transaction_detail_widget.dart';
 
-import '../../../../../utils/constants/custom_app-bar.dart';
+import '../../../../../utils/constants/custom_app_bar.dart';
 import '../../common/widget/heading_text.dart';
 class DriverWallet extends StatefulWidget {
   const DriverWallet({super.key});
