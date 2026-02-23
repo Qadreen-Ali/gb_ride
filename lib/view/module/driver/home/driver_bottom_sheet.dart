@@ -16,23 +16,35 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
   final List<RideModel> mockRides = [
     RideModel(
       rideId: 'r1',
+      localId: 'local1',
       pickupLocation: 'Noor Plaza, Gilgit',
       destinationLocation: 'Jutial, Gilgit',
+      pickupLat: 35.9176,
+      pickupLng: 74.3149,
+      destLat: 35.9200,
+      destLng: 74.3200,
       distanceKm: 3.4,
       etaMinutes: 8,
       fare: 200,
       driverName: 'Hassan',
       driverImagePath: 'assets/images/profile.png',
+      createdAt: DateTime.now(),
     ),
     RideModel(
       rideId: 'r2',
+      localId: 'local2',
       pickupLocation: 'KIU Road',
       destinationLocation: 'Baseen',
+      pickupLat: 35.9100,
+      pickupLng: 74.3100,
+      destLat: 35.9300,
+      destLng: 74.3300,
       distanceKm: 5.1,
       etaMinutes: 12,
       fare: 350,
       driverName: 'Hassan',
       driverImagePath: 'assets/images/profile.png',
+      createdAt: DateTime.now(),
     ),
   ];
 
@@ -61,7 +73,7 @@ class _DriverBottomSheetState extends State<DriverBottomSheet> {
           ),
           const SizedBox(height: 12),
 
-          /// LIST (NO EXPANDED ❌)
+          /// LIST
           Flexible(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 4),

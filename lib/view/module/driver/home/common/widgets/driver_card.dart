@@ -4,7 +4,6 @@ import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/models/ride_model.dart';
 
 class DriverCard extends StatelessWidget {
-  
   const DriverCard({
     super.key,
     required this.rideModel,
@@ -45,7 +44,7 @@ class DriverCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                rideModel.driverName,
+                rideModel.driverName ?? 'Unknown',
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
