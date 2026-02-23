@@ -7,7 +7,6 @@ import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/widget/waiting
 import 'package:gb_ride/view/module/driver/home/common/common_item_widget.dart';
 import 'package:gb_ride/view/module/driver/home/common/widgets/driver_card.dart';
 import 'package:gb_ride/models/ride_model.dart';
-import 'package:gb_ride/enum/ride_status.dart';
 
 class RideFlowScreen extends StatefulWidget {
   final RideModel rideModel;
@@ -20,8 +19,11 @@ class RideFlowScreen extends StatefulWidget {
 
 class _RideFlowScreenState extends State<RideFlowScreen>
     with SingleTickerProviderStateMixin {
-  /// ✅ Ride status MUST live inside State
-  RideStatus _status = RideStatus.onTheWay;
+  /// ✅ Use RideStatus from RideModel (not from enum folder)
+  late RideStatus _status;
+  //animations
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
 
   void _onArrivedPressed() {
     setState(() {
@@ -29,13 +31,10 @@ class _RideFlowScreenState extends State<RideFlowScreen>
     });
   }
 
-  //animations
-  late AnimationController _pulseController;
-  late Animation<double> _pulseAnimation;
-
   @override
   void initState() {
     super.initState();
+    _status = RideStatus.onWay; // ✅ Initialize here once
 
     _pulseController = AnimationController(
       vsync: this,
@@ -84,7 +83,7 @@ class _RideFlowScreenState extends State<RideFlowScreen>
               const SizedBox(height: 16),
 
               /// 🔹 ON THE WAY / WAITING HEADER (DYNAMIC)
-              if (_status == RideStatus.onTheWay) ...[
+              if (_status == RideStatus.onWay) ...[
                 const OnTheWayWidget(),
                 const SizedBox(height: 12),
 
@@ -140,15 +139,11 @@ class _RideFlowScreenState extends State<RideFlowScreen>
                   onSOS: () {},
                 ),
               ],
-              // const SizedBox(height: 20),
 
-              /// DRIVER PROFILE CARD
-
-              // DriverCommonItemWidget(rideModel: widget.rideModel),
               const SizedBox(height: 10),
 
               ///  ARRIVED / WAITING BUTTON
-              if (_status == RideStatus.onTheWay ||
+              if (_status == RideStatus.onWay ||
                   _status == RideStatus.waiting) ...[
                 const SizedBox(height: 12),
 
@@ -163,7 +158,7 @@ class _RideFlowScreenState extends State<RideFlowScreen>
                           ? 'Waiting'
                           : 'Arrived',
                       onPressed: () {
-                        if (_status == RideStatus.onTheWay) {
+                        if (_status == RideStatus.onWay) {
                           _onArrivedPressed();
                         }
                       },

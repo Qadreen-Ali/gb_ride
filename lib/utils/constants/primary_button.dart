@@ -60,7 +60,7 @@ class PrimaryButton extends StatelessWidget {
         child:
             child ??
             Text(
-              title!,
+              title,
               style: TextStyle(
                 fontSize: fontsize ?? 16,
                 fontFamily: 'Poppins',

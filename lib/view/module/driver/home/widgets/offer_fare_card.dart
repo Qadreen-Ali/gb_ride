@@ -48,7 +48,7 @@ class _OfferFareCardState extends State<OfferFareCard> {
                     CircleAvatar(
                       radius: 18,
                       backgroundImage: AssetImage(
-                        ride.driverImagePath,
+                        ride.driverImagePath ?? 'assets/images/profile.png',
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -59,7 +59,7 @@ class _OfferFareCardState extends State<OfferFareCard> {
                         Row(
                           children: [
                             Text(
-                              ride.driverName,
+                              ride.driverName ?? 'Unknown Driver',
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
@@ -89,10 +89,7 @@ class _OfferFareCardState extends State<OfferFareCard> {
                         const SizedBox(height: 2),
                         const Text(
                           '(34 rides)',
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.grey,
-                          ),
+                          style: TextStyle(fontSize: 11, color: Colors.grey),
                         ),
                       ],
                     ),
@@ -214,9 +211,7 @@ class _OfferFareCardState extends State<OfferFareCard> {
                     context: context,
                     isScrollControlled: true,
                     backgroundColor: Colors.transparent,
-                    builder: (_) => OfferFareScreen(
-                      rideModel: ride,
-                    ),
+                    builder: (_) => OfferFareScreen(rideModel: ride),
                   );
 
                   if (mounted) {
