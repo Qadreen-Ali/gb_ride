@@ -1,12 +1,16 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:gb_ride/view/module/local/home/app_drawer/app_drawer.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'home_bottom_sheet.dart';
+import 'widgets/map_markers.dart';
 import 'widgets/top_bar.dart';
+import 'app_drawer/app_drawer.dart';
+
+// Mapbox Token (add your own if expired)
+const String mapboxToken = "YOUR_TOKEN_HERE";
 
 class LocalHomeScreen extends StatefulWidget {
   const LocalHomeScreen({super.key});
@@ -16,33 +20,54 @@ class LocalHomeScreen extends StatefulWidget {
 }
 
 class _LocalHomeScreenState extends State<LocalHomeScreen> {
-  // Mapbox token (your token)
-  static const String _mapboxAccessToken =
-      'pk.eyJ1IjoiZ2JyaWRlIiwiYSI6ImNtbHFoc2FuNzAwd3AzY3NiamttM2U0Ym8ifQ.ubwGJwlG8fv7q1y2R4stbg';
-
-  // Pick any default center (Gilgit example)
-  static const LatLng _initialCenter = LatLng(35.911383, 74.341500);
-
+  final _pickupController = TextEditingController();
+  final _destinationController = TextEditingController();
   final MapController _mapController = MapController();
 
-  final TextEditingController _pickupController = TextEditingController();
-  final TextEditingController _destinationController = TextEditingController();
+  LatLng _currentLocation = const LatLng(35.911383, 74.341500);
+  LatLng? _pickupLocation;
+  LatLng? _destinationLocation;
+
+  double? _distanceKm;
+  int? _etaMinutes;
 
   String _selectedVehicle = 'car';
-
+  bool _isLoading = true;
   bool _showBottomSheet = true;
+
   Timer? _gestureTimer;
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
-  bool get _isKeyboardOpen => MediaQuery.of(context).viewInsets.bottom > 0;
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    try {
+      final position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      setState(() {
+        _currentLocation = LatLng(position.latitude, position.longitude);
+        _pickupLocation = _currentLocation;
+        _pickupController.text = 'Current Location';
+        _isLoading = false;
+      });
+
+      _mapController.move(_currentLocation, 15);
+    } catch (e) {
+      debugPrint("Error getting location: $e");
+      setState(() => _isLoading = false);
+    }
+  }
 
   void _onMapGesture() {
-    if (_isKeyboardOpen) return;
-
-    if (_showBottomSheet) {
-      setState(() => _showBottomSheet = false);
-    }
+    if (!_showBottomSheet) return;
+    setState(() => _showBottomSheet = false);
 
     _gestureTimer?.cancel();
     _gestureTimer = Timer(const Duration(milliseconds: 300), () {
@@ -55,41 +80,48 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
     return Scaffold(
       key: _scaffoldKey,
       drawer: const ProfileDrawer(),
-      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          // ✅ Mapbox map background
-          FlutterMap(
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : FlutterMap(
             mapController: _mapController,
             options: MapOptions(
-              initialCenter: _initialCenter,
-              initialZoom: 14,
-              onPositionChanged: (pos, hasGesture) {
+              initialCenter: _currentLocation,
+              initialZoom: 15,
+              minZoom: 3,
+              maxZoom: 19,
+              onPositionChanged: (_, hasGesture) {
                 if (hasGesture) _onMapGesture();
               },
-              interactionOptions: const InteractionOptions(
-                flags: InteractiveFlag.all,
-              ),
             ),
             children: [
+              /// MAPBOX DARK THEME TILE LAYER
               TileLayer(
-                // Mapbox raster tiles (style: streets)
                 urlTemplate:
-                'https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=$_mapboxAccessToken',
+                "https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/256/{z}/{x}/{y}@2x?access_token=$mapboxToken",
                 userAgentPackageName: 'com.example.gb_ride',
+                tileSize: 256,
+                maxZoom: 19,
+              ),
+
+              /// 📍 MARKERS
+              MapMarkers(
+                currentLocation: _currentLocation,
+                pickupLocation: _pickupLocation,
+                destinationLocation: _destinationLocation,
               ),
             ],
           ),
 
-          // ✅ Top bar (same)
           TopBar(
-            onMenuPressed: () => _scaffoldKey.currentState?.openDrawer(),
-            onNotificationPressed: () {
-              Navigator.pushNamed(context, '/notification');
-            },
+            onMenuPressed: () =>
+                _scaffoldKey.currentState?.openDrawer(),
+            onNotificationPressed: () =>
+                Navigator.pushNamed(context, '/notification'),
           ),
 
-          // ✅ Bottom sheet (same)
+          /// BOTTOM SHEET
           Positioned(
             left: 0,
             right: 0,
@@ -97,16 +129,17 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
             child: AnimatedSlide(
               offset: _showBottomSheet ? Offset.zero : const Offset(0, 1),
               duration: const Duration(milliseconds: 250),
-              curve: Curves.easeOut,
               child: HomeBottomSheet(
                 pickupController: _pickupController,
                 destinationController: _destinationController,
-                distanceKm: null,
-                etaMinutes: null,
+                distanceKm: _distanceKm,
+                etaMinutes: _etaMinutes,
+                selectedVehicle: _selectedVehicle,
+                onVehicleSelect: (v) {
+                  setState(() => _selectedVehicle = v);
+                },
                 onPickupTap: () {},
                 onDestinationTap: () {},
-                selectedVehicle: _selectedVehicle,
-                onVehicleSelect: (v) => setState(() => _selectedVehicle = v),
               ),
             ),
           ),
@@ -117,9 +150,9 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
 
   @override
   void dispose() {
-    _gestureTimer?.cancel();
     _pickupController.dispose();
     _destinationController.dispose();
+    _gestureTimer?.cancel();
     super.dispose();
   }
 }

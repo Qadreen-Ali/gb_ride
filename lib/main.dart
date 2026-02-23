@@ -21,11 +21,21 @@ import 'package:gb_ride/view/splash/splash_screen.dart';
 import 'package:gb_ride/view/auth/form_screen.dart';
 import 'package:gb_ride/view/module/local/setting/payment_method/payment_methods_screen.dart';
 import 'package:gb_ride/view/module/local/setting/history/history_screen.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // // ✅ MUST be pk. public token
+  // const token = String.fromEnvironment('ACCESS_TOKEN');
+  //
+  // // Debug check
+  // assert(token.startsWith('pk.'), 'Use a public Mapbox token (pk.), not sk.');
+  // assert(token.isNotEmpty, 'ACCESS_TOKEN is empty. Pass --dart-define ACCESS_TOKEN=pk.eyJ1IjoiZ2JyaWRlIiwiYSI6ImNtbHFoc2FuNzAwd3AzY3NiamttM2U0Ym8ifQ.ubwGJwlG8fv7q1y2R4stbg');
+
+  // MapboxOptions.setAccessToken(token);
 
   await Supabase.initialize(
     url: 'https://jfwsaehmwgjcpvcimsuy.supabase.co',
