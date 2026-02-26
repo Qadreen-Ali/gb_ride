@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -32,6 +33,8 @@ import 'package:gb_ride/view/module/driver/home/app_drawer/driver_trips.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await dotenv.load(fileName: ".env");
+
   await Supabase.initialize(
     url: 'https://jfwsaehmwgjcpvcimsuy.supabase.co',
     anonKey: 'sb_publishable_aORB6QRHAWCP1CXkXPHC1Q_jEhirfeq',
@@ -39,6 +42,7 @@ void main() async {
 
   // ✅ AuthController registered ONCE
   Get.put(AuthController(), permanent: true);
+
 
   runApp(const MyApp());
 }
