@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
@@ -10,7 +11,7 @@ import 'widgets/top_bar.dart';
 import 'app_drawer/app_drawer.dart';
 
 // Mapbox Token (add your own if expired)
-const String mapboxToken = "YOUR_TOKEN_HERE";
+final String mapboxToken = dotenv.env['MAPBOX_TOKEN']!;
 
 class LocalHomeScreen extends StatefulWidget {
   const LocalHomeScreen({super.key});
@@ -99,7 +100,7 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
               /// MAPBOX DARK THEME TILE LAYER
               TileLayer(
                 urlTemplate:
-                "https://api.mapbox.com/styles/v1/mapbox/dark-v11/tiles/256/{z}/{x}/{y}@2x?access_token=$mapboxToken",
+                "https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}@2x?access_token=$mapboxToken",
                 userAgentPackageName: 'com.example.gb_ride',
                 tileSize: 256,
                 maxZoom: 19,

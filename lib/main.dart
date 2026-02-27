@@ -36,8 +36,8 @@ void main() async {
   await dotenv.load(fileName: ".env");
 
   await Supabase.initialize(
-    url: 'https://jfwsaehmwgjcpvcimsuy.supabase.co',
-    anonKey: 'sb_publishable_aORB6QRHAWCP1CXkXPHC1Q_jEhirfeq',
+    url:  dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANONKEY']!,
   );
 
   // ✅ AuthController registered ONCE
