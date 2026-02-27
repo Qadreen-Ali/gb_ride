@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -32,9 +33,11 @@ import 'package:gb_ride/view/module/driver/home/app_drawer/driver_trips.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await dotenv.load(fileName: ".env");
+
   await Supabase.initialize(
-    url: 'https://jfwsaehmwgjcpvcimsuy.supabase.co',
-    anonKey: 'sb_publishable_aORB6QRHAWCP1CXkXPHC1Q_jEhirfeq',
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANONKEY']!,
   );
 
   // ✅ AuthController registered ONCE

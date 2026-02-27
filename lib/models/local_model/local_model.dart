@@ -1,36 +1,38 @@
 class LocalModel {
   final String id;
-
-  // 🔑 Auth linkage (MOST IMPORTANT)
   final String authId;
 
-  // Identity
-  final String phoneNumber;
+  // Auth / identity
+  final String phoneNumber; // 🔑 from otp_verifications
 
   // Profile info
   final String fullName;
   final String cnic;
   final String gender;
+
+
+
   final String address;
 
   final DateTime createdAt;
 
-  LocalModel({
+  LocalModel( {
     required this.id,
-    required this.authId,
     required this.phoneNumber,
     required this.fullName,
     required this.cnic,
     required this.gender,
     required this.address,
+    required this.authId,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
   /// Convert model → Supabase insert map
   Map<String, dynamic> toMap() {
     return {
-      'auth_id': authId, // 🔑 REQUIRED
       'phone_number': phoneNumber,
+      'id': id,
+      'authId': authId,
       'full_name': fullName,
       'cnic': cnic,
       'gender': gender,
@@ -43,7 +45,7 @@ class LocalModel {
   factory LocalModel.fromMap(Map<String, dynamic> map) {
     return LocalModel(
       id: map['id'] ?? '',
-      authId: map['auth_id'] ?? '',
+      authId: map['authId'] ?? '',
       phoneNumber: map['phone_number'] ?? '',
       fullName: map['full_name'] ?? '',
       cnic: map['cnic'] ?? '',
@@ -59,6 +61,7 @@ class LocalModel {
     String? fullName,
     String? cnic,
     String? gender,
+    int? age,
     String? address,
   }) {
     return LocalModel(

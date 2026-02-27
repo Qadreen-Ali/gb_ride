@@ -1,58 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
-import 'package:gb_ride/view/module/local/home/widgets/fare_bottom_sheet.dart';
 import 'package:gb_ride/view/module/local/home/bottom_sheet/find_driver_bottom_sheet.dart';
+import 'package:gb_ride/view/module/local/home/widgets/fare_bottom_sheet.dart';
 import 'package:gb_ride/view/module/local/home/widgets/location_input_field.dart';
 import 'package:gb_ride/view/module/local/home/widgets/vehicle_option.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeBottomSheet extends StatefulWidget {
-  // final ScrollController scrollController;
-
   final TextEditingController pickupController;
   final TextEditingController destinationController;
+
   final double? distanceKm;
   final int? etaMinutes;
 
-  final VoidCallback onStartPickupSelection;
-  final VoidCallback onStartDestinationSelection;
-  final VoidCallback onExpandSheet;
-
-  final LatLng? pickupLocation;
-  final LatLng? destinationLocation;
-
   final ValueChanged<String> onVehicleSelect;
   final String selectedVehicle;
+
   final VoidCallback onPickupTap;
   final VoidCallback onDestinationTap;
 
-  final MapController? mapController;
-  final void Function(LatLng position, String displayName) onPickupSelected;
-  final void Function(LatLng position, String displayName)
-  onDestinationSelected;
-
   const HomeBottomSheet({
     super.key,
-    // required this.scrollController,
     required this.pickupController,
     required this.destinationController,
-    required this.onStartPickupSelection,
-    required this.onStartDestinationSelection,
-    required this.onExpandSheet,
-    required this.pickupLocation,
-    required this.destinationLocation,
     required this.onVehicleSelect,
     required this.selectedVehicle,
-    required this.mapController,
-    required this.onPickupSelected,
-    required this.onDestinationSelected,
     required this.onPickupTap,
     required this.onDestinationTap,
     this.distanceKm,
@@ -74,9 +49,10 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
 
     try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } catch (e) {
-      debugPrint('WhatsApp not installed');
-      Get.snackbar('Error', 'WhatsApp is not installed on this device.');
+    } catch (_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('WhatsApp not installed')),
+      );
     }
   }
 
@@ -88,7 +64,6 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         child: Container(
           color: Colors.white,
-          // padding: const EdgeInsets.only(bottom: 12),
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom + 12,
           ),
@@ -108,7 +83,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
               ),
               const SizedBox(height: 10),
 
-              //routing code
+              /// Distance + ETA
               if (widget.distanceKm != null && widget.etaMinutes != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -163,10 +138,8 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                 child: LocationInputField(
                   controller: widget.pickupController,
                   hintText: 'From',
-                  // themeColor: GBColor.secondary,
                   iconColor: GBColor.black,
                   iconData: Icons.radio_button_checked,
-                  onMapIconPressed: widget.onStartPickupSelection,
                   onTap: widget.onPickupTap,
                 ),
               ),
@@ -181,7 +154,6 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                   iconData: Icons.location_on,
                   iconColor: GBColor.primary,
                   onTap: widget.onDestinationTap,
-                  onMapIconPressed: widget.onStartDestinationSelection,
                 ),
               ),
 
@@ -191,7 +163,7 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: SizedBox(
-                  height: 70, // 👈 controls height
+                  height: 70,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),

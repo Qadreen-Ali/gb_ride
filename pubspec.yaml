@@ -63,6 +63,7 @@ dependencies:
   supabase_flutter: ^2.5.0
   dotted_border: ^2.1.0
   get: ^4.7.3
+  flutter_dotenv: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +91,8 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/data/gb_pois.json
+    - .env
+
 
   fonts:
     - family: Poppins
