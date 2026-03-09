@@ -10,13 +10,11 @@ class LocalModel {
   final String cnic;
   final String gender;
 
-
-
   final String address;
 
   final DateTime createdAt;
 
-  LocalModel( {
+  LocalModel({
     required this.id,
     required this.phoneNumber,
     required this.fullName,
@@ -31,8 +29,7 @@ class LocalModel {
   Map<String, dynamic> toMap() {
     return {
       'phone_number': phoneNumber,
-      'id': id,
-      'authId': authId,
+      'auth_id': authId,
       'full_name': fullName,
       'cnic': cnic,
       'gender': gender,
@@ -45,7 +42,7 @@ class LocalModel {
   factory LocalModel.fromMap(Map<String, dynamic> map) {
     return LocalModel(
       id: map['id'] ?? '',
-      authId: map['authId'] ?? '',
+      authId: map['auth_id'] ?? '',
       phoneNumber: map['phone_number'] ?? '',
       fullName: map['full_name'] ?? '',
       cnic: map['cnic'] ?? '',

@@ -50,8 +50,7 @@ dependencies:
   mask_text_input_formatter: ^2.9.0
   google_maps_flutter: ^2.14.0
   geolocator: ^14.0.2
-  latlong2: ^0.9.1
-  flutter_map: ^8.2.2
+  mapbox_maps_flutter: ^2.6.0
   dtd: ^4.0.0
   flutter_lints: ^6.0.0
   json_rpc_2: ^4.0.0

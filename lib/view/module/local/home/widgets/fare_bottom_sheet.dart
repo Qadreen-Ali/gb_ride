@@ -15,6 +15,13 @@ class FareBottomSheet extends StatefulWidget {
 
 class _FareBottomSheetState extends State<FareBottomSheet> {
   String selectedPayment = GBText.cash;
+  final TextEditingController _fareController = TextEditingController();
+
+  @override
+  void dispose() {
+    _fareController.dispose();
+    super.dispose();
+  }
 
   void _openPaymentSheet() async {
     final result = await showModalBottomSheet<String>(
@@ -95,6 +102,7 @@ class _FareBottomSheetState extends State<FareBottomSheet> {
                   hintText: GBText.pkr,
                   hintTextColor: Colors.black,
                   keyboardType: TextInputType.number,
+                  controller: _fareController,
                 ),
 
                 /// PAYMENT TYPE (CLICKABLE)
@@ -125,7 +133,10 @@ class _FareBottomSheetState extends State<FareBottomSheet> {
                 /// DONE BUTTON
                 PrimaryButton(
                   title: GBText.done,
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    final fare = double.tryParse(_fareController.text);
+                    Navigator.pop(context, fare);
+                  },
                   backgroundColor: GBColor.primary,
                   textColor: Colors.white,
                 ),

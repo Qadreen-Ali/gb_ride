@@ -2,6 +2,16 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
+            authentication {
+                create<HttpHeaderAuthentication>("basic")
+            }
+            credentials(HttpHeaderCredentials::class) {
+                name = "Authorization"
+                value = "Bearer ${providers.gradleProperty("MAPBOX_DOWNLOADS_TOKEN").get()}"
+            }
+        }
     }
 }
 

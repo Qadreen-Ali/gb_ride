@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gb_ride/services/map_services/location_search_service.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:gb_ride/services/map_services/gb_poi_service.dart';
 import 'package:gb_ride/models/gb_location_data/gb_poi.dart';
 
@@ -58,7 +57,7 @@ class _LocationSearchBottomSheetState extends State<LocationSearchScreen> {
         );
       }).toList();
 
-      // 🌐 2️⃣ LOCATIONIQ SEARCH (FALLBACK)
+      // 🌐 2️⃣ MAPBOX GEOCODING SEARCH
       final apiResults = await LocationSearchService.searchLocations(value);
 
       // 🧹 3️⃣ MERGE + REMOVE DUPLICATES
@@ -225,9 +224,9 @@ class _LocationSearchBottomSheetState extends State<LocationSearchScreen> {
 
                       return InkWell(
                         onTap: () {
-                          final pos = LatLng(item.latitude, item.longitude);
                           Navigator.pop(context, {
-                            'latLng': pos,
+                            'lat': item.latitude,
+                            'lng': item.longitude,
                             'name': item.displayName.split(',').first,
                           });
                         },

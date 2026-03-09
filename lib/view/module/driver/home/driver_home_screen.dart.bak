@@ -7,7 +7,6 @@ import 'package:gb_ride/view/module/driver/home/widgets/top_bar.dart';
 import 'package:gb_ride/view/module/driver/home/app_drawer/app_drawer.dart';
 import 'package:gb_ride/view/module/driver/home/driver_bottom_sheet.dart';
 import 'package:gb_ride/view/module/driver/controller/driver_controller.dart';
-import 'package:gb_ride/services/map_services/location_routing_service.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class DriverHomeScreen extends StatefulWidget {
@@ -24,6 +23,13 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   bool _isLoadingLocation = true;
   final Position _defaultCenter = Position(74.341500, 35.911383);
 
+  double? _pickupLat;
+  double? _pickupLng;
+  double? _destLat;
+  double? _destLng;
+
+  // Route coordinates for GeoJSON (raw [lng, lat] pairs)
+  List<List<double>> _rawRouteCoords = [];
   bool _showBottomSheet = true;
   Timer? _mapGestureTimer;
 
@@ -62,13 +68,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
       ),
     );
 
+    // Set up GeoJSON sources and style layers
+    await _initStyleLayers();
+
     // Get current location for initial camera position
     _getCurrentLocation();
-  }
-
-  /// Called when the map style has fully loaded — safe to add sources/layers
-  void _onStyleLoaded(StyleLoadedEventData data) async {
-    await _initStyleLayers();
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -195,141 +199,34 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     );
   }
 
-  Future<void> _fitBounds({
-    required double pickupLat,
-    required double pickupLng,
-    required double destLat,
-    required double destLng,
-    List<List<double>> routeCoords = const [],
-  }) async {
-    final allPoints = <Position>[
-      Position(pickupLng, pickupLat),
-      Position(destLng, destLat),
-      ...(routeCoords.map((c) => Position(c[0], c[1]))),
-    ];
-
-    double minLng = allPoints.first.lng.toDouble();
-    double maxLng = allPoints.first.lng.toDouble();
-    double minLat = allPoints.first.lat.toDouble();
-    double maxLat = allPoints.first.lat.toDouble();
-
-    for (final p in allPoints) {
-      if (p.lng < minLng) minLng = p.lng.toDouble();
-      if (p.lng > maxLng) maxLng = p.lng.toDouble();
-      if (p.lat < minLat) minLat = p.lat.toDouble();
-      if (p.lat > maxLat) maxLat = p.lat.toDouble();
-    }
-
-    final camera = await _mapboxMap?.cameraForCoordinateBounds(
-      CoordinateBounds(
-        southwest: Point(coordinates: Position(minLng, minLat)),
-        northeast: Point(coordinates: Position(maxLng, maxLat)),
-        infiniteBounds: false,
-      ),
-      MbxEdgeInsets(top: 100, left: 80, bottom: 350, right: 80),
-      null,
-      null,
-      null,
-      null,
-    );
-
-    if (camera != null) {
-      await _mapboxMap?.flyTo(camera, MapAnimationOptions(duration: 600));
-    }
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  // SHOW RIDE ON MAP (when driver taps a ride card)
-  // ═══════════════════════════════════════════════════════════
-
-  /// Shows the local's pickup (green) and destination (red) on the map
-  /// with a route line between them.
-  Future<void> showRideOnMap({
-    required double pickupLat,
-    required double pickupLng,
-    required double destLat,
-    required double destLng,
-  }) async {
-    await _updateMarkers(
-      pickupLat: pickupLat,
-      pickupLng: pickupLng,
-      destLat: destLat,
-      destLng: destLng,
-    );
-
-    try {
-      final result = await LocationRoutingService.getRoutes(
-        startLat: pickupLat,
-        startLng: pickupLng,
-        endLat: destLat,
-        endLng: destLng,
-      );
-
-      if (result != null && result.routes.isNotEmpty) {
-        final route = result.routes.first;
-        final rawCoords = route.coordinates
-            .map<List<double>>((c) => [c[1], c[0]])
-            .toList();
-
-        await _updateRouteLine(rawCoords);
-        await _fitBounds(
-          pickupLat: pickupLat,
-          pickupLng: pickupLng,
-          destLat: destLat,
-          destLng: destLng,
-          routeCoords: rawCoords,
-        );
-      }
-    } catch (e) {
-      debugPrint('Route error: $e');
-      await _fitBounds(
-        pickupLat: pickupLat,
-        pickupLng: pickupLng,
-        destLat: destLat,
-        destLng: destLng,
-      );
-    }
-  }
-
-  /// Clear markers and route from map
-  Future<void> clearMapOverlays() async {
-    await _updateMarkers();
-    await _updateRouteLine([]);
-  }
-
   // ═══════════════════════════════════════════════════════════
   // UPDATE MARKERS (GeoJSON Source)
   // ═══════════════════════════════════════════════════════════
 
-  Future<void> _updateMarkers({
-    double? pickupLat,
-    double? pickupLng,
-    double? destLat,
-    double? destLng,
-  }) async {
+  Future<void> _updateMarkers() async {
     if (!_styleReady || _mapboxMap == null) return;
 
     final features = <Map<String, dynamic>>[];
 
     // Pickup marker - green
-    if (pickupLat != null && pickupLng != null) {
+    if (_pickupLat != null && _pickupLng != null) {
       features.add({
         'type': 'Feature',
         'geometry': {
           'type': 'Point',
-          'coordinates': [pickupLng, pickupLat],
+          'coordinates': [_pickupLng!, _pickupLat!],
         },
         'properties': {'color': '#4CAF50', 'type': 'pickup'},
       });
     }
 
     // Destination marker - red
-    if (destLat != null && destLng != null) {
+    if (_destLat != null && _destLng != null) {
       features.add({
         'type': 'Feature',
         'geometry': {
           'type': 'Point',
-          'coordinates': [destLng, destLat],
+          'coordinates': [_destLng!, _destLat!],
         },
         'properties': {'color': '#F44336', 'type': 'destination'},
       });
@@ -351,16 +248,16 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   // UPDATE ROUTE LINE (GeoJSON Source)
   // ═══════════════════════════════════════════════════════════
 
-  Future<void> _updateRouteLine(List<List<double>> coords) async {
+  Future<void> _updateRouteLine() async {
     if (!_styleReady || _mapboxMap == null) return;
 
     String geojson;
-    if (coords.isEmpty) {
+    if (_rawRouteCoords.isEmpty) {
       geojson = jsonEncode({'type': 'FeatureCollection', 'features': []});
     } else {
       geojson = jsonEncode({
         'type': 'Feature',
-        'geometry': {'type': 'LineString', 'coordinates': coords},
+        'geometry': {'type': 'LineString', 'coordinates': _rawRouteCoords},
       });
     }
 
@@ -369,6 +266,32 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
       'data',
       geojson,
     );
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // MAP TAP
+  // ═══════════════════════════════════════════════════════════
+
+  void _onMapTap(MapContentGestureContext context) {
+    final point = context.point;
+    final lat = point.coordinates.lat.toDouble();
+    final lng = point.coordinates.lng.toDouble();
+
+    setState(() {
+      if (_pickupLat == null) {
+        _pickupLat = lat;
+        _pickupLng = lng;
+      } else if (_destLat == null) {
+        _destLat = lat;
+        _destLng = lng;
+      } else {
+        _pickupLat = lat;
+        _pickupLng = lng;
+        _destLat = null;
+        _destLng = null;
+      }
+    });
+    _updateMarkers();
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -401,7 +324,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
       drawer: const ProfileDrawer(),
       body: Stack(
         children: [
-          // Mapbox Map — native location puck, GeoJSON layers
+          // Mapbox Map
           MapWidget(
             key: const ValueKey('driverHomeMap'),
             mapOptions: MapOptions(
@@ -413,7 +336,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
               zoom: 15,
             ),
             onMapCreated: _onMapCreated,
-            onStyleLoadedListener: _onStyleLoaded,
+            onTapListener: _onMapTap,
             onScrollListener: (_) => _onMapGesture(),
           ),
 
@@ -442,18 +365,9 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 });
               },
               onOfferClose: () {
-                clearMapOverlays();
                 setState(() {
                   _showBottomSheet = true;
                 });
-              },
-              onShowRide: (pickupLat, pickupLng, destLat, destLng) {
-                showRideOnMap(
-                  pickupLat: pickupLat,
-                  pickupLng: pickupLng,
-                  destLat: destLat,
-                  destLng: destLng,
-                );
               },
             ),
           ),

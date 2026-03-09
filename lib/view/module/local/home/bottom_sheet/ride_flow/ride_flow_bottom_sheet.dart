@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:get/get.dart';
 import '../../../../../../utils/constants/app_sizes.dart';
 import '../../../../../../utils/constants/color_string.dart';
 import '../../../../../../utils/constants/image_string.dart';
 import '../../../../../../utils/constants/primary_button.dart';
 import '../../../../../../utils/constants/text_string.dart';
+import '../../../controller/ride_controller.dart';
+import '../../../../../../models/ride_model.dart';
 import 'widgets/bottom_sheet_title.dart';
 import 'widgets/common_item_widget.dart';
-
-enum RideSheetStep {
-  driverArriving,
-  driverArrived,
-  startJourney,
-  destinationArrived,
-}
 
 class RideFlowBottomSheet extends StatefulWidget {
   const RideFlowBottomSheet({super.key});
@@ -24,9 +20,7 @@ class RideFlowBottomSheet extends StatefulWidget {
 
 class _RideFlowBottomSheetState extends State<RideFlowBottomSheet> {
   final PanelController _panelController = PanelController();
-  RideSheetStep _step = RideSheetStep.driverArriving;
-
-  void _goTo(RideSheetStep step) => setState(() => _step = step);
+  final RideController _rideController = Get.find<RideController>();
 
   void _closeSheet() => Navigator.pop(context);
 
@@ -52,118 +46,129 @@ class _RideFlowBottomSheetState extends State<RideFlowBottomSheet> {
           body: const SizedBox.expand(),
 
           panelBuilder: (sc) {
-            final config = _configForStep(_step);
+            return Obx(() {
+              final ride = _rideController.currentRide.value;
+              final status = ride?.status ?? RideStatus.accepted;
+              final config = _configForStatus(status);
 
-            return SafeArea(
-              top: false,
-              bottom: true,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: GBSizes.lg,
-                  vertical: GBSizes.sm,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Drag handle
-                    Center(
-                      child: Container(
-                        width: 40,
-                        height: GBSizes.dividerHeight * 2,
-                        decoration: BoxDecoration(
-                          color: GBColor.black,
-                          borderRadius: BorderRadius.circular(
-                            GBSizes.borderRadiusLg,
+              return SafeArea(
+                top: false,
+                bottom: true,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: GBSizes.lg,
+                    vertical: GBSizes.sm,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Drag handle
+                      Center(
+                        child: Container(
+                          width: 40,
+                          height: GBSizes.dividerHeight * 2,
+                          decoration: BoxDecoration(
+                            color: GBColor.black,
+                            borderRadius: BorderRadius.circular(
+                              GBSizes.borderRadiusLg,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: GBSizes.spaceBtwItems),
+                      const SizedBox(height: GBSizes.spaceBtwItems),
 
-                    // Title
-                    BottomSheetTopTitle(
-                      tiltetext: config.title,
-                      image: Image.asset(
-                        config.titleIcon,
-                        width: GBSizes.iconLg,
+                      // Title
+                      BottomSheetTopTitle(
+                        tiltetext: config.title,
+                        image: Image.asset(
+                          config.titleIcon,
+                          width: GBSizes.iconLg,
+                        ),
                       ),
-                    ),
 
-                    const SizedBox(height: GBSizes.xs),
-
-                    // Common UI (same for all)
-                    const CommonItemWidget(),
-
-                    const SizedBox(height: GBSizes.xs),
-
-                    // Primary Button (always visible)
-                    PrimaryButton(
-                      title: config.primaryButtonText,
-                      backgroundColor: GBColor.primary,
-                      textColor: GBColor.secondary,
-                      onPressed: config.primaryAction,
-                    ),
-
-                    // Optional second button
-                    if (config.secondaryButtonText != null) ...[
                       const SizedBox(height: GBSizes.xs),
+
+                      // Common UI (ride info)
+                      const CommonItemWidget(),
+
+                      const SizedBox(height: GBSizes.xs),
+
+                      // Primary Button
                       PrimaryButton(
-                        title: config.secondaryButtonText!,
+                        title: config.primaryButtonText,
                         backgroundColor: GBColor.primary,
                         textColor: GBColor.secondary,
-                        onPressed: config.secondaryAction ?? () {},
+                        onPressed: config.primaryAction,
                       ),
+
+                      // Optional secondary button
+                      if (config.secondaryButtonText != null) ...[
+                        const SizedBox(height: GBSizes.xs),
+                        PrimaryButton(
+                          title: config.secondaryButtonText!,
+                          backgroundColor: GBColor.primary,
+                          textColor: GBColor.secondary,
+                          onPressed: config.secondaryAction ?? () {},
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
-              ),
-            );
+              );
+            });
           },
         ),
       ),
     );
   }
 
-  _RideStepConfig _configForStep(RideSheetStep step) {
-    switch (step) {
-      case RideSheetStep.driverArriving:
+  _RideStepConfig _configForStatus(RideStatus status) {
+    switch (status) {
+      case RideStatus.accepted:
+      case RideStatus.onWay:
         return _RideStepConfig(
           title: GBText.driverArriveIn2Min,
           titleIcon: GBImagePath.car,
           primaryButtonText: GBText.cancelRequest,
-          primaryAction: _closeSheet,
-          secondaryButtonText: GBText.startRide, // example (you can change)
-          secondaryAction: () => _goTo(RideSheetStep.driverArrived),
+          primaryAction: () {
+            _rideController.cancelRide();
+            _closeSheet();
+          },
         );
 
-      case RideSheetStep.driverArrived:
+      case RideStatus.waiting:
         return _RideStepConfig(
           title: GBText.driverArrived,
           titleIcon: GBImagePath.car,
-          primaryButtonText: GBText.startRide,
-          primaryAction: () => _goTo(RideSheetStep.startJourney),
-          secondaryButtonText: GBText.cancelRequest,
-          secondaryAction: _closeSheet,
+          primaryButtonText: GBText.cancelRequest,
+          primaryAction: () {
+            _rideController.cancelRide();
+            _closeSheet();
+          },
         );
 
-      case RideSheetStep.startJourney:
+      case RideStatus.ongoing:
         return _RideStepConfig(
           title: GBText.startJourney,
           titleIcon: GBImagePath.car,
           primaryButtonText: GBText.accepeted,
-          primaryAction: () => _goTo(RideSheetStep.destinationArrived),
-          secondaryButtonText: null,
-          secondaryAction: null,
+          primaryAction: () {},
         );
 
-      case RideSheetStep.destinationArrived:
+      case RideStatus.completed:
         return _RideStepConfig(
           title: GBText.yourDestination,
           titleIcon: GBImagePath.car,
           primaryButtonText: GBText.endRide,
           primaryAction: _closeSheet,
-          secondaryButtonText: null,
-          secondaryAction: null,
+        );
+
+      default:
+        return _RideStepConfig(
+          title: 'Ride',
+          titleIcon: GBImagePath.car,
+          primaryButtonText: 'Close',
+          primaryAction: _closeSheet,
         );
     }
   }

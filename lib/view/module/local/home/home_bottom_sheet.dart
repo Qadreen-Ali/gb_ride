@@ -3,11 +3,14 @@ import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
 import 'package:gb_ride/utils/constants/text_string.dart';
-import 'package:gb_ride/view/module/local/home/bottom_sheet/find_driver_bottom_sheet.dart';
 import 'package:gb_ride/view/module/local/home/widgets/fare_bottom_sheet.dart';
 import 'package:gb_ride/view/module/local/home/widgets/location_input_field.dart';
 import 'package:gb_ride/view/module/local/home/widgets/vehicle_option.dart';
+import 'package:gb_ride/view/module/local/controller/ride_controller.dart';
+import 'package:gb_ride/models/ride_model.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
 
 class HomeBottomSheet extends StatefulWidget {
   final TextEditingController pickupController;
@@ -22,6 +25,12 @@ class HomeBottomSheet extends StatefulWidget {
   final VoidCallback onPickupTap;
   final VoidCallback onDestinationTap;
 
+  // Location coordinates (needed to build RideModel)
+  final double? pickupLat;
+  final double? pickupLng;
+  final double? destLat;
+  final double? destLng;
+
   const HomeBottomSheet({
     super.key,
     required this.pickupController,
@@ -32,6 +41,10 @@ class HomeBottomSheet extends StatefulWidget {
     required this.onDestinationTap,
     this.distanceKm,
     this.etaMinutes,
+    this.pickupLat,
+    this.pickupLng,
+    this.destLat,
+    this.destLng,
   });
 
   @override
@@ -39,6 +52,9 @@ class HomeBottomSheet extends StatefulWidget {
 }
 
 class _HomeBottomSheetState extends State<HomeBottomSheet> {
+  final RideController _rideController = Get.find<RideController>();
+  double _fare = 0;
+
   Future<void> openWhatsAppChat({
     required String phoneNumber,
     String message = '',
@@ -50,9 +66,9 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
     try {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } catch (_) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('WhatsApp not installed')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('WhatsApp not installed')));
     }
   }
 
@@ -227,18 +243,23 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: GestureDetector(
-                          onTap: () {
-                            showModalBottomSheet(
+                          onTap: () async {
+                            final result = await showModalBottomSheet<double>(
                               context: context,
                               isScrollControlled: true,
                               backgroundColor: Colors.transparent,
                               builder: (_) => const FareBottomSheet(),
                             );
+                            if (result != null) {
+                              setState(() => _fare = result);
+                            }
                           },
-                          child: const AbsorbPointer(
+                          child: AbsorbPointer(
                             child: TextField(
                               decoration: InputDecoration(
-                                hintText: GBText.offerYourFare,
+                                hintText: _fare > 0
+                                    ? 'PKR ${_fare.toStringAsFixed(0)}'
+                                    : GBText.offerYourFare,
                                 hintStyle: TextStyle(color: Colors.grey),
                                 border: InputBorder.none,
                                 isDense: true,
@@ -274,12 +295,44 @@ class _HomeBottomSheetState extends State<HomeBottomSheet> {
                         backgroundColor: GBColor.primary,
                         textColor: Colors.white,
                         onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (_) => FindDriverBottomSheet(),
+                          // Validate inputs
+                          if (widget.pickupController.text.isEmpty ||
+                              widget.destinationController.text.isEmpty) {
+                            Get.snackbar(
+                              'Missing Info',
+                              'Set pickup and destination',
+                            );
+                            return;
+                          }
+                          if (_fare <= 0) {
+                            Get.snackbar(
+                              'Missing Fare',
+                              'Enter your offer fare',
+                            );
+                            return;
+                          }
+
+                          // Build ride model and request
+                          final localId =
+                              Supabase.instance.client.auth.currentUser?.id ??
+                              '';
+                          final ride = RideModel(
+                            rideId: '',
+                            localId: localId,
+                            pickupLocation: widget.pickupController.text,
+                            destinationLocation:
+                                widget.destinationController.text,
+                            pickupLat: widget.pickupLat ?? 0,
+                            pickupLng: widget.pickupLng ?? 0,
+                            destLat: widget.destLat ?? 0,
+                            destLng: widget.destLng ?? 0,
+                            distanceKm: widget.distanceKm ?? 0,
+                            etaMinutes: widget.etaMinutes ?? 0,
+                            fare: _fare,
+                            createdAt: DateTime.now(),
                           );
+
+                          _rideController.requestRide(ride);
                         },
                       ),
                     ),

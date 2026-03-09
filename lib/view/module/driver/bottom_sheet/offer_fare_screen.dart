@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/app_snackbar_string.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
-import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/ride_flow_screen.dart';
+import 'package:gb_ride/view/module/driver/controller/driver_controller.dart';
 import 'package:gb_ride/models/ride_model.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 
 class OfferFareScreen extends StatefulWidget {
   final RideModel rideModel;
@@ -20,6 +19,7 @@ class OfferFareScreen extends StatefulWidget {
 
 class _OfferFareScreenState extends State<OfferFareScreen> {
   late TextEditingController _fareController;
+  final DriverController _driverController = Get.find<DriverController>();
 
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
     super.dispose();
   }
 
-  void _sendOffer() {
+  void _sendOffer() async {
     if (_fareController.text.isEmpty) {
       Get.snackbar(
         AppSnackBarString.fareRequiredTitle,
@@ -53,17 +53,14 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
       return;
     }
 
-    /// ✅ Create UPDATED ride model
-    final updatedRide = widget.rideModel.copyWith(fare: fare);
-
-    Navigator.pop(context);
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => RideFlowScreen(rideModel: updatedRide),
+    // Send the offer to Supabase via controller
+    await _driverController.sendOffer(
+      rideId: widget.rideModel.rideId,
+      offeredFare: fare,
+      etaMinutes: widget.rideModel.etaMinutes,
     );
+
+    if (mounted) Navigator.pop(context);
   }
 
   @override
@@ -179,12 +176,18 @@ class _OfferFareScreenState extends State<OfferFareScreen> {
 
               SizedBox(
                 width: double.infinity,
-                child: PrimaryButton(
-                  title: 'Send Offer',
-                  onPressed: _sendOffer,
-                  backgroundColor: GBColor.primary,
-                  textColor: GBColor.secondary,
-                  fontsize: 18,
+                child: Obx(
+                  () => PrimaryButton(
+                    title: _driverController.isSendingOffer.value
+                        ? 'Sending...'
+                        : 'Send Offer',
+                    onPressed: _driverController.isSendingOffer.value
+                        ? () {}
+                        : _sendOffer,
+                    backgroundColor: GBColor.primary,
+                    textColor: GBColor.secondary,
+                    fontsize: 18,
+                  ),
                 ),
               ),
 

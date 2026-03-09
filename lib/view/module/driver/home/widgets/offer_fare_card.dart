@@ -9,12 +9,20 @@ class OfferFareCard extends StatefulWidget {
   final RideModel rideModel;
   final VoidCallback? onOfferTap;
   final VoidCallback? onOfferClose;
+  final void Function(
+    double pickupLat,
+    double pickupLng,
+    double destLat,
+    double destLng,
+  )?
+  onShowRide;
 
   const OfferFareCard({
     super.key,
     required this.rideModel,
     this.onOfferTap,
     this.onOfferClose,
+    this.onShowRide,
   });
 
   @override
@@ -206,6 +214,12 @@ class _OfferFareCardState extends State<OfferFareCard> {
               PrimaryButton(
                 onPressed: () async {
                   widget.onOfferTap?.call();
+                  widget.onShowRide?.call(
+                    ride.pickupLat,
+                    ride.pickupLng,
+                    ride.destLat,
+                    ride.destLng,
+                  );
 
                   await showModalBottomSheet(
                     context: context,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:gb_ride/utils/logger.dart';
 
@@ -15,84 +16,89 @@ class LocationSuggestion {
     required this.type,
   });
 
-  factory LocationSuggestion.fromJson(Map<String, dynamic> json) {
+  /// Parse a Mapbox Geocoding API feature
+  factory LocationSuggestion.fromMapbox(Map<String, dynamic> feature) {
+    final List coords = feature['center'] ?? [0, 0]; // [lng, lat]
+    final String placeName = feature['place_name'] ?? '';
+    final String type = feature['place_type']?.isNotEmpty == true
+        ? feature['place_type'][0]
+        : '';
+
     return LocationSuggestion(
-      displayName: json['display_name'] ?? '',
-      latitude: double.tryParse(json['lat'] ?? '0') ?? 0.0,
-      longitude: double.tryParse(json['lon'] ?? '0') ?? 0.0,
-      type: json['type'] ?? '',
+      displayName: placeName,
+      latitude: (coords[1] as num).toDouble(),
+      longitude: (coords[0] as num).toDouble(),
+      type: type,
     );
   }
 }
 
+/// Location search & reverse geocoding powered by Mapbox Geocoding API.
+/// Docs: https://docs.mapbox.com/api/search/geocoding/
 class LocationSearchService {
-  static const String _baseUrl = 'https://api.locationiq.com/v1';
-  static const String _apiKey = 'pk.25e1a7ca81d6256515a0311e26fb2ec3'; //
+  static final String _token = dotenv.env['MAPBOX_TOKEN']!;
+  static const String _baseUrl =
+      'https://api.mapbox.com/geocoding/v5/mapbox.places';
 
-  /// 🔍 Search locations
+  // Gilgit-Baltistan bounding box: [minLng, minLat, maxLng, maxLat]
+  static const String _gbBBox = '72.5,34.0,76.0,37.0';
+
+  /// 🔍 Forward geocoding — search locations
   static Future<List<LocationSuggestion>> searchLocations(String query) async {
     if (query.trim().length < 2) return [];
 
     try {
       final Uri url = Uri.parse(
-        '$_baseUrl/search'
-        '?key=$_apiKey'
-        '&q=${Uri.encodeComponent(query)}'
-        '&format=json'
+        '$_baseUrl/${Uri.encodeComponent(query)}.json'
+        '?access_token=$_token'
         '&limit=20'
-        '&addressdetails=1'
-        '&namedetails=1'
-        '&extratags=1'
-        '&dedupe=0'
-        // 🔥 GILGIT-BALTISTAN BIAS
-        '&viewbox=72.5,37.0,76.0,34.0'
-        '&bounded=1',
+        '&autocomplete=true'
+        '&bbox=$_gbBBox'
+        '&language=en',
       );
 
-      final response = await http.get(
-        url,
-        headers: {'Accept': 'application/json'},
-      );
+      final response = await http.get(url);
 
       if (response.statusCode == 200) {
-        final List data = json.decode(response.body);
-        return data.map((e) => LocationSuggestion.fromJson(e)).toList();
+        final data = json.decode(response.body);
+        final List features = data['features'] ?? [];
+        return features.map((f) => LocationSuggestion.fromMapbox(f)).toList();
       } else {
-        logger.i('Search failed: ${response.statusCode}');
+        logger.i('Mapbox search failed: ${response.statusCode}');
         return [];
       }
     } catch (e) {
-      logger.i('Search error: $e');
+      logger.i('Mapbox search error: $e');
       return [];
     }
   }
 
-  /// 📍 Reverse geocoding
+  /// 📍 Reverse geocoding — coordinates → address
   static Future<String?> getAddressFromCoordinates(
     double lat,
     double lon,
   ) async {
     try {
       final Uri url = Uri.parse(
-        '$_baseUrl/reverse'
-        '?key=$_apiKey'
-        '&lat=$lat'
-        '&lon=$lon'
-        '&format=json',
+        '$_baseUrl/$lon,$lat.json'
+        '?access_token=$_token'
+        '&limit=1'
+        '&language=en'
+        '&types=place,locality,neighborhood,address,poi',
       );
 
-      final response = await http.get(
-        url,
-        headers: {'Accept': 'application/json'},
-      );
+      final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        return data['display_name'];
+        final List features = data['features'] ?? [];
+        if (features.isNotEmpty) {
+          return features[0]['place_name'];
+        }
       }
       return null;
     } catch (e) {
-      logger.i('Reverse geocode error: $e');
+      logger.i('Mapbox reverse geocode error: $e');
       return null;
     }
   }

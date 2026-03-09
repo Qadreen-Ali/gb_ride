@@ -1,10 +1,11 @@
 enum RideStatus {
-  requested, // Local requested, waiting for driver response
+  requested, // Local requested, waiting for driver
   accepted, // Driver accepted the ride
   onWay, // Driver is on the way to pickup
+  waiting, // Driver arrived at pickup, waiting for passenger
   ongoing, // Ride started, heading to destination
   completed, // Ride completed
-  cancelled, waiting, // Cancelled by either party
+  cancelled, // Cancelled by either party
 }
 
 class RideModel {
@@ -123,10 +124,14 @@ class RideModel {
 
   static RideStatus _parseStatus(String? status) {
     switch (status) {
+      case 'requested':
+        return RideStatus.requested;
       case 'accepted':
         return RideStatus.accepted;
       case 'onWay':
         return RideStatus.onWay;
+      case 'waiting':
+        return RideStatus.waiting;
       case 'ongoing':
         return RideStatus.ongoing;
       case 'completed':
@@ -140,6 +145,7 @@ class RideModel {
 
   RideModel copyWith({
     String? rideId,
+    String? localId,
     String? driverId,
     double? fare,
     RideStatus? status,
@@ -150,7 +156,7 @@ class RideModel {
   }) {
     return RideModel(
       rideId: rideId ?? this.rideId,
-      localId: localId,
+      localId: localId ?? this.localId,
       driverId: driverId ?? this.driverId,
       pickupLocation: pickupLocation,
       destinationLocation: destinationLocation,

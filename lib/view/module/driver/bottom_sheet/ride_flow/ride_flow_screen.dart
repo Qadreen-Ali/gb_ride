@@ -6,7 +6,9 @@ import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/widget/ongoing
 import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/widget/waiting_widget.dart';
 import 'package:gb_ride/view/module/driver/home/common/common_item_widget.dart';
 import 'package:gb_ride/view/module/driver/home/common/widgets/driver_card.dart';
+import 'package:gb_ride/view/module/driver/controller/driver_controller.dart';
 import 'package:gb_ride/models/ride_model.dart';
+import 'package:get/get.dart';
 
 class RideFlowScreen extends StatefulWidget {
   final RideModel rideModel;
@@ -19,22 +21,19 @@ class RideFlowScreen extends StatefulWidget {
 
 class _RideFlowScreenState extends State<RideFlowScreen>
     with SingleTickerProviderStateMixin {
-  /// ✅ Use RideStatus from RideModel (not from enum folder)
+  final DriverController _driverController = Get.find<DriverController>();
+
   late RideStatus _status;
-  //animations
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
-
-  void _onArrivedPressed() {
-    setState(() {
-      _status = RideStatus.waiting;
-    });
-  }
 
   @override
   void initState() {
     super.initState();
-    _status = RideStatus.onWay; // ✅ Initialize here once
+    _status = RideStatus.onWay;
+
+    // Update Supabase: driver is on the way
+    _driverController.updateRideStatus(RideStatus.onWay);
 
     _pulseController = AnimationController(
       vsync: this,
@@ -44,6 +43,36 @@ class _RideFlowScreenState extends State<RideFlowScreen>
     _pulseAnimation = Tween<double>(begin: 0.95, end: 1.0).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
+  }
+
+  void _onArrivedPressed() {
+    _driverController.updateRideStatus(RideStatus.waiting);
+    setState(() {
+      _status = RideStatus.waiting;
+    });
+  }
+
+  void _onStartTrip() {
+    _driverController.updateRideStatus(RideStatus.ongoing);
+    setState(() {
+      _status = RideStatus.ongoing;
+    });
+  }
+
+  void _onEndTrip() {
+    _driverController.completeRide();
+    setState(() {
+      _status = RideStatus.completed;
+    });
+    // Close the bottom sheet after a short delay
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) Navigator.pop(context);
+    });
+  }
+
+  void _onCancelRide() {
+    _driverController.updateRideStatus(RideStatus.cancelled);
+    Navigator.pop(context);
   }
 
   @override
@@ -82,7 +111,7 @@ class _RideFlowScreenState extends State<RideFlowScreen>
               ),
               const SizedBox(height: 16),
 
-              /// 🔹 ON THE WAY / WAITING HEADER (DYNAMIC)
+              /// ON THE WAY
               if (_status == RideStatus.onWay) ...[
                 const OnTheWayWidget(),
                 const SizedBox(height: 12),
@@ -97,9 +126,7 @@ class _RideFlowScreenState extends State<RideFlowScreen>
                 DriverCommonItemWidget(rideModel: widget.rideModel),
               ],
 
-              // =====================
-              // WAITING
-              // =====================
+              /// WAITING (Driver arrived at pickup)
               if (_status == RideStatus.waiting) ...[
                 WaitingWidget(
                   waitingTime: const Duration(minutes: 3),
@@ -117,9 +144,7 @@ class _RideFlowScreenState extends State<RideFlowScreen>
                 DriverCommonItemWidget(rideModel: widget.rideModel),
               ],
 
-              // =====================
-              // ONGOING
-              // =====================
+              /// ONGOING (Trip in progress)
               if (_status == RideStatus.ongoing) ...[
                 DriverCard(
                   rideModel: widget.rideModel,
@@ -129,20 +154,16 @@ class _RideFlowScreenState extends State<RideFlowScreen>
 
                 const SizedBox(height: 12),
                 OngoingTripWidget(
-                  timeLeft: const Duration(minutes: 12),
-                  distanceLeftKm: 5.4,
-                  onEndTrip: () {
-                    setState(() {
-                      _status = RideStatus.completed;
-                    });
-                  },
+                  timeLeft: Duration(minutes: widget.rideModel.etaMinutes),
+                  distanceLeftKm: widget.rideModel.distanceKm,
+                  onEndTrip: _onEndTrip,
                   onSOS: () {},
                 ),
               ],
 
               const SizedBox(height: 10),
 
-              ///  ARRIVED / WAITING BUTTON
+              /// ARRIVED / WAITING / START TRIP BUTTONS
               if (_status == RideStatus.onWay ||
                   _status == RideStatus.waiting) ...[
                 const SizedBox(height: 12),
@@ -173,21 +194,16 @@ class _RideFlowScreenState extends State<RideFlowScreen>
 
                 PrimaryButton(
                   title: 'Cancel Ride',
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: _onCancelRide,
                   backgroundColor: GBColor.black.withValues(alpha: 0.3),
                   textColor: GBColor.secondary,
                   fontsize: 16,
                 ),
 
-                // TEMP — remove later
                 if (_status == RideStatus.waiting)
                   PrimaryButton(
                     title: 'START TRIP',
-                    onPressed: () {
-                      setState(() {
-                        _status = RideStatus.ongoing;
-                      });
-                    },
+                    onPressed: _onStartTrip,
                     backgroundColor: Colors.green,
                     textColor: Colors.white,
                     fontsize: 16,
