@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:gb_ride/models/driver_model/driver_model.dart';
 import 'package:gb_ride/models/local_model/local_model.dart';
 import 'package:gb_ride/services/driver_services/driver_service.dart';
 import 'package:gb_ride/services/local_service/local_service.dart';
-import 'package:gb_ride/view/auth/controller/auth_controller.dart';
 
 /// ROLE ENUM (UI NEEDS THIS)
 enum UserRole { student, local, driver }

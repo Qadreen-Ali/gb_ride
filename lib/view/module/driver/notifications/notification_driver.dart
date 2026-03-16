@@ -10,7 +10,7 @@ class NotificationDriverScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // 3 tabs
+      length: 2,
       child: Scaffold(
         backgroundColor: GBColor.secondary,
         appBar: CustomAppBar(
@@ -54,17 +54,12 @@ class NotificationDriverScreen extends StatelessWidget {
                 tabs: const [
                   Tab(text: 'All'),
                   Tab(text: 'System'),
-                  Tab(text: 'Promos'),
                 ],
               ),
             ),
             Expanded(
               child: TabBarView(
-                children: [
-                  NotificationAllScreen(),
-                  NotificationSystemScreen(),
-                  // PromosNotificationScreen(),
-                ],
+                children: [NotificationAllScreen(), NotificationSystemScreen()],
               ),
             ),
           ],

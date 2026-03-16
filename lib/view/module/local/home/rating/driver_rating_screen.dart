@@ -2,22 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/app_snackbar_string.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/primary_button.dart';
+import 'package:gb_ride/services/ride_services/ride_service.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:logger/logger.dart';
 import 'package:solar_icon_pack/solar_icon_pack.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../utils/constants/custom_app_bar.dart';
-import '../../../../../utils/constants/image_string.dart';
 
 class DriverRatingScreen extends StatefulWidget {
   final String driverName;
   final String driverImage;
+  final String rideId;
+  final String driverId;
 
   const DriverRatingScreen({
     super.key,
     required this.driverName,
     required this.driverImage,
+    this.rideId = '',
+    this.driverId = '',
   });
 
   @override
@@ -92,7 +97,24 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: AssetImage(widget.driverImage),
+                  backgroundColor: GBColor.primary,
+                  backgroundImage: widget.driverImage.isNotEmpty
+                      ? (widget.driverImage.startsWith('http')
+                            ? NetworkImage(widget.driverImage) as ImageProvider
+                            : AssetImage(widget.driverImage))
+                      : null,
+                  child: widget.driverImage.isEmpty
+                      ? Text(
+                          widget.driverName.isNotEmpty
+                              ? widget.driverName[0].toUpperCase()
+                              : 'D',
+                          style: const TextStyle(
+                            fontSize: 36,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : null,
                 ),
                 Container(
                   padding: const EdgeInsets.all(4),
@@ -351,7 +373,7 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
             // Submit button
             PrimaryButton(
               title: "Submit Rating",
-              onPressed: () {},
+              onPressed: _submitRating,
               backgroundColor: GBColor.primary,
               textColor: Colors.white,
             ),
@@ -411,21 +433,49 @@ class _DriverRatingScreenState extends State<DriverRatingScreen> {
     );
   }
 
-  void _submitRating() {
-    // Handle rating submission
-    _logger.i('Rating: $_rating');
-    _logger.i('Tags: $_selectedTags');
-    _logger.i('Tip: $_selectedTip');
-    _logger.i('Comment: ${_commentController.text}');
+  void _submitRating() async {
+    if (_rating == 0) {
+      Get.snackbar('Rating Required', 'Please tap a star to rate your driver');
+      return;
+    }
 
-    // Show success message
-    Get.snackbar(
-      AppSnackBarString.feedbackTitle,
-      AppSnackBarString.feedbackMessage,
-    );
+    try {
+      // Get local's DB ID
+      final authId = Supabase.instance.client.auth.currentUser?.id ?? '';
+      String localId = '';
+      if (authId.isNotEmpty) {
+        final res = await Supabase.instance.client
+            .from('locals')
+            .select('id')
+            .eq('auth_id', authId)
+            .maybeSingle();
+        localId = res?['id']?.toString() ?? '';
+      }
 
-    // Navigate back
-    Navigator.pop(context);
+      await RideService.instance.submitRating(
+        rideId: widget.rideId,
+        driverId: widget.driverId,
+        localId: localId,
+        rating: _rating,
+        tags: _selectedTags,
+        tip: _selectedTip,
+        comment: _commentController.text.isNotEmpty
+            ? _commentController.text
+            : null,
+      );
+
+      _logger.i('Rating submitted: $_rating stars');
+
+      Get.snackbar(
+        AppSnackBarString.feedbackTitle,
+        AppSnackBarString.feedbackMessage,
+      );
+
+      if (mounted) Navigator.pop(context);
+    } catch (e) {
+      _logger.e('Rating submission failed: $e');
+      Get.snackbar('Error', 'Failed to submit rating. Please try again.');
+    }
   }
 
   @override

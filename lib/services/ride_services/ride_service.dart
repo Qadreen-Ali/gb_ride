@@ -299,4 +299,89 @@ class RideService {
   double _degreesToRadians(double degrees) {
     return degrees * (3.14159265359 / 180);
   }
+
+  // ═════════════════════════════════════════════════════════════
+  // RATINGS
+  // ═════════════════════════════════════════════════════════════
+
+  /// Submit a rating for a completed ride
+  Future<void> submitRating({
+    required String rideId,
+    required String driverId,
+    required String localId,
+    required int rating,
+    List<String> tags = const [],
+    int? tip,
+    String? comment,
+  }) async {
+    try {
+      await _client.from('ratings').insert({
+        'ride_id': rideId,
+        'driver_id': driverId,
+        'local_id': localId,
+        'rating': rating,
+        'tags': tags,
+        'tip': tip,
+        'comment': comment,
+      });
+    } catch (e) {
+      throw Exception('Submit rating error: $e');
+    }
+  }
+
+  /// Get a driver's average rating
+  Future<double> getDriverAverageRating(String driverId) async {
+    try {
+      final response = await _client
+          .from('ratings')
+          .select('rating')
+          .eq('driver_id', driverId);
+
+      if (response.isEmpty) return 0.0;
+
+      final total = response.fold<int>(
+        0,
+        (sum, r) => sum + (r['rating'] as int),
+      );
+      return total / response.length;
+    } catch (e) {
+      return 0.0;
+    }
+  }
+
+  /// Get total completed rides for a driver
+  Future<int> getDriverTotalRides(String driverId) async {
+    try {
+      final response = await _client
+          .from('rides')
+          .select('id')
+          .eq('driver_id', driverId)
+          .eq('status', 'completed');
+
+      return response.length;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  // ═════════════════════════════════════════════════════════════
+  // RIDE HISTORY
+  // ═════════════════════════════════════════════════════════════
+
+  /// Get ride history for a local (completed + cancelled rides)
+  Future<List<RideModel>> getRideHistory(String localId) async {
+    try {
+      final response = await _client
+          .from('rides')
+          .select()
+          .eq('local_id', localId)
+          .inFilter('status', ['completed', 'cancelled'])
+          .order('created_at', ascending: false)
+          .limit(50);
+
+      return response.map<RideModel>((m) => RideModel.fromMap(m)).toList();
+    } catch (e) {
+      throw Exception('Get ride history error: $e');
+    }
+  }
 }

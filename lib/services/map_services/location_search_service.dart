@@ -40,8 +40,11 @@ class LocationSearchService {
   static const String _baseUrl =
       'https://api.mapbox.com/geocoding/v5/mapbox.places';
 
-  // Gilgit-Baltistan bounding box: [minLng, minLat, maxLng, maxLat]
-  static const String _gbBBox = '72.5,34.0,76.0,37.0';
+  // Gilgit-Baltistan bounding box (expanded): [minLng, minLat, maxLng, maxLat]
+  static const String _gbBBox = '72.0,33.5,77.0,37.5';
+
+  // Proximity bias — Gilgit city center so nearby results rank higher
+  static const String _proximity = '74.31,35.92';
 
   /// 🔍 Forward geocoding — search locations
   static Future<List<LocationSuggestion>> searchLocations(String query) async {
@@ -51,9 +54,12 @@ class LocationSearchService {
       final Uri url = Uri.parse(
         '$_baseUrl/${Uri.encodeComponent(query)}.json'
         '?access_token=$_token'
-        '&limit=20'
+        '&limit=10'
         '&autocomplete=true'
+        '&fuzzyMatch=true'
         '&bbox=$_gbBBox'
+        '&proximity=$_proximity'
+        '&types=poi,poi.landmark,place,locality,neighborhood,address'
         '&language=en',
       );
 
@@ -84,7 +90,7 @@ class LocationSearchService {
         '?access_token=$_token'
         '&limit=1'
         '&language=en'
-        '&types=place,locality,neighborhood,address,poi',
+        '&types=poi,poi.landmark,place,locality,neighborhood,address',
       );
 
       final response = await http.get(url);

@@ -2,27 +2,127 @@ import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/secondary_button.dart';
 import 'package:gb_ride/view/module/driver/common/widget/heading_text.dart';
 import 'package:gb_ride/view/module/driver/settings/profile/widget/trip_widget.dart';
+import 'package:gb_ride/services/ride_services/ride_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../utils/constants/color_string.dart';
 import '../../../../../utils/constants/custom_app_bar.dart';
 import '../../../../../utils/constants/image_string.dart';
 import '../../../local/setting/profile/widget/profile_picker.dart';
+import '../../../local/setting/logout/logout_screen.dart';
 import '../wallet/widget/transaction_detail_widget.dart';
 
-class DriverProfileScreen extends StatelessWidget {
+class DriverProfileScreen extends StatefulWidget {
   const DriverProfileScreen({super.key});
 
   @override
+  State<DriverProfileScreen> createState() => _DriverProfileScreenState();
+}
+
+class _DriverProfileScreenState extends State<DriverProfileScreen> {
+  String _name = '';
+  String _vehicleType = '';
+  String _vehicleNumber = '';
+  double _avgRating = 0.0;
+  int _totalRides = 0;
+  int _totalReviews = 0;
+  String _joinedDate = '';
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfile();
+  }
+
+  Future<void> _loadProfile() async {
+    try {
+      final authId = Supabase.instance.client.auth.currentUser?.id ?? '';
+      if (authId.isEmpty) return;
+
+      final res = await Supabase.instance.client
+          .from('drivers')
+          .select()
+          .eq('auth_id', authId)
+          .maybeSingle();
+
+      if (res != null) {
+        final driverId = res['id']?.toString() ?? '';
+        final rating = await RideService.instance.getDriverAverageRating(
+          driverId,
+        );
+        final rides = await RideService.instance.getDriverTotalRides(driverId);
+
+        // Count total reviews
+        final reviews = await Supabase.instance.client
+            .from('ratings')
+            .select('id')
+            .eq('driver_id', driverId);
+
+        final createdAt = DateTime.tryParse(res['created_at'] ?? '');
+        String joined = '–';
+        if (createdAt != null) {
+          const months = [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec',
+          ];
+          joined =
+              '${months[createdAt.month - 1]}, ${createdAt.year.toString().substring(2)}';
+        }
+
+        if (mounted) {
+          setState(() {
+            _name = res['full_name'] ?? '';
+            _vehicleType = res['vehicle_type'] ?? '';
+            _vehicleNumber = res['vehicle_number'] ?? '';
+            _avgRating = rating;
+            _totalRides = rides;
+            _totalReviews = reviews.length;
+            _joinedDate = joined;
+            _isLoading = false;
+          });
+        }
+      } else {
+        if (mounted) setState(() => _isLoading = false);
+      }
+    } catch (_) {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        backgroundColor: GBColor.secondary,
+        appBar: CustomAppBar(title: 'Profile', background: GBColor.secondary),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       backgroundColor: GBColor.secondary,
       appBar: CustomAppBar(
         title: 'Profile',
         background: GBColor.secondary,
-        actions: [IconButton(onPressed: () {
-          Navigator.pushNamed(context, '/driver(profile)');
-
-        }, icon: Icon(Icons.edit, size: 20,color: GBColor.black,))],
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/driver(profile)');
+            },
+            icon: Icon(Icons.edit, size: 20, color: GBColor.black),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -36,7 +136,7 @@ class DriverProfileScreen extends StatelessWidget {
               SizedBox(height: 10),
               Center(
                 child: Text(
-                  "Ali",
+                  _name.isNotEmpty ? _name : 'Driver',
                   style: TextStyle(
                     color: GBColor.black,
                     fontSize: 18,
@@ -63,7 +163,7 @@ class DriverProfileScreen extends StatelessWidget {
                         Icon(Icons.star, color: GBColor.primary, size: 20),
                         SizedBox(width: 6),
                         Text(
-                          "4.9",
+                          _avgRating > 0 ? _avgRating.toStringAsFixed(1) : '–',
                           style: TextStyle(
                             color: GBColor.black,
                             fontSize: 13,
@@ -73,7 +173,7 @@ class DriverProfileScreen extends StatelessWidget {
                         ),
                         SizedBox(width: 10),
                         Text(
-                          "(152 reviews)",
+                          '($_totalReviews reviews)',
                           style: TextStyle(
                             color: GBColor.black,
                             fontSize: 13,
@@ -91,17 +191,20 @@ class DriverProfileScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Tripwidget(text1: "1,240", text2: "Total Trips"),
+                  Tripwidget(
+                    text1: _totalRides.toString(),
+                    text2: "Total Trips",
+                  ),
                   SizedBox(width: 12),
-                  Tripwidget(text1: "Oct , 21", text2: "Joined"),
+                  Tripwidget(text1: _joinedDate, text2: "Joined"),
                 ],
               ),
               SizedBox(height: 14),
               HeadingText(titleText: "Vehicle"),
               SizedBox(height: 14),
               TransactionDetailsWidget(
-                rideNumber: 'Honda G11',
-                rideTime: 'Gilgit237',
+                rideNumber: _vehicleType.isNotEmpty ? _vehicleType : '–',
+                rideTime: _vehicleNumber.isNotEmpty ? _vehicleNumber : '–',
                 image: GBImagePath.car,
                 showImage: false,
                 ridePkr: '',
@@ -138,7 +241,7 @@ class DriverProfileScreen extends StatelessWidget {
               SizedBox(height: 40),
               SecondaryButton(
                 title: "Logout",
-                onPressed: () {},
+                onPressed: () => showLogoutConfirmation(context),
                 borderColor: GBColor.error,
                 backgroundColor: GBColor.secondary,
                 textColor: GBColor.error,

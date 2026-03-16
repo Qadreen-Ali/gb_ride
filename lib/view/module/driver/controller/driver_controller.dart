@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gb_ride/models/ride_model.dart';
 import 'package:gb_ride/models/ride_offer_model.dart';
@@ -30,7 +31,8 @@ class DriverController extends GetxController {
   StreamSubscription? _rideSubscription;
   StreamSubscription? _offerSubscription;
   Timer? _offerExpiryTimer;
-  String? _currentOfferId;
+  // ignore: unused_field
+  String? _currentOfferId; // kept for future cancel-offer logic
 
   @override
   void onInit() {
@@ -151,6 +153,14 @@ class DriverController extends GetxController {
     try {
       isSendingOffer.value = true;
 
+      // Fetch real avg rating & total rides from DB
+      final avgRating = await rideService.getDriverAverageRating(
+        driverDbId.value,
+      );
+      final totalRides = await rideService.getDriverTotalRides(
+        driverDbId.value,
+      );
+
       // Build the offer
       final offer = RideOfferModel(
         offerId: '', // Supabase auto-generates
@@ -159,6 +169,8 @@ class DriverController extends GetxController {
         driverName: driverName.value,
         driverPhone: driverPhone.value,
         driverImage: driverImage.value,
+        driverRating: avgRating,
+        driverTotalRides: totalRides,
         offeredFare: offeredFare,
         etaMinutes: etaMinutes,
         createdAt: DateTime.now(),
@@ -259,14 +271,33 @@ class DriverController extends GetxController {
     if (activeRide.value == null) return;
 
     try {
+      final completedRide = activeRide.value!; // capture before clearing
       await rideService.updateRideStatus(
-        activeRide.value!.rideId,
+        completedRide.rideId,
         RideStatus.completed,
       );
 
       _rideSubscription?.cancel();
       activeRide.value = null;
-      Get.snackbar('Ride Completed', 'Great job!');
+
+      // Show completion summary dialog
+      Get.defaultDialog(
+        title: 'Ride Completed!',
+        titleStyle: const TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 18,
+          fontFamily: 'Poppins',
+        ),
+        middleText:
+            'Fare: ${completedRide.formattedFare}\n'
+            'Distance: ${completedRide.formattedDistance}\n'
+            'Duration: ${completedRide.formattedEta}',
+        middleTextStyle: const TextStyle(fontSize: 15, fontFamily: 'Poppins'),
+        textConfirm: 'OK',
+        confirmTextColor: Colors.white,
+        buttonColor: const Color(0xFF1B1B1B),
+        onConfirm: () => Get.back(),
+      );
     } catch (e) {
       Get.snackbar('Error', e.toString());
     }

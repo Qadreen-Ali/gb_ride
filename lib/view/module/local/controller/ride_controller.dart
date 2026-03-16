@@ -4,6 +4,7 @@ import 'package:gb_ride/models/ride_model.dart';
 import 'package:gb_ride/models/ride_offer_model.dart';
 import 'package:gb_ride/services/ride_services/ride_service.dart';
 import 'package:gb_ride/services/map_services/location_service.dart';
+import 'package:gb_ride/view/module/local/home/rating/widgets/rating_dialogue.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RideController extends GetxController {
@@ -15,6 +16,7 @@ class RideController extends GetxController {
   final currentRide = Rx<RideModel?>(null);
   final incomingOffers = <RideOfferModel>[].obs;
   final isSearching = false.obs;
+  final isInRide = false.obs;
   final isLoading = false.obs;
   final currentFare = 0.0.obs;
 
@@ -161,6 +163,7 @@ class RideController extends GetxController {
       // Clear offers — ride is now assigned
       incomingOffers.clear();
       isSearching.value = false;
+      isInRide.value = true;
 
       Get.snackbar('Ride Accepted', '${offer.driverName} is on the way!');
     } catch (e) {
@@ -201,32 +204,52 @@ class RideController extends GetxController {
                   break;
                 case RideStatus.accepted:
                   isSearching.value = false;
+                  isInRide.value = true;
                   Get.snackbar(
                     'Driver Assigned',
                     '${ride.driverName} accepted your ride!',
                   );
                   break;
                 case RideStatus.onWay:
+                  isInRide.value = true;
                   Get.snackbar(
                     'On the Way',
                     '${ride.driverName} is coming to pick you up',
                   );
                   break;
                 case RideStatus.waiting:
+                  isInRide.value = true;
                   Get.snackbar(
                     'Driver Arrived',
                     '${ride.driverName} is waiting at pickup',
                   );
                   break;
                 case RideStatus.ongoing:
+                  isInRide.value = true;
                   Get.snackbar(
                     'Trip Started',
                     'Heading to ${ride.destinationLocation}',
                   );
                   break;
                 case RideStatus.completed:
+                  final driverName = ride.driverName ?? 'Driver';
+                  final driverImage = ride.driverImagePath ?? '';
+                  final rideId = ride.rideId;
+                  final driverId = ride.driverId ?? '';
                   Get.snackbar('Trip Completed', 'You have arrived!');
                   _cleanup();
+                  // Show rating dialog after a short delay
+                  Future.delayed(const Duration(milliseconds: 500), () {
+                    Get.dialog(
+                      EndRideRatingDialog(
+                        driverName: driverName,
+                        driverImage: driverImage,
+                        rideId: rideId,
+                        driverId: driverId,
+                      ),
+                      barrierDismissible: false,
+                    );
+                  });
                   break;
                 case RideStatus.cancelled:
                   Get.snackbar('Ride Cancelled', 'The ride has been cancelled');
@@ -274,6 +297,7 @@ class RideController extends GetxController {
     currentRideId = null;
     incomingOffers.clear();
     isSearching.value = false;
+    isInRide.value = false;
     isLoading.value = false;
     currentFare.value = 0.0;
   }

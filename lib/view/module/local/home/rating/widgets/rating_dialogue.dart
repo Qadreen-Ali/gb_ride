@@ -17,11 +17,15 @@ class RatingDialogue extends StatelessWidget {
 class EndRideRatingDialog extends StatefulWidget {
   final String driverName;
   final String driverImage;
+  final String rideId;
+  final String driverId;
 
   const EndRideRatingDialog({
     super.key,
     required this.driverName,
     required this.driverImage,
+    this.rideId = '',
+    this.driverId = '',
   });
 
   @override
@@ -43,7 +47,24 @@ class _EndRideRatingDialogState extends State<EndRideRatingDialog> {
             // Driver Avatar
             CircleAvatar(
               radius: 40,
-              backgroundImage: AssetImage(widget.driverImage),
+              backgroundColor: GBColor.primary,
+              backgroundImage: widget.driverImage.isNotEmpty
+                  ? (widget.driverImage.startsWith('http')
+                        ? NetworkImage(widget.driverImage) as ImageProvider
+                        : AssetImage(widget.driverImage))
+                  : null,
+              child: widget.driverImage.isEmpty
+                  ? Text(
+                      widget.driverName.isNotEmpty
+                          ? widget.driverName[0].toUpperCase()
+                          : 'D',
+                      style: const TextStyle(
+                        fontSize: 32,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  : null,
             ),
             const SizedBox(height: 16),
 
@@ -123,6 +144,8 @@ class _EndRideRatingDialogState extends State<EndRideRatingDialog> {
                           builder: (context) => DriverRatingScreen(
                             driverName: widget.driverName,
                             driverImage: widget.driverImage,
+                            rideId: widget.rideId,
+                            driverId: widget.driverId,
                           ),
                         ),
                       );

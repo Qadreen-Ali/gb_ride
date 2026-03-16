@@ -1,15 +1,3 @@
-import java.util.Properties
-import java.io.FileInputStream
-
-// .env file read karne ke liye
-val env = Properties()
-val envFile = file(".env")
-
-if (envFile.exists()) {
-    env.load(FileInputStream(envFile))
-}
-
-val MAPBOX_DOWNLOADS_TOKEN = env.getProperty("MAPBOX_DOWNLOADS_TOKEN")
 
 pluginManagement {
     val flutterSdkPath =
@@ -27,14 +15,6 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-
-        maven {
-            url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
-            credentials {
-                username = "mapbox"
-                password = MAPBOX_DOWNLOADS_TOKEN
-            }
-        }
     }
 }
 

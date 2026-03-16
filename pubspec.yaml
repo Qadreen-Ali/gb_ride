@@ -64,6 +64,7 @@ dependencies:
   get: ^4.7.3
   flutter_dotenv: ^6.0.0
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

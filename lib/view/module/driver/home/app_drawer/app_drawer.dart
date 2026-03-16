@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../local/home/app_drawer/app_drawer.dart';
 
@@ -12,7 +13,29 @@ class ProfileDrawer extends StatefulWidget {
 }
 
 class _ProfileDrawerState extends State<ProfileDrawer> {
-  int _selectedIndex = -1; // -1 means nothing selected by default
+  int _selectedIndex = -1;
+  String _driverName = 'Driver';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadName();
+  }
+
+  Future<void> _loadName() async {
+    try {
+      final authId = Supabase.instance.client.auth.currentUser?.id ?? '';
+      if (authId.isEmpty) return;
+      final res = await Supabase.instance.client
+          .from('drivers')
+          .select('full_name')
+          .eq('auth_id', authId)
+          .maybeSingle();
+      if (res != null && mounted) {
+        setState(() => _driverName = res['full_name'] ?? 'Driver');
+      }
+    } catch (_) {}
+  }
 
   void _onSelect(int index, VoidCallback action) {
     setState(() => _selectedIndex = index);
@@ -39,19 +62,18 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               child: Row(
                 children: [
                   // Profile avatar
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [Colors.pink.shade300, Colors.orange.shade300],
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundColor: GBColor.primary,
+                    child: Text(
+                      _driverName.isNotEmpty
+                          ? _driverName[0].toUpperCase()
+                          : 'D',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 28,
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -59,10 +81,10 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                     onTap: () => _onSelect(3, () {
                       Navigator.pushNamed(context, '/driverProfile');
                     }),
-                    child: const Expanded(
+                    child: Expanded(
                       child: Text(
-                        'Ali',
-                        style: TextStyle(
+                        _driverName,
+                        style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w500,
                           color: Colors.black87,
@@ -74,7 +96,6 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               ),
             ),
             Divider(),
-
 
             // Menu items
             Expanded(
@@ -132,8 +153,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
 
             // History
             InkWell(
-              onTap: () {
-              },
+              onTap: () {},
               child: GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, '/history');

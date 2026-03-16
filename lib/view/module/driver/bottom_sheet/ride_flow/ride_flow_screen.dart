@@ -30,10 +30,13 @@ class _RideFlowScreenState extends State<RideFlowScreen>
   @override
   void initState() {
     super.initState();
-    _status = RideStatus.onWay;
+    _status = widget.rideModel.status;
 
-    // Update Supabase: driver is on the way
-    _driverController.updateRideStatus(RideStatus.onWay);
+    // Only transition to onWay if ride was just accepted
+    if (_status == RideStatus.accepted) {
+      _status = RideStatus.onWay;
+      _driverController.updateRideStatus(RideStatus.onWay);
+    }
 
     _pulseController = AnimationController(
       vsync: this,
@@ -43,6 +46,16 @@ class _RideFlowScreenState extends State<RideFlowScreen>
     _pulseAnimation = Tween<double>(begin: 0.95, end: 1.0).animate(
       CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
     );
+  }
+
+  @override
+  void didUpdateWidget(RideFlowScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.rideModel.status != oldWidget.rideModel.status) {
+      setState(() {
+        _status = widget.rideModel.status;
+      });
+    }
   }
 
   void _onArrivedPressed() {
@@ -61,18 +74,12 @@ class _RideFlowScreenState extends State<RideFlowScreen>
 
   void _onEndTrip() {
     _driverController.completeRide();
-    setState(() {
-      _status = RideStatus.completed;
-    });
-    // Close the bottom sheet after a short delay
-    Future.delayed(const Duration(seconds: 1), () {
-      if (mounted) Navigator.pop(context);
-    });
+    // activeRide is set to null by completeRide() → Obx swaps back
   }
 
   void _onCancelRide() {
     _driverController.updateRideStatus(RideStatus.cancelled);
-    Navigator.pop(context);
+    // activeRide is set to null by stream → Obx swaps back
   }
 
   @override

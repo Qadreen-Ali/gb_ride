@@ -34,8 +34,6 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
   // Gilgit-Baltistan center
   final Position _defaultCenter = Position(74.341500, 35.911383);
 
-  double? _currentLat;
-  double? _currentLng;
   double? _pickupLat;
   double? _pickupLng;
   double? _destLat;
@@ -56,6 +54,10 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
   List<List<double>> _rawRouteCoords = [];
 
   Timer? _gestureTimer;
+  Timer? _pulseTimer;
+  double _pulseRadius = 14.0;
+  double _pulseOpacity = 0.4;
+  bool _pulseGrowing = true;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
@@ -159,6 +161,24 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
       ),
     );
 
+    // Pulse ring layer (animated blink)
+    await style.addLayer(
+      CircleLayer(
+        id: 'markers-pulse-layer',
+        sourceId: 'markers-source',
+        circleRadius: 14.0,
+        circleOpacity: 0.4,
+        circleStrokeWidth: 0.0,
+      ),
+    );
+
+    // Data-driven pulse color from feature property
+    await style.setStyleLayerProperty(
+      'markers-pulse-layer',
+      'circle-color',
+      '["get", "color"]',
+    );
+
     // Data-driven circle color from feature property
     await style.setStyleLayerProperty(
       'markers-circle-layer',
@@ -167,6 +187,42 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
     );
 
     _styleReady = true;
+    _startPulseAnimation();
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // PULSE ANIMATION
+  // ═══════════════════════════════════════════════════════════
+
+  void _startPulseAnimation() {
+    _pulseTimer?.cancel();
+    _pulseTimer = Timer.periodic(const Duration(milliseconds: 60), (_) {
+      if (!_styleReady || _mapboxMap == null) return;
+
+      if (_pulseGrowing) {
+        _pulseRadius += 0.4;
+        _pulseOpacity -= 0.012;
+        if (_pulseRadius >= 22.0) _pulseGrowing = false;
+      } else {
+        _pulseRadius -= 0.6;
+        _pulseOpacity += 0.018;
+        if (_pulseRadius <= 14.0) _pulseGrowing = true;
+      }
+
+      _pulseOpacity = _pulseOpacity.clamp(0.0, 0.4);
+      _pulseRadius = _pulseRadius.clamp(14.0, 22.0);
+
+      _mapboxMap!.style.setStyleLayerProperty(
+        'markers-pulse-layer',
+        'circle-radius',
+        _pulseRadius,
+      );
+      _mapboxMap!.style.setStyleLayerProperty(
+        'markers-pulse-layer',
+        'circle-opacity',
+        _pulseOpacity,
+      );
+    });
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -181,8 +237,6 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
       );
 
       setState(() {
-        _currentLat = position.latitude;
-        _currentLng = position.longitude;
         _pickupLat = position.latitude;
         _pickupLng = position.longitude;
         _pickupController.text = 'Current Location';
@@ -498,19 +552,8 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
                 Navigator.pushNamed(context, '/notification'),
           ),
 
-          // Driver offer cards overlay (top of screen)
-          DriverOfferOverlay(
-            onAccepted: () {
-              // Close any open bottom sheet and show ride flow
-              Navigator.of(context).popUntil((route) => route.isFirst);
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (_) => const RideFlowBottomSheet(),
-              );
-            },
-          ),
+          // Driver offer cards — auto-hides when no offers
+          const DriverOfferOverlay(),
 
           // Map selection overlay
           if (_isSelectingOnMap)
@@ -535,12 +578,14 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
               child: Obx(() {
                 final rideCtrl = Get.find<RideController>();
 
+                // Active ride — show ride flow
+                if (rideCtrl.isInRide.value) {
+                  return RideFlowBottomSheet(onCancelled: () {});
+                }
+
+                // Searching for driver — show find driver
                 if (rideCtrl.isSearching.value) {
-                  return FindDriverBottomSheet(
-                    onCancelled: () {
-                      // Ride cancelled — switch back to home sheet
-                    },
-                  );
+                  return FindDriverBottomSheet(onCancelled: () {});
                 }
 
                 return HomeBottomSheet(
@@ -572,6 +617,7 @@ class _LocalHomeScreenState extends State<LocalHomeScreen> {
     _pickupController.dispose();
     _destinationController.dispose();
     _gestureTimer?.cancel();
+    _pulseTimer?.cancel();
     super.dispose();
   }
 }

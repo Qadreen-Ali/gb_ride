@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:gb_ride/view/module/driver/home/widgets/top_bar.dart';
 import 'package:gb_ride/view/module/driver/home/app_drawer/app_drawer.dart';
 import 'package:gb_ride/view/module/driver/home/driver_bottom_sheet.dart';
+import 'package:gb_ride/view/module/driver/bottom_sheet/ride_flow/ride_flow_screen.dart';
 import 'package:gb_ride/view/module/driver/controller/driver_controller.dart';
 import 'package:gb_ride/services/map_services/location_routing_service.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -26,6 +27,10 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   bool _showBottomSheet = true;
   Timer? _mapGestureTimer;
+  Timer? _pulseTimer;
+  double _pulseRadius = 14.0;
+  double _pulseOpacity = 0.4;
+  bool _pulseGrowing = true;
 
   // Track whether native style layers are ready
   bool _styleReady = false;
@@ -131,6 +136,23 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
       ),
     );
 
+    // Pulse ring layer (animated blink)
+    await style.addLayer(
+      CircleLayer(
+        id: 'markers-pulse-layer',
+        sourceId: 'markers-source',
+        circleRadius: 14.0,
+        circleOpacity: 0.4,
+        circleStrokeWidth: 0.0,
+      ),
+    );
+
+    await style.setStyleLayerProperty(
+      'markers-pulse-layer',
+      'circle-color',
+      '["get", "color"]',
+    );
+
     // Data-driven circle color from feature property "color"
     await style.setStyleLayerProperty(
       'markers-circle-layer',
@@ -139,6 +161,42 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     );
 
     _styleReady = true;
+    _startPulseAnimation();
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // PULSE ANIMATION
+  // ═══════════════════════════════════════════════════════════
+
+  void _startPulseAnimation() {
+    _pulseTimer?.cancel();
+    _pulseTimer = Timer.periodic(const Duration(milliseconds: 60), (_) {
+      if (!_styleReady || _mapboxMap == null) return;
+
+      if (_pulseGrowing) {
+        _pulseRadius += 0.4;
+        _pulseOpacity -= 0.012;
+        if (_pulseRadius >= 22.0) _pulseGrowing = false;
+      } else {
+        _pulseRadius -= 0.6;
+        _pulseOpacity += 0.018;
+        if (_pulseRadius <= 14.0) _pulseGrowing = true;
+      }
+
+      _pulseOpacity = _pulseOpacity.clamp(0.0, 0.4);
+      _pulseRadius = _pulseRadius.clamp(14.0, 22.0);
+
+      _mapboxMap!.style.setStyleLayerProperty(
+        'markers-pulse-layer',
+        'circle-radius',
+        _pulseRadius,
+      );
+      _mapboxMap!.style.setStyleLayerProperty(
+        'markers-pulse-layer',
+        'circle-opacity',
+        _pulseOpacity,
+      );
+    });
   }
 
   // ═══════════════════════════════════════════════════════════
@@ -435,27 +493,38 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             bottom: _showBottomSheet ? 0 : -500,
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeOut,
-            child: DriverBottomSheet(
-              onOfferTap: () {
-                setState(() {
-                  _showBottomSheet = false;
-                });
-              },
-              onOfferClose: () {
-                clearMapOverlays();
-                setState(() {
-                  _showBottomSheet = true;
-                });
-              },
-              onShowRide: (pickupLat, pickupLng, destLat, destLng) {
-                showRideOnMap(
-                  pickupLat: pickupLat,
-                  pickupLng: pickupLng,
-                  destLat: destLat,
-                  destLng: destLng,
-                );
-              },
-            ),
+            child: Obx(() {
+              final driverCtrl = Get.find<DriverController>();
+              final activeRide = driverCtrl.activeRide.value;
+
+              // Active ride — show ride flow
+              if (activeRide != null) {
+                return RideFlowScreen(rideModel: activeRide);
+              }
+
+              // Normal — show ride request cards
+              return DriverBottomSheet(
+                onOfferTap: () {
+                  setState(() {
+                    _showBottomSheet = false;
+                  });
+                },
+                onOfferClose: () {
+                  clearMapOverlays();
+                  setState(() {
+                    _showBottomSheet = true;
+                  });
+                },
+                onShowRide: (pickupLat, pickupLng, destLat, destLng) {
+                  showRideOnMap(
+                    pickupLat: pickupLat,
+                    pickupLng: pickupLng,
+                    destLat: destLat,
+                    destLng: destLng,
+                  );
+                },
+              );
+            }),
           ),
         ],
       ),
@@ -465,6 +534,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   @override
   void dispose() {
     _mapGestureTimer?.cancel();
+    _pulseTimer?.cancel();
     super.dispose();
   }
 }

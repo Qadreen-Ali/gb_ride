@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/utils/constants/image_string.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileDrawer extends StatefulWidget {
   const ProfileDrawer({super.key});
@@ -10,7 +11,29 @@ class ProfileDrawer extends StatefulWidget {
 }
 
 class _ProfileDrawerState extends State<ProfileDrawer> {
-  int _selectedIndex = -1; // -1 means nothing selected by default
+  int _selectedIndex = -1;
+  String _userName = 'Profile';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadName();
+  }
+
+  Future<void> _loadName() async {
+    try {
+      final authId = Supabase.instance.client.auth.currentUser?.id ?? '';
+      if (authId.isEmpty) return;
+      final res = await Supabase.instance.client
+          .from('locals')
+          .select('full_name')
+          .eq('auth_id', authId)
+          .maybeSingle();
+      if (res != null && mounted) {
+        setState(() => _userName = res['full_name'] ?? 'Profile');
+      }
+    } catch (_) {}
+  }
 
   void _onSelect(int index, VoidCallback action) {
     setState(() => _selectedIndex = index);
@@ -37,19 +60,16 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
               child: Row(
                 children: [
                   // Profile avatar
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      gradient: LinearGradient(
-                        colors: [Colors.pink.shade300, Colors.orange.shade300],
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundColor: GBColor.primary,
+                    child: Text(
+                      _userName.isNotEmpty ? _userName[0].toUpperCase() : 'P',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 28,
                     ),
                   ),
                   const SizedBox(width: 16),

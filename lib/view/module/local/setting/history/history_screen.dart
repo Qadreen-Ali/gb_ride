@@ -1,74 +1,165 @@
 import 'package:flutter/material.dart';
 import 'package:gb_ride/utils/constants/color_string.dart';
 import 'package:gb_ride/view/module/local/setting/history/ride_history_screen.dart';
+import 'package:gb_ride/services/ride_services/ride_service.dart';
+import 'package:gb_ride/models/ride_model.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../../../utils/constants/custom_app_bar.dart';
 
-class HistoryScreen extends StatelessWidget {
+class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
+
+  @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen> {
+  List<RideModel> _rides = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadHistory();
+  }
+
+  Future<void> _loadHistory() async {
+    try {
+      final authId = Supabase.instance.client.auth.currentUser?.id ?? '';
+      if (authId.isEmpty) {
+        setState(() => _isLoading = false);
+        return;
+      }
+
+      final res = await Supabase.instance.client
+          .from('locals')
+          .select('id')
+          .eq('auth_id', authId)
+          .maybeSingle();
+
+      final localId = res?['id']?.toString() ?? '';
+      if (localId.isEmpty) {
+        setState(() => _isLoading = false);
+        return;
+      }
+
+      final rides = await RideService.instance.getRideHistory(localId);
+      if (mounted) {
+        setState(() {
+          _rides = rides;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  String _formatDate(DateTime dt) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    final hour = dt.hour > 12 ? dt.hour - 12 : (dt.hour == 0 ? 12 : dt.hour);
+    final amPm = dt.hour >= 12 ? 'PM' : 'AM';
+    return '${dt.day} ${months[dt.month - 1]}, $hour:${dt.minute.toString().padLeft(2, '0')} $amPm';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F7F7),
       appBar: CustomAppBar(
-       showLeading: false,
+        showLeading: false,
         title: 'History',
-        actions: [Padding(
-          padding: const EdgeInsets.all(8),
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color:GBColor.primary,
-                shape: BoxShape.circle,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: GBColor.primary,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.close, color: GBColor.secondary),
               ),
-              child: const Icon(Icons.close, color:GBColor.secondary),
             ),
           ),
-        ),],
+        ],
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.only(bottom: 12),
-        itemCount: 8,
-        separatorBuilder: (_, _) => Divider(
-          height: 1,
-          thickness: 1,
-          color: GBColor.linegrey,
-          indent: 16,
-          endIndent: 16,
-        ),
-        itemBuilder: (context, index) {
-          return _HistoryTile(
-            date: '20 sep, 8:55 AM',
-            pickupLocation: 'Sonikot Gilgit Baltistan',
-            destinationLocation: 'Silicon Global Khomar',
-            fare: 'PKR 130.00',
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const RideHistoryDetailScreen(
-                    date: 'October 26, 2025, 10: 30 AM',
-                    pickupLocation: 'Jutial Noor Plaza Gilgit',
-                    destinationLocation: 'KIU main Road',
-                    fare: '80.00PKR',
-                    driverName: 'AbuHassan',
-                    driverRating: '4.9',
-                    vehicleModel: 'Blue Toyota\nSMz40',
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _rides.isEmpty
+          ? const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.history, size: 48, color: Colors.grey),
+                  SizedBox(height: 12),
+                  Text(
+                    'No rides yet',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-              );
-            },
-          );
-        },
-      ),
+                ],
+              ),
+            )
+          : ListView.separated(
+              padding: const EdgeInsets.only(bottom: 12),
+              itemCount: _rides.length,
+              separatorBuilder: (_, __) => Divider(
+                height: 1,
+                thickness: 1,
+                color: GBColor.linegrey,
+                indent: 16,
+                endIndent: 16,
+              ),
+              itemBuilder: (context, index) {
+                final ride = _rides[index];
+                return _HistoryTile(
+                  date: _formatDate(ride.createdAt),
+                  pickupLocation: ride.pickupLocation,
+                  destinationLocation: ride.destinationLocation,
+                  fare: ride.formattedFare,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RideHistoryDetailScreen(
+                          date: _formatDate(ride.createdAt),
+                          pickupLocation: ride.pickupLocation,
+                          destinationLocation: ride.destinationLocation,
+                          fare: ride.formattedFare,
+                          driverName: ride.driverName ?? 'Driver',
+                          driverRating: '–',
+                          vehicleModel: '',
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 }
-
 
 class _HistoryTile extends StatelessWidget {
   final String date;
@@ -93,10 +184,10 @@ class _HistoryTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.zero, 
+          borderRadius: BorderRadius.zero,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha:0.03),
+              color: Colors.black.withValues(alpha: 0.03),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -169,10 +260,7 @@ class _HistoryTile extends StatelessWidget {
             /// FARE
             Text(
               fare,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -203,10 +291,7 @@ class _LocationIndicator extends StatelessWidget {
             child: Container(
               width: 12,
               height: 12,
-              decoration: BoxDecoration(
-                color: color,
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
             ),
           ),
         ),
